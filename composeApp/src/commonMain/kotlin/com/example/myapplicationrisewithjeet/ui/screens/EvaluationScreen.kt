@@ -3,6 +3,7 @@ package com.example.myapplicationrisewithjeet.ui.screens
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,6 +20,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplicationrisewithjeet.ui.theme.*
 import kotlinx.coroutines.delay
+import myapplicationrisewithjeet.composeapp.generated.resources.Res
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_bolt
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_books
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_chart
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_clipboard
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_diamond_blue
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_note
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_scales
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_search
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_timer
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_way_forward
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_write
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 
 private val EVBg    = Color(0xFF0F1629)
 private val EVCard  = Color(0xFF1A2540)
@@ -28,7 +43,7 @@ private val EVLight = Color(0xFFF4F6FB)
 
 private enum class EvalPhase { LOADING, RESULTS }
 
-private data class AnalysisStep(val emoji: String, val title: String, val subtitle: String, val done: Boolean)
+private data class AnalysisStep(val icon: DrawableResource, val title: String, val subtitle: String, val done: Boolean)
 
 @Composable
 fun EvaluationScreen(
@@ -65,11 +80,11 @@ fun EvaluationScreen(
 @Composable
 private fun EvaluationLoadingContent(countdown: Int) {
     val analysisSteps = listOf(
-        AnalysisStep("📐", "Structural Analysis",         "Checking introduction-body-conclusion flow",    true),
-        AnalysisStep("📚", "Content Depth Assessment",    "Evaluating breadth and depth of dimensions",    true),
-        AnalysisStep("⚖️", "Balance & Perspective Check", "Ensuring multi-dimensional viewpoint",           true),
-        AnalysisStep("📊", "Fact & Example Validation",   "Cross-verifying with latest data",               countdown < 15),
-        AnalysisStep("🔷", "6-Pillar Rubric Scoring",     "Depth · Demand · Structure · Substantiation",   false),
+        AnalysisStep(Res.drawable.icon_note, "Structural Analysis",         "Checking introduction-body-conclusion flow",    true),
+        AnalysisStep(Res.drawable.icon_books, "Content Depth Assessment",    "Evaluating breadth and depth of dimensions",    true),
+        AnalysisStep(Res.drawable.icon_scales, "Balance & Perspective Check", "Ensuring multi-dimensional viewpoint",           true),
+        AnalysisStep(Res.drawable.icon_chart, "Fact & Example Validation",   "Cross-verifying with latest data",               countdown < 15),
+        AnalysisStep(Res.drawable.icon_diamond_blue, "6-Pillar Rubric Scoring",     "Depth · Demand · Structure · Substantiation",   false),
     )
 
     Column(
@@ -135,7 +150,11 @@ private fun EvaluationLoadingContent(countdown: Int) {
                         .padding(vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(step.emoji, fontSize = 18.sp, modifier = Modifier.width(28.dp))
+                    Image(
+                        painter = painterResource(step.icon),
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp).width(28.dp)
+                    )
                     Spacer(Modifier.width(10.dp))
                     Column(modifier = Modifier.weight(1f)) {
                         Text(step.title, color = Color(0xFF111827), fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
@@ -184,7 +203,11 @@ private fun EvaluationLoadingContent(countdown: Int) {
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("⏱", fontSize = 14.sp)
+                        Image(
+                            painter = painterResource(Res.drawable.icon_timer),
+                            contentDescription = null,
+                            modifier = Modifier.size(14.dp)
+                        )
                         Spacer(Modifier.width(6.dp))
                         Text(
                             "$countdown Seconds Remaining",
@@ -210,7 +233,7 @@ private fun EvaluationLoadingContent(countdown: Int) {
 
 // ── Step 3: Results ──────────────────────────────────────────
 
-private data class RubricItem(val emoji: String, val label: String, val score: Float, val max: Float, val color: Color)
+private data class RubricItem(val icon: DrawableResource, val label: String, val score: Float, val max: Float, val color: Color)
 
 @Composable
 private fun EvaluationResultsContent(
@@ -219,12 +242,12 @@ private fun EvaluationResultsContent(
     onWhatNext: () -> Unit
 ) {
     val rubricItems = listOf(
-        RubricItem("📝", "Introduction & Context", 1.8f, 2f, Color(0xFF22C55E)),
-        RubricItem("📚", "Content Depth",          1.6f, 2f, Color(0xFFF0A500)),
-        RubricItem("🔍", "Critical Analysis",      1.5f, 2f, Color(0xFFF0A500)),
-        RubricItem("📊", "Examples & Data",        0.7f, 1f, Color(0xFFEF4444)),
-        RubricItem("🗺️", "Way Forward",            1.7f, 2f, Color(0xFF22C55E)),
-        RubricItem("✏️", "Language & Presentation",0.9f, 1f, Color(0xFFF0A500)),
+        RubricItem(Res.drawable.icon_note, "Introduction & Context", 1.8f, 2f, Color(0xFF22C55E)),
+        RubricItem(Res.drawable.icon_books, "Content Depth",          1.6f, 2f, Color(0xFFF0A500)),
+        RubricItem(Res.drawable.icon_search, "Critical Analysis",      1.5f, 2f, Color(0xFFF0A500)),
+        RubricItem(Res.drawable.icon_chart, "Examples & Data",        0.7f, 1f, Color(0xFFEF4444)),
+        RubricItem(Res.drawable.icon_way_forward, "Way Forward",            1.7f, 2f, Color(0xFF22C55E)),
+        RubricItem(Res.drawable.icon_write, "Language & Presentation",0.9f, 1f, Color(0xFFF0A500)),
     )
 
     Column(
@@ -326,7 +349,11 @@ private fun EvaluationResultsContent(
                 .padding(20.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("📊", fontSize = 18.sp)
+                Image(
+                    painter = painterResource(Res.drawable.icon_chart),
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
                 Spacer(Modifier.width(8.dp))
                 Text("Rubric Breakdown", color = Color(0xFF111827), fontSize = 16.sp, fontWeight = FontWeight.ExtraBold)
             }
@@ -340,7 +367,11 @@ private fun EvaluationResultsContent(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
-                            Text(item.emoji, fontSize = 14.sp)
+                            Image(
+                                painter = painterResource(item.icon),
+                                contentDescription = null,
+                                modifier = Modifier.size(14.dp)
+                            )
                             Spacer(Modifier.width(8.dp))
                             Text(item.label, color = Color(0xFF374151), fontSize = 13.sp, fontWeight = FontWeight.Medium)
                         }
@@ -378,7 +409,15 @@ private fun EvaluationResultsContent(
                 shape = RoundedCornerShape(14.dp),
                 border = ButtonDefaults.outlinedButtonBorder
             ) {
-                Text("📋  View Markup", color = EVWhite, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource(Res.drawable.icon_clipboard),
+                        contentDescription = null,
+                        modifier = Modifier.size(14.dp)
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text("View Markup", color = EVWhite, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                }
             }
             Box(
                 modifier = Modifier.weight(1f).height(50.dp)
@@ -387,7 +426,15 @@ private fun EvaluationResultsContent(
                     .clickable { onWhatNext() },
                 contentAlignment = Alignment.Center
             ) {
-                Text("What Next? →", color = Color(0xFF111827), fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource(Res.drawable.icon_bolt),
+                        contentDescription = null,
+                        modifier = Modifier.size(13.dp)
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text("What Next?", color = Color(0xFF111827), fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                }
             }
         }
 

@@ -3,6 +3,7 @@ package com.example.myapplicationrisewithjeet.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,6 +38,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplicationrisewithjeet.ui.theme.GoldGradient
+import myapplicationrisewithjeet.composeapp.generated.resources.Res
+import myapplicationrisewithjeet.composeapp.generated.resources.planner_books
+import myapplicationrisewithjeet.composeapp.generated.resources.planner_build_header
+import myapplicationrisewithjeet.composeapp.generated.resources.planner_check
+import myapplicationrisewithjeet.composeapp.generated.resources.planner_note
+import myapplicationrisewithjeet.composeapp.generated.resources.planner_other
+import myapplicationrisewithjeet.composeapp.generated.resources.planner_reading
+import myapplicationrisewithjeet.composeapp.generated.resources.planner_revision
+import myapplicationrisewithjeet.composeapp.generated.resources.planner_timer
+import myapplicationrisewithjeet.composeapp.generated.resources.planner_video
+import myapplicationrisewithjeet.composeapp.generated.resources.planner_write
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 
 private val BsBg = Color(0xFF232427)
 private val BsHero = Color(0xFF0D1A3A)
@@ -47,17 +61,17 @@ private val BsBorder = Color(0xFFD9DFEA)
 private val BsText = Color(0xFF2A3553)
 private val BsMuted = Color(0xFF7C87A4)
 
-private data class StudyTypeOption(val emoji: String, val label: String)
+private data class StudyTypeOption(val icon: DrawableResource, val label: String)
 
 private val studyTypes = listOf(
-    StudyTypeOption("🎥", "Video\nLectures"),
-    StudyTypeOption("📖", "Reading"),
-    StudyTypeOption("✅", "Practice"),
-    StudyTypeOption("🔄", "Revision"),
-    StudyTypeOption("📝", "Test"),
-    StudyTypeOption("✏️", "Note\nMaking"),
-    StudyTypeOption("✍️", "Answer\nWriting"),
-    StudyTypeOption("💡", "Other")
+    StudyTypeOption(Res.drawable.planner_video, "Video\nLectures"),
+    StudyTypeOption(Res.drawable.planner_reading, "Reading"),
+    StudyTypeOption(Res.drawable.planner_check, "Practice"),
+    StudyTypeOption(Res.drawable.planner_revision, "Revision"),
+    StudyTypeOption(Res.drawable.planner_note, "Test"),
+    StudyTypeOption(Res.drawable.planner_note, "Note\nMaking"),
+    StudyTypeOption(Res.drawable.planner_write, "Answer\nWriting"),
+    StudyTypeOption(Res.drawable.planner_other, "Other")
 )
 
 private val subjects = listOf("Indian Polity", "Modern History", "Geography", "Economy", "Environment", "Science & Technology", "GS Paper 1", "GS Paper 2", "GS Paper 3", "GS Paper 4")
@@ -111,7 +125,11 @@ fun BuildStudyPlanScreen(
                     .padding(vertical = 18.dp, horizontal = 18.dp)
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
-                    Text("📝", fontSize = 40.sp)
+                    Image(
+                        painter = painterResource(Res.drawable.planner_build_header),
+                        contentDescription = null,
+                        modifier = Modifier.size(40.dp)
+                    )
                     Spacer(Modifier.height(4.dp))
                     Text("Build Your Study Plan", color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold)
                     Text("Thursday, Mar 19 · Add a task to get started", color = Color(0xFF95A0BD), fontSize = 12.sp)
@@ -171,7 +189,7 @@ fun BuildStudyPlanScreen(
                 Spacer(Modifier.height(10.dp))
 
                 FormCard {
-                    FieldLabel("🗂️", "STUDY TYPE")
+                    FieldLabel(Res.drawable.planner_books, "STUDY TYPE")
                     Spacer(Modifier.height(8.dp))
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         studyTypes.chunked(4).forEachIndexed { rowIndex, row ->
@@ -182,6 +200,7 @@ fun BuildStudyPlanScreen(
                                     Box(
                                         modifier = Modifier
                                             .weight(1f)
+                                            .height(90.dp)
                                             .clip(RoundedCornerShape(10.dp))
                                             .background(if (selected) Color(0xFF202A4A) else BsField)
                                             .border(1.dp, if (selected) Color(0xFF202A4A) else BsBorder, RoundedCornerShape(10.dp))
@@ -190,7 +209,11 @@ fun BuildStudyPlanScreen(
                                         contentAlignment = Alignment.Center
                                     ) {
                                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                            Text(option.emoji, fontSize = 18.sp)
+                                            Image(
+                                                painter = painterResource(option.icon),
+                                                contentDescription = null,
+                                                modifier = Modifier.size(18.dp)
+                                            )
                                             val parts = option.label.split("\\n")
                                             Text(parts[0], color = if (selected) Color.White else BsText, fontSize = 12.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
                                             if (parts.size > 1) Text(parts[1], color = if (selected) Color(0xFFC6D0E8) else BsMuted, fontSize = 10.sp, textAlign = TextAlign.Center)
@@ -231,7 +254,15 @@ fun BuildStudyPlanScreen(
                             .padding(vertical = 8.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("⏱ $durationText", color = Color(0xFFC48621), fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                painter = painterResource(Res.drawable.planner_timer),
+                                contentDescription = null,
+                                modifier = Modifier.size(12.dp)
+                            )
+                            Spacer(Modifier.width(5.dp))
+                            Text(durationText, color = Color(0xFFC48621), fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                        }
                     }
                 }
 
@@ -285,6 +316,19 @@ private fun FormCard(content: @Composable ColumnScope.() -> Unit) {
 private fun FieldLabel(icon: String, label: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(icon, fontSize = 12.sp)
+        Spacer(Modifier.width(5.dp))
+        Text(label, color = BsMuted, fontSize = 12.sp, fontWeight = FontWeight.ExtraBold)
+    }
+}
+
+@Composable
+private fun FieldLabel(icon: DrawableResource, label: String) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Image(
+            painter = painterResource(icon),
+            contentDescription = null,
+            modifier = Modifier.size(12.dp)
+        )
         Spacer(Modifier.width(5.dp))
         Text(label, color = BsMuted, fontSize = 12.sp, fontWeight = FontWeight.ExtraBold)
     }

@@ -3,6 +3,7 @@ package com.example.myapplicationrisewithjeet.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,13 +23,21 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplicationrisewithjeet.ui.theme.*
+import myapplicationrisewithjeet.composeapp.generated.resources.Res
+import myapplicationrisewithjeet.composeapp.generated.resources.news_hindu
+import myapplicationrisewithjeet.composeapp.generated.resources.news_indian_express
+import myapplicationrisewithjeet.composeapp.generated.resources.news_jeet_ai
+import myapplicationrisewithjeet.composeapp.generated.resources.news_save
+import myapplicationrisewithjeet.composeapp.generated.resources.news_time
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 
 // ── Colour palette ────────────────────────────────────────────
 private val DNBg    = Color(0xFF0F1629)
 private val DNCard  = Color(0xFF1A2540)
 private val DNWhite = Color.White
 private val DNGray  = Color(0xFF9CA3AF)
-private val DNLight = Color(0xFFF4F6FB)
+private val DNLight = Color(0xFFF0F4FA)
 private val DNBorder = Color(0xFFE5E7EB)
 
 // ── Data model ────────────────────────────────────────────────
@@ -139,14 +148,14 @@ private val ieArticles = listOf(
 )
 
 @Composable
-fun DailyNewsScreen(onBack: () -> Unit) {
+fun DailyNewsScreen(onBack: () -> Unit, onJeetAIClick: () -> Unit = {}) {
     var selectedTab by remember { mutableStateOf(0) }   // 0 = The Hindu, 1 = Indian Express
     val articles = if (selectedTab == 0) hinduArticles else ieArticles
 
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(DNBg),
+            .background(DNLight),
         contentPadding = PaddingValues(bottom = 32.dp)
     ) {
         // ── Dark hero header ───────────────────────────────
@@ -253,13 +262,15 @@ fun DailyNewsScreen(onBack: () -> Unit) {
                 ) {
                     SourceTab(
                         modifier = Modifier.weight(1f),
-                        label = "🖊 The Hindu",
+                        icon = Res.drawable.news_hindu,
+                        label = "The Hindu",
                         selected = selectedTab == 0,
                         onClick = { selectedTab = 0 }
                     )
                     SourceTab(
                         modifier = Modifier.weight(1f),
-                        label = "📰 Indian Express",
+                        icon = Res.drawable.news_indian_express,
+                        label = "Indian Express",
                         selected = selectedTab == 1,
                         onClick = { selectedTab = 1 }
                     )
@@ -309,6 +320,7 @@ fun DailyNewsScreen(onBack: () -> Unit) {
         items(articles) { article ->
             NewsArticleCard(
                 article = article,
+                onJeetAIClick = onJeetAIClick,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
             )
         }
@@ -350,7 +362,7 @@ fun DailyNewsScreen(onBack: () -> Unit) {
 
                     Spacer(Modifier.height(14.dp))
 
-                    // Streak dots
+                    // Streak boxes
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(6.dp)
@@ -362,7 +374,10 @@ fun DailyNewsScreen(onBack: () -> Unit) {
                                     .weight(1f)
                                     .height(24.dp)
                                     .clip(RoundedCornerShape(4.dp))
-                                    .then(if (filled) Modifier.background(GoldGradient) else Modifier.background(Color(0xFF2D3561))),
+                                    .then(
+                                        if (filled) Modifier.background(Color(0xFFF5A623))
+                                        else Modifier.background(Color(0xFFE0E0E0))
+                                    ),
                                 contentAlignment = Alignment.Center
                             ) {
                                 if (filled) Text("✓", color = DNBg, fontSize = 10.sp, fontWeight = FontWeight.Bold)
@@ -405,7 +420,7 @@ private fun StatBox(modifier: Modifier, value: String, label: String, valueColor
 }
 
 @Composable
-private fun SourceTab(modifier: Modifier, label: String, selected: Boolean, onClick: () -> Unit) {
+private fun SourceTab(modifier: Modifier, icon: DrawableResource, label: String, selected: Boolean, onClick: () -> Unit) {
     Box(
         modifier = modifier
             .height(44.dp)
@@ -415,17 +430,25 @@ private fun SourceTab(modifier: Modifier, label: String, selected: Boolean, onCl
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            label,
-            color = if (selected) DNWhite else Color(0xFF374151),
-            fontSize = 13.sp,
-            fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
-        )
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+            Image(
+                painter = painterResource(icon),
+                contentDescription = null,
+                modifier = Modifier.size(13.dp)
+            )
+            Spacer(Modifier.width(6.dp))
+            Text(
+                label,
+                color = if (selected) DNWhite else Color(0xFF374151),
+                fontSize = 13.sp,
+                fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
+            )
+        }
     }
 }
 
 @Composable
-private fun NewsArticleCard(article: NewsArticle, modifier: Modifier = Modifier) {
+private fun NewsArticleCard(article: NewsArticle, onJeetAIClick: () -> Unit = {}, modifier: Modifier = Modifier) {
     var saved   by remember { mutableStateOf(false) }
     var marked  by remember { mutableStateOf(false) }
 
@@ -449,8 +472,12 @@ private fun NewsArticleCard(article: NewsArticle, modifier: Modifier = Modifier)
                 if (article.focusTag.isNotEmpty()) NewsTag(article.focusTag, article.focusTagColor)
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("⏱", fontSize = 11.sp)
-                Spacer(Modifier.width(2.dp))
+                Image(
+                    painter = painterResource(Res.drawable.news_time),
+                    contentDescription = null,
+                    modifier = Modifier.size(11.dp)
+                )
+                Spacer(Modifier.width(3.dp))
                 Text("${article.readMin} min", color = DNGray, fontSize = 11.sp)
             }
         }
@@ -494,8 +521,12 @@ private fun NewsArticleCard(article: NewsArticle, modifier: Modifier = Modifier)
                     .padding(horizontal = 14.dp, vertical = 9.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(if (saved) "🔖" else "📌", fontSize = 12.sp)
-                    Spacer(Modifier.width(4.dp))
+                    Image(
+                        painter = painterResource(Res.drawable.news_save),
+                        contentDescription = null,
+                        modifier = Modifier.size(12.dp)
+                    )
+                    Spacer(Modifier.width(6.dp))
                     Text(
                         "Save",
                         color = if (saved) GoldAccent else Color(0xFF374151),
@@ -533,12 +564,16 @@ private fun NewsArticleCard(article: NewsArticle, modifier: Modifier = Modifier)
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
                     .background(Color(0xFF111827))
-                    .clickable {}
+                    .clickable { onJeetAIClick() }
                     .padding(horizontal = 14.dp, vertical = 9.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("🤖", fontSize = 12.sp)
-                    Spacer(Modifier.width(4.dp))
+                    Image(
+                        painter = painterResource(Res.drawable.news_jeet_ai),
+                        contentDescription = null,
+                        modifier = Modifier.size(12.dp)
+                    )
+                    Spacer(Modifier.width(6.dp))
                     Text("Jeet AI", color = DNWhite, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                 }
             }

@@ -78,14 +78,33 @@ fun App() {
                 key(currentScreen) {
                     when (val screen = currentScreen) {
                         is Screen.Home     -> HomeScreen(
-                            onProfileClick       = { currentScreen = Screen.Profile },
-                            onQuizClick          = { currentScreen = Screen.DailyMCQSetup },
-                            onPyqsClick          = { currentScreen = Screen.PYQHome },
-                            onDailyMainsClick    = { currentScreen = Screen.DailyMainsChallenge },
-                            onDailyNewsClick     = { currentScreen = Screen.DailyNews },
-                            onStudyPlanClick     = { currentScreen = Screen.StudyPlanner },
-                            onRevisionSuiteClick = { currentScreen = Screen.RevisionSuite },
-                            onJeetAIClick        = { currentScreen = Screen.JeetAI }
+                            onProfileClick                = { currentScreen = Screen.Profile },
+                            onQuizClick                   = { currentScreen = Screen.DailyMCQSetup },
+                            onPyqsClick                   = { currentScreen = Screen.PYQHome },
+                            onDailyMainsClick             = { currentScreen = Screen.DailyMainsChallenge },
+                            onDailyNewsClick              = { currentScreen = Screen.DailyNews },
+                            onStudyPlanClick              = { currentScreen = Screen.StudyPlanner },
+                            onRevisionSuiteClick          = { currentScreen = Screen.RevisionSuite },
+                            onJeetAIClick                 = { currentScreen = Screen.JeetAI },
+                            onStartTrackingSyllabusClick  = { currentScreen = Screen.SyllabusTracker },
+                            onPreviousYearQuestionsClick  = { currentScreen = Screen.PYQNew }
+                        )
+                        is Screen.SyllabusTracker -> SyllabusTrackerScreen(
+                            onBack          = { currentScreen = Screen.Home },
+                            onStartTracking = { currentScreen = Screen.SyllabusSubjectSelect }
+                        )
+                        is Screen.SyllabusSubjectSelect -> SyllabusSubjectSelectScreen(
+                            onBack              = { currentScreen = Screen.SyllabusTracker },
+                            onSubjectSelected   = { id -> currentScreen = Screen.SyllabusSubTopics(id) }
+                        )
+                        is Screen.SyllabusSubTopics -> SyllabusSubTopicsScreen(
+                            subjectId          = screen.subjectId,
+                            onBack             = { currentScreen = Screen.SyllabusSubjectSelect },
+                            onSubTopicSelected = { id -> currentScreen = Screen.SyllabusTopicDetail(id) }
+                        )
+                        is Screen.SyllabusTopicDetail -> SyllabusTopicDetailScreen(
+                            subTopicId = screen.subTopicId,
+                            onBack     = { currentScreen = Screen.SyllabusSubjectSelect }
                         )
                         is Screen.JeetAI -> JeetAIScreen(
                             onBack = { currentScreen = Screen.Home }
@@ -140,7 +159,17 @@ fun App() {
                             onDashboard = { studyPlanBuilt = false; currentScreen = Screen.Home }
                         )
                         is Screen.DailyNews -> DailyNewsScreen(
-                            onBack = { currentScreen = Screen.Home }
+                            onBack        = { currentScreen = Screen.Home },
+                            onJeetAIClick = { currentScreen = Screen.JeetAILoading }
+                        )
+                        is Screen.JeetAILoading -> JeetAILoadingScreen(
+                            onViewSummary = { currentScreen = Screen.JeetAISummary },
+                            onBack        = { currentScreen = Screen.DailyNews }
+                        )
+                        is Screen.JeetAISummary -> JeetAISummaryScreen(
+                            onBack        = { currentScreen = Screen.JeetAILoading },
+                            onNewsFeed    = { currentScreen = Screen.DailyNews },
+                            onNextArticle = { currentScreen = Screen.DailyNews }
                         )
                         is Screen.DailyMainsChallenge -> DailyMainsChallengeScreen(
                             onBack          = { currentScreen = Screen.Home },
@@ -258,6 +287,29 @@ fun App() {
                         is Screen.PYQWhatNext -> PYQWhatNextScreen(
                             onBack = { currentScreen = Screen.PYQSessionResult },
                             onHome = { currentScreen = Screen.Home }
+                        )
+                        is Screen.PYQNew -> PYQNewHomeScreen(
+                            onBack            = { currentScreen = Screen.Home },
+                            onSubjectSelected = { id -> currentScreen = Screen.PYQNewSubTopics(id) }
+                        )
+                        is Screen.PYQNewSubTopics -> PYQNewSubTopicsScreen(
+                            subjectId         = screen.subjectId,
+                            onBack            = { currentScreen = Screen.PYQNew },
+                            onSubTopicSelected = { id -> currentScreen = Screen.PYQNewTopicDetail(id) }
+                        )
+                        is Screen.PYQNewTopicDetail -> PYQNewTopicDetailScreen(
+                            subTopicId        = screen.subTopicId,
+                            onBack            = { currentScreen = Screen.PYQNewSubTopics("history") },
+                            onTopicSelected   = { id -> currentScreen = Screen.PYQNewSetup(id) }
+                        )
+                        is Screen.PYQNewSetup -> PYQNewSetupScreen(
+                            topicId           = screen.topicId,
+                            onBack            = { currentScreen = Screen.PYQNewTopicDetail("ancient") },
+                            onContinue        = { currentScreen = Screen.PYQNewReady }
+                        )
+                        is Screen.PYQNewReady -> PYQNewReadyScreen(
+                            onBack            = { currentScreen = Screen.PYQNewSetup("indus") },
+                            onStartChallenge  = { currentScreen = Screen.PYQQuestion }
                         )
                         is Screen.SubjectDetail -> SubjectDetailScreen(
                             subjectId = screen.subjectId,

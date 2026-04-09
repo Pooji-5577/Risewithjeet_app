@@ -3,6 +3,7 @@ package com.example.myapplicationrisewithjeet.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -28,6 +30,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplicationrisewithjeet.ui.theme.GoldGradient
+import myapplicationrisewithjeet.composeapp.generated.resources.Res
+import myapplicationrisewithjeet.composeapp.generated.resources.planner_check
+import myapplicationrisewithjeet.composeapp.generated.resources.planner_target
+import myapplicationrisewithjeet.composeapp.generated.resources.planner_timer
+import myapplicationrisewithjeet.composeapp.generated.resources.planner_trophy
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 
 private val PcBg = Color(0xFF202327)
 private val PcHero = Color(0xFF0D1A3A)
@@ -75,13 +84,13 @@ fun PlanCompleteScreen(onDashboard: () -> Unit) {
                     .padding(12.dp)
             ) {
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    StatTile(Modifier.weight(1f), "⏱", "6.5h", "TOTAL STUDIED", Color(0xFF3E4A6C))
-                    StatTile(Modifier.weight(1f), "✅", "5/5", "TASKS DONE", Color(0xFF4CA960))
+                    StatTile(Modifier.weight(1f), Res.drawable.planner_timer, "6.5h", "TOTAL STUDIED", Color(0xFF3E4A6C))
+                    StatTile(Modifier.weight(1f), Res.drawable.planner_check, "5/5", "TASKS DONE", Color(0xFF4CA960))
                 }
                 Spacer(Modifier.height(8.dp))
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    StatTile(Modifier.weight(1f), "🎯", "88%", "MCQ ACCURACY", Color(0xFF4F75D2))
-                    StatTile(Modifier.weight(1f), "🔥", "48", "DAY STREAK", Color(0xFFD7961F))
+                    StatTile(Modifier.weight(1f), Res.drawable.planner_target, "88%", "MCQ ACCURACY", Color(0xFF4F75D2))
+                    StatTileEmoji(Modifier.weight(1f), "🔥", "48", "DAY STREAK", Color(0xFFD7961F))
                 }
 
                 Spacer(Modifier.height(10.dp))
@@ -95,7 +104,15 @@ fun PlanCompleteScreen(onDashboard: () -> Unit) {
                 ) {
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                         Column {
-                            Text("🏆 New Achievement!", color = Color(0xFF1A223B), fontSize = 16.sp, fontWeight = FontWeight.ExtraBold)
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Image(
+                                    painter = painterResource(Res.drawable.planner_trophy),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Spacer(Modifier.width(6.dp))
+                                Text("New Achievement!", color = Color(0xFF1A223B), fontSize = 16.sp, fontWeight = FontWeight.ExtraBold)
+                            }
                             Text("First perfect study day this month", color = Color(0xFF404B68), fontSize = 12.sp)
                         }
                         Text("+35XP", color = Color(0xFF1A223B), fontSize = 42.sp, fontWeight = FontWeight.ExtraBold)
@@ -126,6 +143,33 @@ fun PlanCompleteScreen(onDashboard: () -> Unit) {
 
 @Composable
 private fun StatTile(
+    modifier: Modifier,
+    icon: DrawableResource,
+    value: String,
+    label: String,
+    valueColor: Color
+) {
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(12.dp))
+            .background(PcCard)
+            .border(1.dp, PcBorder, RoundedCornerShape(12.dp))
+            .padding(vertical = 10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(icon),
+            contentDescription = null,
+            modifier = Modifier.size(24.dp)
+        )
+        Spacer(Modifier.height(4.dp))
+        Text(value, color = valueColor, fontSize = 28.sp, fontWeight = FontWeight.ExtraBold)
+        Text(label, color = PcMuted, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+    }
+}
+
+@Composable
+private fun StatTileEmoji(
     modifier: Modifier,
     emoji: String,
     value: String,

@@ -3,6 +3,7 @@ package com.example.myapplicationrisewithjeet.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +40,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplicationrisewithjeet.ui.theme.GoldAccent
 import com.example.myapplicationrisewithjeet.ui.theme.GoldGradient
+import myapplicationrisewithjeet.composeapp.generated.resources.Res
+import myapplicationrisewithjeet.composeapp.generated.resources.planner_calendar
+import myapplicationrisewithjeet.composeapp.generated.resources.planner_my_study
+import myapplicationrisewithjeet.composeapp.generated.resources.planner_target
+import org.jetbrains.compose.resources.painterResource
 
 private val SpBackdrop = Color(0xFF222429)
 private val SpHero = Color(0xFF0D1A3A)
@@ -128,8 +134,8 @@ private fun EmptyPlanner(onBack: () -> Unit, onBuildPlan: () -> Unit) {
                     Text("🗓 DAILY STUDY PLANNER", color = GoldAccent, fontSize = 13.sp, fontWeight = FontWeight.Bold)
                 }
                 Spacer(Modifier.height(16.dp))
-                Text("Where planning meets", color = Color.White, fontSize = 52.sp, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center, lineHeight = 56.sp)
-                Text("purpose", color = GoldAccent, fontSize = 52.sp, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center)
+                Text("Where planning meets", color = Color.White, fontSize = 28.sp, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center, lineHeight = 42.sp)
+                Text("purpose", color = GoldAccent, fontSize = 28.sp, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center)
                 Spacer(Modifier.height(12.dp))
                 Text(
                     "Plan every hour, track every milestone - built\naround your UPSC journey.",
@@ -193,7 +199,15 @@ private fun EmptyPlanner(onBack: () -> Unit, onBuildPlan: () -> Unit) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("📅  Sat, Mar 22, 2026", color = SpText, fontSize = 16.sp, fontWeight = FontWeight.ExtraBold)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource(Res.drawable.planner_calendar),
+                        contentDescription = null,
+                        modifier = Modifier.size(14.dp)
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text("Sat, Mar 22, 2026", color = SpText, fontSize = 16.sp, fontWeight = FontWeight.ExtraBold)
+                }
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(20.dp))
@@ -217,7 +231,11 @@ private fun EmptyPlanner(onBack: () -> Unit, onBuildPlan: () -> Unit) {
                 contentAlignment = Alignment.Center
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("📅", fontSize = 64.sp)
+                    Image(
+                        painter = painterResource(Res.drawable.planner_calendar),
+                        contentDescription = null,
+                        modifier = Modifier.size(64.dp)
+                    )
                     Spacer(Modifier.height(10.dp))
                     Text("Your plan is empty", color = SpText, fontSize = 24.sp, fontWeight = FontWeight.ExtraBold)
                     Spacer(Modifier.height(8.dp))
@@ -236,7 +254,15 @@ private fun EmptyPlanner(onBack: () -> Unit, onBuildPlan: () -> Unit) {
                             .clickable { onBuildPlan() }
                             .padding(horizontal = 20.dp, vertical = 12.dp)
                     ) {
-                        Text("🎯 Build My Study Plan →", color = Color(0xFF1A223B), fontWeight = FontWeight.ExtraBold, fontSize = 14.sp)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                painter = painterResource(Res.drawable.planner_target),
+                                contentDescription = null,
+                                modifier = Modifier.size(14.dp)
+                            )
+                            Spacer(Modifier.width(6.dp))
+                            Text("Build My Study Plan →", color = Color(0xFF1A223B), fontWeight = FontWeight.ExtraBold, fontSize = 14.sp)
+                        }
                     }
                 }
             }
@@ -269,7 +295,11 @@ private fun PopulatedPlanner(onBack: () -> Unit, onBuildPlan: () -> Unit, onStar
                 .padding(16.dp)
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
-                Text("🗓", fontSize = 22.sp)
+                Image(
+                    painter = painterResource(Res.drawable.planner_my_study),
+                    contentDescription = null,
+                    modifier = Modifier.size(22.dp)
+                )
                 Spacer(Modifier.height(4.dp))
                 Text("My Study", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.ExtraBold)
                 Text("Planner", color = GoldAccent, fontSize = 24.sp, fontWeight = FontWeight.ExtraBold)
@@ -298,7 +328,15 @@ private fun PopulatedPlanner(onBack: () -> Unit, onBuildPlan: () -> Unit, onStar
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("📅  Sat, Mar 22, 2026", color = SpText, fontSize = 15.sp, fontWeight = FontWeight.ExtraBold)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource(Res.drawable.planner_calendar),
+                        contentDescription = null,
+                        modifier = Modifier.size(14.dp)
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text("Sat, Mar 22, 2026", color = SpText, fontSize = 15.sp, fontWeight = FontWeight.ExtraBold)
+                }
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(20.dp))

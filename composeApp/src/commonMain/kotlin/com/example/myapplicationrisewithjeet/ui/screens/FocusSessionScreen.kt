@@ -3,6 +3,7 @@ package com.example.myapplicationrisewithjeet.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +37,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplicationrisewithjeet.ui.theme.GoldGradient
 import kotlinx.coroutines.delay
+import myapplicationrisewithjeet.composeapp.generated.resources.Res
+import myapplicationrisewithjeet.composeapp.generated.resources.planner_my_study
+import myapplicationrisewithjeet.composeapp.generated.resources.planner_pause
+import org.jetbrains.compose.resources.painterResource
 
 private val FsBg = Color(0xFF202327)
 private val FsHero = Color(0xFF0D1A3A)
@@ -171,7 +176,17 @@ fun FocusSessionScreen(
                                     .clickable { paused = !paused },
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text(if (paused) "▶ Resume" else "⏸ Pause", color = FsText, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    if (!paused) {
+                                        Image(
+                                            painter = painterResource(Res.drawable.planner_pause),
+                                            contentDescription = null,
+                                            modifier = Modifier.size(14.dp)
+                                        )
+                                        Spacer(Modifier.width(5.dp))
+                                    }
+                                    Text(if (paused) "▶ Resume" else "Pause", color = FsText, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                                }
                             }
                             Box(
                                 modifier = Modifier
@@ -190,7 +205,15 @@ fun FocusSessionScreen(
 
                 Spacer(Modifier.height(8.dp))
 
-                Text("📅  Today's Study Plan", color = FsText, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource(Res.drawable.planner_my_study),
+                        contentDescription = null,
+                        modifier = Modifier.size(14.dp)
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text("Today's Study Plan", color = FsText, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                }
                 Spacer(Modifier.height(6.dp))
 
                 Box(

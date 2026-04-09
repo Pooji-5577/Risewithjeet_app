@@ -76,6 +76,8 @@ fun HomeScreen(
     onDailyNewsClick: () -> Unit = {},
     onStudyPlanClick: () -> Unit = {},
     onRevisionSuiteClick: () -> Unit = {},
+    onStartTrackingSyllabusClick: () -> Unit = {},
+    onPreviousYearQuestionsClick: () -> Unit = {},
     initialTab: Int = 0
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -102,7 +104,7 @@ fun HomeScreen(
                     onDailyMainsClick()
                 },
                 onMockTestsClick = { scope.launch { drawerState.close() } },
-                onPreviousYearQuestionsClick = { scope.launch { drawerState.close() } },
+                onPreviousYearQuestionsClick = { scope.launch { drawerState.close() }; onPreviousYearQuestionsClick() },
                 onPerformanceAnalyticsClick = { scope.launch { drawerState.close() } },
                 onLeaderboardClick = { scope.launch { drawerState.close() } },
                 onFlashcardsClick = { scope.launch { drawerState.close() } },
@@ -151,7 +153,7 @@ fun HomeScreen(
                         Spacer(Modifier.height(12.dp))
                         StudyPlanSection(onStudyPlanClick = onStudyPlanClick)
                         Spacer(Modifier.height(12.dp))
-                        SyllabusTrackerSection()
+                        SyllabusTrackerSection(onStartTracking = onStartTrackingSyllabusClick)
                         Spacer(Modifier.height(12.dp))
                         RevisionSuiteSection(onExploreClick = onRevisionSuiteClick)
                         Spacer(Modifier.height(12.dp))
@@ -701,7 +703,7 @@ private fun StudyPlanSection(onStudyPlanClick: () -> Unit = {}) {
 // ─────────────────────────────────────────────
 
 @Composable
-private fun SyllabusTrackerSection() {
+private fun SyllabusTrackerSection(onStartTracking: () -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -722,7 +724,7 @@ private fun SyllabusTrackerSection() {
                 Spacer(Modifier.width(6.dp))
                 Text("Syllabus Tracker", color = TextDark, fontSize = 15.sp, fontWeight = FontWeight.Bold)
             }
-            Text("Track →", color = GoldAccent, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+            Text("Track →", color = GoldAccent, fontSize = 12.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.clickable { onStartTracking() })
         }
         Spacer(Modifier.height(12.dp))
 
@@ -771,7 +773,7 @@ private fun SyllabusTrackerSection() {
                         .height(48.dp)
                         .clip(RoundedCornerShape(16.dp))
                         .background(GoldGradient)
-                        .clickable {},
+                        .clickable { onStartTracking() },
                     contentAlignment = Alignment.Center
                 ) {
                     Text("📚 Start Tracking Syllabus →", color = Color(0xFF1A1A1A), fontWeight = FontWeight.Bold, fontSize = 15.sp)

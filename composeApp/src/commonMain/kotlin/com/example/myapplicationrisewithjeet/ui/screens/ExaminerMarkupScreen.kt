@@ -3,6 +3,7 @@ package com.example.myapplicationrisewithjeet.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,6 +21,12 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplicationrisewithjeet.ui.theme.*
+import myapplicationrisewithjeet.composeapp.generated.resources.Res
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_bolt
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_document
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_note
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_write
+import org.jetbrains.compose.resources.painterResource
 
 private val MUBg    = Color(0xFFF2F3F8)
 private val MUDark  = Color(0xFF0F1629)
@@ -57,7 +64,11 @@ fun ExaminerMarkupScreen(
                 Text("←", color = White70, fontSize = 20.sp, modifier = Modifier.clickable { onBack() })
             }
             Spacer(Modifier.height(8.dp))
-            Text("📝", fontSize = 28.sp)
+            Image(
+                painter = painterResource(Res.drawable.icon_note),
+                contentDescription = null,
+                modifier = Modifier.size(28.dp)
+            )
             Spacer(Modifier.height(4.dp))
             Text("Examiner's Markup", color = MUWhite, fontSize = 20.sp, fontWeight = FontWeight.ExtraBold)
         }
@@ -106,7 +117,11 @@ fun ExaminerMarkupScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("📄", fontSize = 14.sp)
+                    Image(
+                        painter = painterResource(Res.drawable.icon_document),
+                        contentDescription = null,
+                        modifier = Modifier.size(14.dp)
+                    )
                     Spacer(Modifier.width(6.dp))
                     Text("Annotated Answer", color = Color(0xFF111827), fontSize = 14.sp, fontWeight = FontWeight.Bold)
                 }
@@ -245,7 +260,15 @@ fun ExaminerMarkupScreen(
                 shape = RoundedCornerShape(14.dp),
                 border = ButtonDefaults.outlinedButtonBorder
             ) {
-                Text("✏️  Try Another", color = Color(0xFF374151), fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource(Res.drawable.icon_write),
+                        contentDescription = null,
+                        modifier = Modifier.size(13.dp)
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text("Try Another", color = Color(0xFF374151), fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                }
             }
             Box(
                 modifier = Modifier.weight(1f).height(50.dp)
@@ -254,7 +277,15 @@ fun ExaminerMarkupScreen(
                     .clickable { onWhatNext() },
                 contentAlignment = Alignment.Center
             ) {
-                Text("What Next? →", color = Color(0xFF111827), fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource(Res.drawable.icon_bolt),
+                        contentDescription = null,
+                        modifier = Modifier.size(13.dp)
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text("What Next?", color = Color(0xFF111827), fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                }
             }
         }
 

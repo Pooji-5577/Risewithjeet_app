@@ -3,6 +3,7 @@ package com.example.myapplicationrisewithjeet.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,15 +13,28 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplicationrisewithjeet.ui.theme.*
 import kotlinx.coroutines.delay
+import myapplicationrisewithjeet.composeapp.generated.resources.Res
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_browse
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_camera
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_note
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_reset
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_scales
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_timer
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_upload
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 
-private val MTBg     = Color(0xFFF2F3F8)
+private val MTBg     = Color(0xFFEFF3F9)
 private val MTDark   = Color(0xFF0F1629)
 private val MTCard   = Color(0xFF1A2540)
 private val MTWhite  = Color.White
@@ -131,7 +145,11 @@ fun MockTestAnswerScreen(
         ) {
             // Evaluating header
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("⚖️", fontSize = 18.sp)
+                Image(
+                    painter = painterResource(Res.drawable.icon_scales),
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
+                )
                 Spacer(Modifier.width(8.dp))
                 Text(
                     "Evaluating Your Answer",
@@ -175,9 +193,9 @@ fun MockTestAnswerScreen(
                     )
                     Spacer(Modifier.height(12.dp))
                     Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                        StatChip("📝", "250 words")
-                        StatChip("🕐", "15 min suggested")
-                        StatChip("💎", "10 marks")
+                        StatChip(Res.drawable.icon_note, "250 words")
+                        StatChip(Res.drawable.icon_timer, "15 min suggested")
+                        StatChip(Res.drawable.icon_note, "10 marks")
                     }
                 }
             }
@@ -256,7 +274,15 @@ fun MockTestAnswerScreen(
                             shape = RoundedCornerShape(10.dp),
                             border = ButtonDefaults.outlinedButtonBorder
                         ) {
-                            Text("↺ Reset", color = MTDark, fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Image(
+                                    painter = painterResource(Res.drawable.icon_reset),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(13.dp)
+                                )
+                                Spacer(Modifier.width(6.dp))
+                                Text("Reset", color = MTDark, fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
+                            }
                         }
                     }
 
@@ -268,64 +294,90 @@ fun MockTestAnswerScreen(
                     )
                 }
             }
-        }
+            Spacer(Modifier.height(12.dp))
 
-        Spacer(Modifier.height(16.dp))
-
-        // ── Drop zone ─────────────────────────────────────────
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(MTWhite)
-                .border(2.dp, MTBorder, RoundedCornerShape(16.dp))
-                .padding(32.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("📤", fontSize = 40.sp)
-                Spacer(Modifier.height(10.dp))
-                Text(
-                    "Drop your answer script here",
-                    color = MTDark,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    "Upload handwritten answers, text files, etc.",
-                    color = MTGray,
-                    fontSize = 12.sp,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(Modifier.height(14.dp))
-                OutlinedButton(
-                    onClick = {},
-                    shape = RoundedCornerShape(10.dp),
-                    border = ButtonDefaults.outlinedButtonBorder
-                ) {
-                    Text("📎  Browse Files", color = MTDark, fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
+            // ── Drop zone ─────────────────────────────────────
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(14.dp))
+                    .background(Color(0xFFF5F7FB))
+                    .drawBehind {
+                        val stroke = 2.dp.toPx()
+                        drawRoundRect(
+                            color = Color(0xFFC9CFDA),
+                            style = Stroke(
+                                width = stroke,
+                                pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+                            ),
+                            cornerRadius = androidx.compose.ui.geometry.CornerRadius(14.dp.toPx(), 14.dp.toPx())
+                        )
+                    }
+                    .padding(horizontal = 20.dp, vertical = 24.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Image(
+                        painter = painterResource(Res.drawable.icon_upload),
+                        contentDescription = null,
+                        modifier = Modifier.size(38.dp)
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        "Drop your answer script here",
+                        color = MTDark,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        "Upload handwritten answers, text files, etc.",
+                        color = MTGray,
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(Modifier.height(12.dp))
+                    OutlinedButton(
+                        onClick = {},
+                        shape = RoundedCornerShape(10.dp),
+                        border = ButtonDefaults.outlinedButtonBorder
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                painter = painterResource(Res.drawable.icon_browse),
+                                contentDescription = null,
+                                modifier = Modifier.size(12.dp)
+                            )
+                            Spacer(Modifier.width(6.dp))
+                            Text("Browse Files", color = MTDark, fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
+                        }
+                    }
                 }
             }
-        }
 
-        Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(14.dp))
 
-        // ── Submit button ─────────────────────────────────────
-        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+            // ── Submit button ─────────────────────────────────
             Button(
                 onClick = onSubmit,
                 modifier = Modifier.fillMaxWidth().height(54.dp),
                 shape = RoundedCornerShape(14.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = MTDark)
             ) {
-                Text(
-                    "🏆  Submit Answer for Evaluation",
-                    color = MTWhite,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 15.sp
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource(Res.drawable.icon_camera),
+                        contentDescription = null,
+                        modifier = Modifier.size(14.dp)
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text(
+                        "Submit Answer For Evaluation",
+                        color = MTWhite,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 15.sp
+                    )
+                }
             }
             Spacer(Modifier.height(6.dp))
             Text(
@@ -342,9 +394,13 @@ fun MockTestAnswerScreen(
 }
 
 @Composable
-private fun StatChip(emoji: String, label: String) {
+private fun StatChip(icon: DrawableResource, label: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Text(emoji, fontSize = 12.sp)
+        Image(
+            painter = painterResource(icon),
+            contentDescription = null,
+            modifier = Modifier.size(11.dp)
+        )
         Spacer(Modifier.width(3.dp))
         Text(label, color = White70, fontSize = 11.sp)
     }

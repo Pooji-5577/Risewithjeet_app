@@ -39,13 +39,19 @@ sealed class Screen {
     data object ExaminerMarkup      : Screen()
     data object WhatNext            : Screen()
     data object JeetAI              : Screen()
+    data object JeetAILoading          : Screen()
+    data object JeetAISummary          : Screen()
+    data object SyllabusTracker        : Screen()
+    data object SyllabusSubjectSelect  : Screen()
+    data class  SyllabusSubTopics(val subjectId: String) : Screen()
+    data class  SyllabusTopicDetail(val subTopicId: String) : Screen()
     // Daily MCQ flow
     data object DailyMCQSetup       : Screen()
     data object DailyMCQChallenge   : Screen()
     data object DailyMCQResult      : Screen()
     data object DailyMCQReview      : Screen()
     data object DailyMCQNextSteps   : Screen()
-    // PYQ flow
+    // PYQ flow (original)
     data object PYQHome             : Screen()
     data object PYQSubjectSelect    : Screen()
     data object PYQSubjectTopics    : Screen()
@@ -55,6 +61,12 @@ sealed class Screen {
     data object PYQAIScore          : Screen()
     data object PYQMainsEval        : Screen()
     data object PYQWhatNext         : Screen()
+    // PYQ new flow
+    data object PYQNew                                  : Screen()
+    data class  PYQNewSubTopics(val subjectId: String)  : Screen()
+    data class  PYQNewTopicDetail(val subTopicId: String) : Screen()
+    data class  PYQNewSetup(val topicId: String)        : Screen()
+    data object PYQNewReady                             : Screen()
 }
 
 data class NavItem(

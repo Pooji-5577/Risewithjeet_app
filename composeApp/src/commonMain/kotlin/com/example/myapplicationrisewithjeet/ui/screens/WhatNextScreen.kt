@@ -3,6 +3,7 @@ package com.example.myapplicationrisewithjeet.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,6 +23,17 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplicationrisewithjeet.ui.theme.*
+import myapplicationrisewithjeet.composeapp.generated.resources.Res
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_reset
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_retry_today
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_note
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_books
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_star
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_target
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_trophy
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_write
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 
 private val WNBg    = Color(0xFFF2F3F8)
 private val WNDark  = Color(0xFF0F1629)
@@ -101,14 +113,14 @@ fun WhatNextScreen(
             ) {
                 ActionCard(
                     modifier = Modifier.weight(1f),
-                    emoji = "🔄",
+                    icon = Res.drawable.icon_reset,
                     title = "Rewrite with Feedback",
                     subtitle = "Apply suggestions immediately",
                     onClick = {}
                 )
                 ActionCard(
                     modifier = Modifier.weight(1f),
-                    emoji = "💾",
+                    icon = Res.drawable.icon_note,
                     title = "Save to Notes",
                     subtitle = "Add to personalised revision",
                     onClick = {}
@@ -120,14 +132,14 @@ fun WhatNextScreen(
             ) {
                 ActionCard(
                     modifier = Modifier.weight(1f),
-                    emoji = "🎓",
+                    icon = Res.drawable.icon_books,
                     title = "Discuss with Mentor",
                     subtitle = "Get expert guidance",
                     onClick = {}
                 )
                 ActionCard(
                     modifier = Modifier.weight(1f),
-                    emoji = "⭐",
+                    icon = Res.drawable.icon_star,
                     title = "View Model Answer",
                     subtitle = "See perfect structure & content",
                     onClick = {}
@@ -152,7 +164,11 @@ fun WhatNextScreen(
                         .background(Color(0xFFFFF3E0)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("🎯", fontSize = 20.sp)
+                    Image(
+                        painter = painterResource(Res.drawable.icon_target),
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp)
+                    )
                 }
                 Spacer(Modifier.width(12.dp))
                 Column(modifier = Modifier.weight(1f)) {
@@ -160,6 +176,37 @@ fun WhatNextScreen(
                     Text("Continue your streak & improve", color = WNGray, fontSize = 12.sp)
                 }
                 Text("›", color = WNGray, fontSize = 20.sp)
+            }
+
+            // Retry today's challenge
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Color(0xFFFFFCF5))
+                    .border(1.dp, GoldAccent, RoundedCornerShape(12.dp))
+                    .clickable {}
+                    .padding(horizontal = 16.dp, vertical = 14.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color(0xFFFFF3E0)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(Res.drawable.icon_retry_today),
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+                Spacer(Modifier.width(12.dp))
+                Column(modifier = Modifier.weight(1f)) {
+                    Text("Retry Today's Challenge", color = GoldAccent, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                    Text("Improve your score from 6/10 — daily challenges can be retried", color = WNGray, fontSize = 12.sp)
+                }
             }
         }
 
@@ -174,7 +221,11 @@ fun WhatNextScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("🏆", fontSize = 16.sp)
+                Image(
+                    painter = painterResource(Res.drawable.icon_trophy),
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
                 Spacer(Modifier.width(6.dp))
                 Text("Past Challenges", color = WNDark, fontSize = 15.sp, fontWeight = FontWeight.Bold)
             }
@@ -258,7 +309,15 @@ fun WhatNextScreen(
                 shape = RoundedCornerShape(14.dp),
                 border = ButtonDefaults.outlinedButtonBorder
             ) {
-                Text("✏️  Try Another", color = Color(0xFF374151), fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource(Res.drawable.icon_write),
+                        contentDescription = null,
+                        modifier = Modifier.size(13.dp)
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text("Try Another", color = Color(0xFF374151), fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                }
             }
             Button(
                 onClick = onDashboard,
@@ -277,7 +336,7 @@ fun WhatNextScreen(
 @Composable
 private fun ActionCard(
     modifier: Modifier,
-    emoji: String,
+    icon: DrawableResource,
     title: String,
     subtitle: String,
     onClick: () -> Unit
@@ -291,7 +350,11 @@ private fun ActionCard(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(emoji, fontSize = 28.sp)
+        Image(
+            painter = painterResource(icon),
+            contentDescription = null,
+            modifier = Modifier.size(28.dp)
+        )
         Spacer(Modifier.height(8.dp))
         Text(title, color = WNDark, fontSize = 13.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, lineHeight = 18.sp)
         Spacer(Modifier.height(4.dp))
