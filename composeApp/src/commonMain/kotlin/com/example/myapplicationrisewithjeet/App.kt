@@ -78,16 +78,37 @@ fun App() {
                 key(currentScreen) {
                     when (val screen = currentScreen) {
                         is Screen.Home     -> HomeScreen(
+                            onOverviewClick               = { currentScreen = Screen.Home },
+                            onStudyPlannerMenuClick       = { currentScreen = Screen.StudyPlanner },
                             onProfileClick                = { currentScreen = Screen.Profile },
                             onQuizClick                   = { currentScreen = Screen.DailyMCQSetup },
                             onPyqsClick                   = { currentScreen = Screen.PYQHome },
+                            onSyllabusTrackerMenuClick    = { currentScreen = Screen.SyllabusTracker },
+                            onVideoLecturesClick          = { currentScreen = Screen.VideoLectures },
+                            onStudyMaterialClick          = { currentScreen = Screen.Prelims },
+                            onCurrentAffairsClick         = { currentScreen = Screen.DailyNews },
+                            onTestSeriesClick             = { currentScreen = Screen.DailyMCQSetup },
+                            onPersonalMentorshipClick     = { currentScreen = Screen.HelpSupport },
                             onDailyMainsClick             = { currentScreen = Screen.DailyMainsChallenge },
                             onDailyNewsClick              = { currentScreen = Screen.DailyNews },
+                            onMockTestsClick              = { currentScreen = Screen.MockTestPlatform },
                             onStudyPlanClick              = { currentScreen = Screen.StudyPlanner },
                             onRevisionSuiteClick          = { currentScreen = Screen.RevisionSuite },
                             onJeetAIClick                 = { currentScreen = Screen.JeetAI },
                             onStartTrackingSyllabusClick  = { currentScreen = Screen.SyllabusTracker },
-                            onPreviousYearQuestionsClick  = { currentScreen = Screen.PYQNew }
+                            onPreviousYearQuestionsClick  = { currentScreen = Screen.PYQNew },
+                            onPerformanceAnalyticsClick   = { currentScreen = Screen.PerformanceAnalysis },
+                            onTestAnalyticsClick          = { currentScreen = Screen.TestAnalytics },
+                            onFlashcardsClick             = { currentScreen = Screen.FlashcardVault },
+                            onMindmapsClick               = { currentScreen = Screen.MindMaps },
+                            onSpacedRepetitionClick       = { currentScreen = Screen.RevisionSuite },
+                            onStudyGroupsClick            = { currentScreen = Screen.HelpSupport },
+                            onLeaderboardClick            = { currentScreen = Screen.Leaderboard },
+                            onDiscussionsClick            = { currentScreen = Screen.HelpSupport },
+                            onQaForumClick                = { currentScreen = Screen.HelpSupport },
+                            onPremiumPlansClick           = { currentScreen = Screen.PremiumPlans },
+                            onSettingsClick               = { currentScreen = Screen.AccountSettings },
+                            onLogoutClick                 = { currentScreen = Screen.Splash }
                         )
                         is Screen.SyllabusTracker -> SyllabusTrackerScreen(
                             onBack          = { currentScreen = Screen.Home },
@@ -108,6 +129,21 @@ fun App() {
                         )
                         is Screen.JeetAI -> JeetAIScreen(
                             onBack = { currentScreen = Screen.Home }
+                        )
+                        is Screen.VideoLectures -> VideoLecturesScreen(
+                            onIndianPolityClick = { currentScreen = Screen.IndianPolityVideos }
+                        )
+                        is Screen.IndianPolityVideos -> IndianPolityVideosScreen(
+                            onBack = { currentScreen = Screen.VideoLectures },
+                            onWatch = { currentScreen = Screen.IndianPolityWatch },
+                            onPdf = { currentScreen = Screen.IndianPolityPdf }
+                        )
+                        is Screen.IndianPolityWatch -> IndianPolityWatchScreen(
+                            onBack = { currentScreen = Screen.IndianPolityVideos },
+                            onReadPdf = { currentScreen = Screen.IndianPolityPdf }
+                        )
+                        is Screen.IndianPolityPdf -> IndianPolityPdfScreen(
+                            onBack = { currentScreen = Screen.IndianPolityWatch }
                         )
                         is Screen.RevisionSuite -> RevisionSuiteScreen(
                             onBack           = { currentScreen = Screen.Home },
@@ -146,6 +182,29 @@ fun App() {
                             onBack              = { currentScreen = Screen.Home },
                             onBuildPlan         = { currentScreen = Screen.BuildStudyPlan },
                             onStartFocusSession = { currentScreen = Screen.FocusSession }
+                        )
+                        is Screen.MockTestPlatform -> MockTestPlatformScreen(
+                            onPreviewTestSummary = { isMains ->
+                                currentScreen = Screen.MockTestSummary(isMains)
+                            }
+                        )
+                        is Screen.MockTestSummary -> MockTestSummaryScreen(
+                            isMains = screen.isMains,
+                            onBack = { currentScreen = Screen.MockTestPlatform },
+                            onEditConfiguration = { currentScreen = Screen.MockTestPlatform },
+                            onGenerateTestNow = {
+                                currentScreen = if (screen.isMains) {
+                                    Screen.DailyMainsChallenge
+                                } else {
+                                    Screen.DailyMCQChallenge
+                                }
+                            }
+                        )
+                        is Screen.PerformanceAnalysis -> PerformanceAnalysisScreen(
+                            onBack = { currentScreen = Screen.Home }
+                        )
+                        is Screen.TestAnalytics -> TestAnalyticsScreen(
+                            onBack = { currentScreen = Screen.Home }
                         )
                         is Screen.BuildStudyPlan -> BuildStudyPlanScreen(
                             onBack      = { currentScreen = Screen.StudyPlanner },

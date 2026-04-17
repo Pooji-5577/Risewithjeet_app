@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.lazy.LazyColumn
@@ -68,16 +69,37 @@ private data class SyllabusProgressItem(
 @Composable
 fun HomeScreen(
     onSubjectClick: (String) -> Unit = {},
+    onOverviewClick: () -> Unit = {},
+    onStudyPlannerMenuClick: () -> Unit = {},
     onQuizClick: () -> Unit = {},
     onPyqsClick: () -> Unit = {},
     onJeetAIClick: () -> Unit = {},
+    onSyllabusTrackerMenuClick: () -> Unit = {},
+    onVideoLecturesClick: () -> Unit = {},
+    onStudyMaterialClick: () -> Unit = {},
+    onCurrentAffairsClick: () -> Unit = {},
+    onTestSeriesClick: () -> Unit = {},
+    onPersonalMentorshipClick: () -> Unit = {},
     onProfileClick: () -> Unit = {},
     onDailyMainsClick: () -> Unit = {},
     onDailyNewsClick: () -> Unit = {},
+    onMockTestsClick: () -> Unit = {},
     onStudyPlanClick: () -> Unit = {},
     onRevisionSuiteClick: () -> Unit = {},
     onStartTrackingSyllabusClick: () -> Unit = {},
     onPreviousYearQuestionsClick: () -> Unit = {},
+    onPerformanceAnalyticsClick: () -> Unit = {},
+    onTestAnalyticsClick: () -> Unit = {},
+    onFlashcardsClick: () -> Unit = {},
+    onMindmapsClick: () -> Unit = {},
+    onSpacedRepetitionClick: () -> Unit = {},
+    onStudyGroupsClick: () -> Unit = {},
+    onLeaderboardClick: () -> Unit = {},
+    onDiscussionsClick: () -> Unit = {},
+    onQaForumClick: () -> Unit = {},
+    onPremiumPlansClick: () -> Unit = {},
+    onSettingsClick: () -> Unit = {},
+    onLogoutClick: () -> Unit = {},
     initialTab: Int = 0
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -87,6 +109,42 @@ fun HomeScreen(
         drawerState = drawerState,
         drawerContent = {
             HomeHamburgerDrawer(
+                onOverviewClick = {
+                    scope.launch { drawerState.close() }
+                    onOverviewClick()
+                },
+                onStudyPlannerClick = {
+                    scope.launch { drawerState.close() }
+                    onStudyPlannerMenuClick()
+                },
+                onJeetAIMenuClick = {
+                    scope.launch { drawerState.close() }
+                    onJeetAIClick()
+                },
+                onSyllabusTrackerClick = {
+                    scope.launch { drawerState.close() }
+                    onSyllabusTrackerMenuClick()
+                },
+                onVideoLecturesClick = {
+                    scope.launch { drawerState.close() }
+                    onVideoLecturesClick()
+                },
+                onStudyMaterialClick = {
+                    scope.launch { drawerState.close() }
+                    onStudyMaterialClick()
+                },
+                onCurrentAffairsClick = {
+                    scope.launch { drawerState.close() }
+                    onCurrentAffairsClick()
+                },
+                onTestSeriesClick = {
+                    scope.launch { drawerState.close() }
+                    onTestSeriesClick()
+                },
+                onPersonalMentorshipClick = {
+                    scope.launch { drawerState.close() }
+                    onPersonalMentorshipClick()
+                },
                 onDailyMcqClick = {
                     scope.launch { drawerState.close() }
                     onQuizClick()
@@ -95,30 +153,71 @@ fun HomeScreen(
                     scope.launch { drawerState.close() }
                     onPyqsClick()
                 },
-                onJeetAIMenuClick = {
-                    scope.launch { drawerState.close() }
-                    onJeetAIClick()
-                },
                 onDailyAnswerWritingClick = {
                     scope.launch { drawerState.close() }
                     onDailyMainsClick()
                 },
-                onMockTestsClick = { scope.launch { drawerState.close() } },
+                onMockTestsClick = {
+                    scope.launch { drawerState.close() }
+                    onMockTestsClick()
+                },
                 onPreviousYearQuestionsClick = { scope.launch { drawerState.close() }; onPreviousYearQuestionsClick() },
-                onPerformanceAnalyticsClick = { scope.launch { drawerState.close() } },
-                onLeaderboardClick = { scope.launch { drawerState.close() } },
-                onFlashcardsClick = { scope.launch { drawerState.close() } },
-                onMindmapsClick = { scope.launch { drawerState.close() } },
-                onSpacedRepetitionClick = { scope.launch { drawerState.close() } },
-                onStudyGroupsClick = { scope.launch { drawerState.close() } },
-                onCommunityLeaderboardClick = { scope.launch { drawerState.close() } },
-                onDiscussionsClick = { scope.launch { drawerState.close() } },
-                onQaForumClick = { scope.launch { drawerState.close() } },
+                onPerformanceAnalyticsClick = {
+                    scope.launch { drawerState.close() }
+                    onPerformanceAnalyticsClick()
+                },
+                onTestAnalyticsClick = {
+                    scope.launch { drawerState.close() }
+                    onTestAnalyticsClick()
+                },
+                onFlashcardsClick = {
+                    scope.launch { drawerState.close() }
+                    onFlashcardsClick()
+                },
+                onMindmapsClick = {
+                    scope.launch { drawerState.close() }
+                    onMindmapsClick()
+                },
+                onSpacedRepetitionClick = {
+                    scope.launch { drawerState.close() }
+                    onSpacedRepetitionClick()
+                },
+                onStudyGroupsClick = {
+                    scope.launch { drawerState.close() }
+                    onStudyGroupsClick()
+                },
+                onLeaderboardClick = {
+                    scope.launch { drawerState.close() }
+                    onLeaderboardClick()
+                },
+                onDiscussionsClick = {
+                    scope.launch { drawerState.close() }
+                    onDiscussionsClick()
+                },
+                onQaForumClick = {
+                    scope.launch { drawerState.close() }
+                    onQaForumClick()
+                },
+                onPremiumPlansClick = {
+                    scope.launch { drawerState.close() }
+                    onPremiumPlansClick()
+                },
+                onSettingsClick = {
+                    scope.launch { drawerState.close() }
+                    onSettingsClick()
+                },
+                onLogoutClick = {
+                    scope.launch { drawerState.close() }
+                    onLogoutClick()
+                },
                 onStudyModeClick = {
                     scope.launch { drawerState.close() }
                     onStudyPlanClick()
                 },
-                onGoPremiumClick = { scope.launch { drawerState.close() } }
+                onGoPremiumClick = {
+                    scope.launch { drawerState.close() }
+                    onPremiumPlansClick()
+                }
             )
         }
     ) {
@@ -235,21 +334,32 @@ private fun HomeTopBar(onProfileClick: () -> Unit, onMenuClick: () -> Unit) {
 
 @Composable
 private fun HomeHamburgerDrawer(
+    onOverviewClick: () -> Unit,
+    onStudyPlannerClick: () -> Unit,
+    onJeetAIMenuClick: () -> Unit,
+    onSyllabusTrackerClick: () -> Unit,
+    onVideoLecturesClick: () -> Unit,
+    onStudyMaterialClick: () -> Unit,
+    onCurrentAffairsClick: () -> Unit,
+    onTestSeriesClick: () -> Unit,
+    onPersonalMentorshipClick: () -> Unit,
     onDailyMcqClick: () -> Unit,
     onPyqsMenuClick: () -> Unit,
-    onJeetAIMenuClick: () -> Unit,
     onDailyAnswerWritingClick: () -> Unit,
     onMockTestsClick: () -> Unit,
     onPreviousYearQuestionsClick: () -> Unit,
     onPerformanceAnalyticsClick: () -> Unit,
+    onTestAnalyticsClick: () -> Unit,
     onLeaderboardClick: () -> Unit,
     onFlashcardsClick: () -> Unit,
     onMindmapsClick: () -> Unit,
     onSpacedRepetitionClick: () -> Unit,
     onStudyGroupsClick: () -> Unit,
-    onCommunityLeaderboardClick: () -> Unit,
     onDiscussionsClick: () -> Unit,
     onQaForumClick: () -> Unit,
+    onPremiumPlansClick: () -> Unit,
+    onSettingsClick: () -> Unit,
+    onLogoutClick: () -> Unit,
     onStudyModeClick: () -> Unit,
     onGoPremiumClick: () -> Unit
 ) {
@@ -260,34 +370,55 @@ private fun HomeHamburgerDrawer(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp, vertical = 14.dp),
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
+            DrawerGroupTitle("DASHBOARD")
+            DrawerItem("📋", "Overview", onOverviewClick)
+            DrawerItem("📅", "Study Planner", onStudyPlannerClick)
+            DrawerItem("🤖", "Jeet AI", onJeetAIMenuClick)
+            DrawerItem("🧭", "Syllabus Tracker", onSyllabusTrackerClick)
+
+            Spacer(Modifier.height(8.dp))
+            DrawerGroupTitle("LEARNING")
+            DrawerItem("🎬", "Video Lectures", onVideoLecturesClick)
+            DrawerItem("📚", "Study Material", onStudyMaterialClick)
+            DrawerItem("📰", "Current Affairs", onCurrentAffairsClick)
+            DrawerItem("🧪", "Test Series", onTestSeriesClick)
+            DrawerItem("🧑‍🏫", "Personal Mentorship", onPersonalMentorshipClick)
+
+            Spacer(Modifier.height(8.dp))
             DrawerGroupTitle("PRACTICE")
-            DrawerItem("📚", "PYQs", onPyqsMenuClick)
-            DrawerItem("🤖", "JeetAI", onJeetAIMenuClick)
             DrawerItem("🎯", "Daily MCQ", onDailyMcqClick)
             DrawerItem("✍️", "Daily Answer Writing", onDailyAnswerWritingClick)
             DrawerItem("📝", "Mock Tests", onMockTestsClick)
             DrawerItem("📜", "Previous Year Questions", onPreviousYearQuestionsClick)
+            DrawerItem("📘", "PYQs", onPyqsMenuClick)
 
             Spacer(Modifier.height(8.dp))
             DrawerGroupTitle("ANALYTICS")
             DrawerItem("📊", "Performance Analytics", onPerformanceAnalyticsClick)
-            DrawerItem("🏆", "Leaderboard", onLeaderboardClick)
+            DrawerItem("🔎", "Test Analytics", onTestAnalyticsClick)
 
             Spacer(Modifier.height(8.dp))
             DrawerGroupTitle("REVISION TOOLS")
-            DrawerItem("🗂️", "Flashcards", onFlashcardsClick)
+            DrawerItem("🃏", "Flashcards", onFlashcardsClick)
             DrawerItem("🧩", "Mindmaps", onMindmapsClick)
             DrawerItem("🔁", "Spaced Repetition", onSpacedRepetitionClick)
 
             Spacer(Modifier.height(8.dp))
             DrawerGroupTitle("COMMUNITY")
             DrawerItem("👥", "Study Groups", onStudyGroupsClick)
-            DrawerItem("🏅", "Leaderboard", onCommunityLeaderboardClick)
+            DrawerItem("🏅", "Leaderboard", onLeaderboardClick)
             DrawerItem("💬", "Discussions", onDiscussionsClick)
             DrawerItem("❓", "Q&A Forum", onQaForumClick)
+
+            Spacer(Modifier.height(8.dp))
+            DrawerGroupTitle("ACCOUNT")
+            DrawerItem("👑", "Premium Plans", onPremiumPlansClick)
+            DrawerItem("⚙️", "Settings", onSettingsClick)
+            DrawerItem("🚪", "Logout", onLogoutClick)
 
             Spacer(Modifier.weight(1f))
 
