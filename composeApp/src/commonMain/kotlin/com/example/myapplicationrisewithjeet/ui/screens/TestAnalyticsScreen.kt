@@ -1,6 +1,7 @@
 package com.example.myapplicationrisewithjeet.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
@@ -34,7 +36,9 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -47,10 +51,18 @@ fun TestAnalyticsScreen(onBack: () -> Unit = {}) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFEFF3FA))
+            .background(Color(0xFFE2E7F0))
     ) {
         item {
             AnalyticsHeader(onBack = onBack)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(26.dp)
+                    .padding(horizontal = 12.dp)
+                    .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
+                    .background(Color(0xFFF0F4FA))
+            )
             TabSwitch(tab = tab, onSelect = { tab = it })
             SpacerH(10)
         }
@@ -70,59 +82,65 @@ private fun AnalyticsHeader(onBack: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFF08162C))
-            .padding(horizontal = 14.dp, vertical = 14.dp)
+            .background(Color(0xFF0A1631))
+            .padding(horizontal = 14.dp, vertical = 12.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text("←", color = Color(0xFF9CB0CA), fontSize = 16.sp, modifier = Modifier.clickable { onBack() })
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                TopBubble("🧠")
-                TopBubble("🔔")
-            }
         }
-        SpacerH(10)
+        SpacerH(16)
         Box(
             modifier = Modifier
-                .background(Color(0xFF1B2744), RoundedCornerShape(999.dp))
-                .border(1.dp, Color(0xFF2C3B5D), RoundedCornerShape(999.dp))
+                .align(Alignment.CenterHorizontally)
+                .background(Color(0xFFF5A623).copy(alpha = 0.18f), RoundedCornerShape(999.dp))
+                .border(1.dp, Color(0xFFF5A623).copy(alpha = 0.32f), RoundedCornerShape(999.dp))
                 .padding(horizontal = 10.dp, vertical = 4.dp)
         ) {
-            Text("🏁 TEST ANALYTICS · DASHBOARD", color = Color(0xFFE2B768), fontSize = 8.5.sp, fontWeight = FontWeight.Bold)
+            Text(
+                "📊 TEST ANALYTICS · DASHBOARD",
+                color = Color(0xFFF5A623),
+                fontSize = 8.5.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 0.4.sp
+            )
         }
         SpacerH(8)
         Text(
             buildAnnotatedString {
                 append("Rahul's ")
-                withStyle(SpanStyle(color = Color(0xFFF5A623))) { append("Progress.") }
+                withStyle(SpanStyle(color = Color(0xFFF5A623), fontStyle = FontStyle.Italic)) { append("Progress.") }
             },
             color = Color.White,
-            fontSize = 38.sp,
+            fontSize = 26.sp,
             fontWeight = FontWeight.ExtraBold,
-            lineHeight = 40.sp
+            lineHeight = 31.sp,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         SpacerH(4)
         Text(
-            "Your complete UPSC test analytics · score trends, subject\nmastery, rank history, time management and AI-powered next steps.",
-            color = Color(0xFF6D84A6),
-            fontSize = 10.5.sp,
-            lineHeight = 16.sp
+            "Your complete UPSC test analytics - score trends, subject\nmastery, rank history, time management and Jeet\nAI-powered next steps.",
+            color = Color(0xFFFFFFFF).copy(alpha = 0.45f),
+            fontSize = 12.5.sp,
+            lineHeight = 20.63.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         SpacerH(10)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFF121F39), RoundedCornerShape(12.dp))
-                .padding(vertical = 8.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
+                .clip(RoundedCornerShape(14.dp))
+                .background(Color.White.copy(alpha = 0.07f), RoundedCornerShape(14.dp))
+                .border(1.dp, Color.White.copy(alpha = 0.09f), RoundedCornerShape(14.dp))
         ) {
-            HeaderStat("34", "TESTS TAKEN", Color(0xFFE2B768))
-            HeaderStat("127", "AV SCORE", Color(0xFF6B8BFF))
-            HeaderStat("87%", "ACCURACY", Color(0xFF65D68A))
-            HeaderStat("42", "DAY STREAK", Color(0xFF7D69E3))
+            HeaderStat("34", "TESTS TAKEN", Color(0xFFF5A623), Modifier.weight(1f))
+            HeaderStat("127", "AVG SCORE", Color(0xFF1A56C4), Modifier.weight(1f))
+            HeaderStat("87%", "ACCURACY", Color(0xFF0E8A56), Modifier.weight(1f))
+            HeaderStat("42", "DAY STREAK", Color(0xFF7C3AED), Modifier.weight(1f), showDivider = false)
         }
     }
 }
@@ -140,10 +158,43 @@ private fun TopBubble(label: String) {
 }
 
 @Composable
-private fun HeaderStat(value: String, label: String, valueColor: Color) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(value, color = valueColor, fontSize = 16.sp, fontWeight = FontWeight.ExtraBold)
-        Text(label, color = Color(0xFF6D84A6), fontSize = 8.sp)
+private fun HeaderStat(
+    value: String,
+    label: String,
+    valueColor: Color,
+    modifier: Modifier = Modifier,
+    showDivider: Boolean = true,
+) {
+    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(vertical = 10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                value,
+                color = valueColor,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.ExtraBold,
+                letterSpacing = (-0.4).sp
+            )
+            Text(
+                label,
+                color = Color.White.copy(alpha = 0.32f),
+                fontSize = 9.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 0.4.sp
+            )
+        }
+        if (showDivider) {
+            Box(
+                modifier = Modifier
+                    .width(1.dp)
+                    .height(38.dp)
+                    .background(Color.White.copy(alpha = 0.08f))
+            )
+        }
     }
 }
 
@@ -152,14 +203,12 @@ private fun TabSwitch(tab: AnalyticsTab, onSelect: (AnalyticsTab) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp)
-            .background(Color.White, RoundedCornerShape(16.dp))
-            .padding(4.dp),
-        horizontalArrangement = Arrangement.spacedBy(6.dp)
+            .padding(horizontal = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        TabChip("🫀 Prelims", tab == AnalyticsTab.Prelims, Modifier.weight(1f)) { onSelect(AnalyticsTab.Prelims) }
+        TabChip("🎯 Prelims", tab == AnalyticsTab.Prelims, Modifier.weight(1f)) { onSelect(AnalyticsTab.Prelims) }
         TabChip("✍️ Mains", tab == AnalyticsTab.Mains, Modifier.weight(1f)) { onSelect(AnalyticsTab.Mains) }
-        TabChip("🎯 Mock Tests", tab == AnalyticsTab.MockTests, Modifier.weight(1f)) { onSelect(AnalyticsTab.MockTests) }
+        TabChip("📝 Mock Tests", tab == AnalyticsTab.MockTests, Modifier.weight(1f)) { onSelect(AnalyticsTab.MockTests) }
     }
 }
 
@@ -168,16 +217,30 @@ private fun TabChip(label: String, selected: Boolean, modifier: Modifier = Modif
     Box(
         modifier = modifier
             .height(36.dp)
-            .background(if (selected) Color(0xFF121F39) else Color(0xFFF4F6FB), RoundedCornerShape(10.dp))
+            .background(if (selected) Color(0xFF1A2744) else Color.White, RoundedCornerShape(20.dp))
+            .border(0.8.dp, if (selected) Color(0xFFE0E7EE) else Color(0xFFC9D2DE), RoundedCornerShape(20.dp))
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            label,
-            color = if (selected) Color.White else Color(0xFF6D7F97),
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Bold
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(horizontal = 12.dp)
+        ) {
+            Text(
+                label.takeWhile { it != ' ' },
+                color = if (selected) Color.White else Color(0xFF1A2744),
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(Modifier.width(6.dp))
+            Text(
+                label.substringAfter(' ', ""),
+                color = if (selected) Color.White else Color(0xFF1A2744),
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }
 
@@ -188,27 +251,94 @@ private fun PrelimsTab() {
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            MetricCard("QUESTION ATTEMPTED", "4,218", "across all tests", Color(0xFFF2942C), Modifier.weight(1f))
-            MetricCard("OVERALL ACCURACY", "82.4%", "↗ Target: 85%", Color(0xFF60B977), Modifier.weight(1f))
+            PrelimsTopMetricCard(
+                title = "QUESTIONS ATTEMPTED",
+                value = "4,218",
+                sub = "across all tests",
+                topBorder = Color(0xFFFF6900),
+                subColor = Color(0xFF8FA4BE),
+                modifier = Modifier.weight(1f)
+            )
+            PrelimsTopMetricCard(
+                title = "OVERALL ACCURACY",
+                value = "82.4%",
+                sub = "↗ Target: 85%",
+                topBorder = Color(0xFF0E8A56),
+                subColor = Color(0xFF0E8A56),
+                modifier = Modifier.weight(1f)
+            )
         }
         TrendCard(
             title = "📊 Daily MCQ Performance Trend",
             subtitle = "8-week rolling accuracy",
             metrics = listOf(
-                Triple("1,842", "Correct", Color(0xFF4CAF50)),
-                Triple("513", "Wrong", Color(0xFFE54B64)),
-                Triple("187", "Skipped", Color(0xFF7F8FA8)),
+                Triple("1,842", "Correct", Color(0xFF0E8A56)),
+                Triple("513", "Wrong", Color(0xFFE85D75)),
+                Triple("187", "Skipped", Color(0xFF8FA4BE)),
                 Triple("78.4%", "Net Acc.", Color(0xFFF0A330))
             ),
-            lineColor = Color(0xFF5A78FF)
+            lineColor = Color(0xFF5A78FF),
+            showWeekAxis = true,
+            markerValue = "82.4%"
         )
         NumberOfQuestionsCard()
         SubjectAccuracyCard()
-        FocusAreasCard(
-            "⚠️ FOCUS AREAS",
-            "Economy (44%) and Geography (38%) need\nimmediate attention. Dedicate 30 min daily this\nweek to these subjects."
-        )
         BottomActions()
+    }
+}
+
+@Composable
+private fun PrelimsTopMetricCard(
+    title: String,
+    value: String,
+    sub: String,
+    topBorder: Color,
+    subColor: Color,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .height(123.dp)
+            .background(Color.White, RoundedCornerShape(16.dp))
+            .border(1.dp, Color(0xFFE3EAF2), RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(16.dp))
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(3.dp)
+                .background(topBorder, RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(start = 16.8.dp, end = 16.8.dp, top = 10.8.dp, bottom = 10.dp)
+        ) {
+            Text(
+                title,
+                color = Color(0xFF8FA4BE),
+                fontSize = 11.sp,
+                fontWeight = FontWeight.SemiBold,
+                letterSpacing = 0.5.sp,
+                lineHeight = 16.5.sp
+            )
+            SpacerH(3)
+            Text(
+                value,
+                color = Color(0xFF1A2744),
+                fontSize = 32.sp,
+                fontWeight = FontWeight.ExtraBold,
+                lineHeight = 48.sp
+            )
+            SpacerH(2)
+            Text(
+                sub,
+                color = subColor,
+                fontSize = 10.sp,
+                fontWeight = if (sub.startsWith("↗")) FontWeight.SemiBold else FontWeight.Normal,
+                lineHeight = 15.sp
+            )
+        }
     }
 }
 
@@ -218,25 +348,238 @@ private fun MainsTab() {
         modifier = Modifier.padding(horizontal = 12.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            MetricCard("ANSWERS WRITTEN", "38", "this month", Color(0xFF60B977), Modifier.weight(1f))
-            MetricCard("AVG SCORE", "7.4", "/10", Color(0xFFF09C2B), Modifier.weight(1f))
-            MetricCard("AVERAGE TIME", "12m", "per answer", Color(0xFF5A78FF), Modifier.weight(1f))
-        }
-        TrendCard(
-            title = "📈 Daily Mains Challenge Trend",
-            subtitle = "Performance across 8 tests",
-            metrics = listOf(
-                Triple("8.2", "Latest Score", Color(0xFF6F63FF)),
-                Triple("+0.8", "Improvement", Color(0xFF4CAF50)),
-                Triple("38", "Answers Written", Color(0xFFF0A330))
-            ),
-            lineColor = Color(0xFFF0B13A)
-        )
+        MainsSummaryStrip()
+        MainsTrendCard()
         NumberOfQuestionsCard()
         TimePerQuestionCard()
         RecentMainsCard()
         BottomActions()
+    }
+}
+
+@Composable
+private fun MainsSummaryStrip() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color(0xFF1A2744), RoundedCornerShape(20.dp))
+            .border(0.8.dp, Color(0xFFE0E7EE), RoundedCornerShape(20.dp))
+            .padding(vertical = 8.dp)
+    ) {
+        MainsSummaryMetric(
+            value = "34",
+            label = "TESTS TAKEN",
+            valueColor = Color(0xFFF5A623),
+            modifier = Modifier.weight(1f)
+        )
+        MainsSummaryMetric(
+            value = "127",
+            label = "AVG SCORE",
+            valueColor = Color(0xFF1A56C4),
+            modifier = Modifier.weight(1f)
+        )
+        MainsSummaryMetric(
+            value = "87%",
+            label = "ACCURACY",
+            valueColor = Color(0xFF0E8A56),
+            modifier = Modifier.weight(1f)
+        )
+        MainsSummaryMetric(
+            value = "42",
+            label = "DAY STREAK",
+            valueColor = Color(0xFF7C3AED),
+            modifier = Modifier.weight(1f),
+            showDivider = false
+        )
+    }
+}
+
+@Composable
+private fun MainsSummaryMetric(
+    value: String,
+    label: String,
+    valueColor: Color,
+    modifier: Modifier = Modifier,
+    showDivider: Boolean = true,
+) {
+    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(vertical = 2.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                value,
+                color = valueColor,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.ExtraBold,
+                letterSpacing = (-0.4).sp
+            )
+            Text(
+                label,
+                color = Color.White.copy(alpha = 0.32f),
+                fontSize = 9.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 0.4.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+        if (showDivider) {
+            Box(
+                modifier = Modifier
+                    .width(1.dp)
+                    .height(34.dp)
+                    .background(Color.White.copy(alpha = 0.08f))
+            )
+        }
+    }
+}
+
+@Composable
+private fun MainsTrendCard() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(6.dp, RoundedCornerShape(16.dp), clip = false)
+            .background(Color.White, RoundedCornerShape(16.dp))
+            .border(1.dp, Color(0xFFDDE5F0), RoundedCornerShape(16.dp))
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Text(
+            "✍️ Daily Mains Challenge Trend",
+            color = Color(0xFF1A2744),
+            fontSize = 12.sp,
+            fontWeight = FontWeight.ExtraBold
+        )
+        Text(
+            "Performance across 8 tests",
+            color = Color(0xFF5A7096),
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Normal
+        )
+        MainsTrendChart()
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            listOf("T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8").forEach {
+                Text(it, color = Color(0xFF8FA4BE), fontSize = 9.5.sp)
+            }
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(62.dp)
+                .background(Color(0xFFEEF2F8), RoundedCornerShape(13.dp))
+                .border(1.dp, Color(0xFFDDE5F0), RoundedCornerShape(13.dp))
+                .padding(horizontal = 18.dp)
+        ) {
+            Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
+                MainsBottomMetric(
+                    value = "8.2",
+                    label = "Latest Score",
+                    valueColor = Color(0xFF7C3AED),
+                    modifier = Modifier.weight(1f)
+                )
+                Box(modifier = Modifier.width(1.dp).height(36.dp).background(Color(0xFFDDE5F0)))
+                MainsBottomMetric(
+                    value = "+0.8",
+                    label = "Improvement",
+                    valueColor = Color(0xFF0E8A56),
+                    modifier = Modifier.weight(1f)
+                )
+                Box(modifier = Modifier.width(1.dp).height(36.dp).background(Color(0xFFDDE5F0)))
+                MainsBottomMetric(
+                    value = "38",
+                    label = "Answers Written",
+                    valueColor = Color(0xFFC95212),
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun MainsBottomMetric(
+    value: String,
+    label: String,
+    valueColor: Color,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            value,
+            color = valueColor,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.ExtraBold,
+            letterSpacing = (-0.4).sp
+        )
+        Text(
+            label,
+            color = Color(0xFF8FA4BE),
+            fontSize = 9.5.sp,
+            fontWeight = FontWeight.SemiBold,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+private fun MainsTrendChart() {
+    Canvas(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(82.dp)
+            .padding(top = 6.dp, bottom = 2.dp)
+    ) {
+        val points = listOf(
+            0.03f to 0.74f,
+            0.17f to 0.69f,
+            0.31f to 0.63f,
+            0.45f to 0.55f,
+            0.59f to 0.45f,
+            0.73f to 0.34f,
+            0.87f to 0.25f,
+            0.99f to 0.18f,
+        )
+
+        val dashed = PathEffect.dashPathEffect(floatArrayOf(6f, 6f), 0f)
+        repeat(3) { idx ->
+            val y = size.height * (idx + 1) / 4f
+            drawLine(
+                color = Color(0xFFDDE5F0),
+                start = androidx.compose.ui.geometry.Offset(0f, y),
+                end = androidx.compose.ui.geometry.Offset(size.width, y),
+                strokeWidth = 1f,
+                pathEffect = dashed
+            )
+        }
+
+        val mapped = points.map { (x, y) -> androidx.compose.ui.geometry.Offset(x * size.width, y * size.height) }
+        val path = androidx.compose.ui.graphics.Path().apply {
+            moveTo(mapped.first().x, mapped.first().y)
+            for (i in 1 until mapped.size) lineTo(mapped[i].x, mapped[i].y)
+        }
+
+        drawPath(
+            path = path,
+            color = Color(0xFFF5A623),
+            style = Stroke(width = 3.2f, cap = StrokeCap.Round)
+        )
+
+        mapped.forEachIndexed { index, pt ->
+            if (index == mapped.lastIndex || index % 2 == 0) {
+                drawCircle(Color.White, radius = 5.8f, center = pt)
+                drawCircle(Color(0xFFF5A623), radius = 3.7f, center = pt)
+            }
+        }
     }
 }
 
@@ -315,6 +658,8 @@ private fun TrendCard(
     metrics: List<Triple<String, String, Color>>,
     lineColor: Color,
     chipLabel: String = "",
+    showWeekAxis: Boolean = false,
+    markerValue: String = "",
 ) {
     Column(
         modifier = Modifier
@@ -344,70 +689,159 @@ private fun TrendCard(
             SpacerH(10)
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 metrics.forEach { m ->
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(m.first, color = m.third, fontSize = 28.sp, fontWeight = FontWeight.ExtraBold)
-                        Text(m.second, color = Color(0xFF9AA8BE), fontSize = 9.sp)
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            m.first,
+                            color = m.third,
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            lineHeight = 33.sp
+                        )
+                        Text(
+                            m.second,
+                            color = Color(0xFF8FA4BE),
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            lineHeight = 15.sp
+                        )
                     }
                 }
             }
         }
         SpacerH(10)
-        Sparkline(lineColor)
+        Sparkline(
+            lineColor = lineColor,
+            showWeekAxis = showWeekAxis,
+            markerValue = markerValue
+        )
     }
 }
 
 @Composable
-private fun Sparkline(lineColor: Color) {
-    androidx.compose.foundation.Canvas(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(72.dp)
-            .background(Color(0xFFF8FAFF), RoundedCornerShape(10.dp))
-            .padding(horizontal = 6.dp, vertical = 6.dp)
-    ) {
-        val points = listOf(
-            0.12f to 0.72f,
-            0.24f to 0.65f,
-            0.36f to 0.61f,
-            0.48f to 0.52f,
-            0.60f to 0.45f,
-            0.72f to 0.35f,
-            0.86f to 0.24f,
-            0.96f to 0.20f,
-        )
+private fun Sparkline(
+    lineColor: Color,
+    showWeekAxis: Boolean = false,
+    markerValue: String = "",
+) {
+    Column {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(82.dp)
+        ) {
+            androidx.compose.foundation.Canvas(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(72.dp)
+                    .align(Alignment.BottomCenter)
+                    .padding(horizontal = 2.dp)
+            ) {
+                val points = listOf(
+                    0.04f to 0.75f,
+                    0.17f to 0.68f,
+                    0.30f to 0.63f,
+                    0.43f to 0.56f,
+                    0.56f to 0.48f,
+                    0.69f to 0.38f,
+                    0.82f to 0.30f,
+                    0.95f to 0.22f,
+                )
 
-        val grid = Color(0xFFDCE4F0)
-        repeat(4) { idx ->
-            val y = size.height * (idx + 1) / 5f
-            drawLine(
-                color = grid,
-                start = androidx.compose.ui.geometry.Offset(0f, y),
-                end = androidx.compose.ui.geometry.Offset(size.width, y),
-                strokeWidth = 1f,
-                pathEffect = PathEffect.dashPathEffect(floatArrayOf(5f, 6f), 0f)
-            )
-        }
+                val grid = Color(0xFFDDE5F0)
+                repeat(3) { idx ->
+                    val y = size.height * (idx + 1) / 4f
+                    drawLine(
+                        color = grid,
+                        start = androidx.compose.ui.geometry.Offset(0f, y),
+                        end = androidx.compose.ui.geometry.Offset(size.width, y),
+                        strokeWidth = 1f,
+                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(5f, 6f), 0f)
+                    )
+                }
 
-        val mapped = points.map { p ->
-            androidx.compose.ui.geometry.Offset(p.first * size.width, p.second * size.height)
-        }
+                val mapped = points.map { p ->
+                    androidx.compose.ui.geometry.Offset(p.first * size.width, p.second * size.height)
+                }
 
-        val path = androidx.compose.ui.graphics.Path().apply {
-            moveTo(mapped.first().x, mapped.first().y)
-            for (i in 1 until mapped.size) {
-                lineTo(mapped[i].x, mapped[i].y)
+                val path = androidx.compose.ui.graphics.Path().apply {
+                    moveTo(mapped.first().x, mapped.first().y)
+                    for (i in 1 until mapped.size) {
+                        lineTo(mapped[i].x, mapped[i].y)
+                    }
+                }
+
+                // Gradient fill area under the line
+                val fillPath = androidx.compose.ui.graphics.Path().apply {
+                    moveTo(mapped.first().x, mapped.first().y)
+                    for (i in 1 until mapped.size) {
+                        lineTo(mapped[i].x, mapped[i].y)
+                    }
+                    lineTo(size.width, size.height)
+                    lineTo(0f, size.height)
+                    close()
+                }
+
+                drawPath(
+                    path = fillPath,
+                    color = Color(0xFFE8F1FF),
+                    alpha = 0.6f
+                )
+
+                drawPath(path = path, color = lineColor, style = Stroke(width = 3.6f, cap = StrokeCap.Round))
+
+                mapped.forEachIndexed { index, pt ->
+                    if (index == mapped.lastIndex || index % 2 == 0) {
+                        drawCircle(
+                            color = Color(0xFF1A56C4),
+                            radius = 5.5f,
+                            center = pt,
+                            style = Stroke(width = 1.97f)
+                        )
+                        drawCircle(Color.White, radius = 4.2f, center = pt)
+                    }
+                }
+            }
+
+            if (markerValue.isNotBlank()) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(end = 18.dp)
+                        .background(Color(0xFF1A56C4), RoundedCornerShape(6.dp))
+                        .padding(horizontal = 7.dp, vertical = 3.dp)
+                ) {
+                    Text(
+                        markerValue,
+                        color = Color.White,
+                        fontSize = 9.4.sp,
+                        fontWeight = FontWeight.Bold,
+                        lineHeight = 11.sp
+                    )
+                }
             }
         }
 
-        drawPath(path = path, color = lineColor, style = Stroke(width = 5f, cap = StrokeCap.Round))
-
-        mapped.forEachIndexed { index, pt ->
-            if (index % 2 == 0 || index == mapped.lastIndex) {
-                drawCircle(Color.White, radius = 6f, center = pt)
-                drawCircle(lineColor, radius = 4.2f, center = pt)
+        if (showWeekAxis) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 2.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                listOf("W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8").forEach {
+                    Text(
+                        it,
+                        color = Color(0xFF8FA4BE),
+                        fontSize = 9.5.sp,
+                        fontWeight = FontWeight.Normal
+                    )
+                }
             }
         }
     }
@@ -415,50 +849,160 @@ private fun Sparkline(lineColor: Color) {
 
 @Composable
 private fun NumberOfQuestionsCard() {
+    val bars = listOf(
+        Triple("Mon", 12, 25.dp),
+        Triple("Tue", 12, 32.dp),
+        Triple("Wed", 13, 34.dp),
+        Triple("Thu", 25, 25.dp),
+        Triple("Fri", 28, 25.dp),
+        Triple("Sat", 25, 25.dp),
+        Triple("Sun", 25, 25.dp),
+    )
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.White, RoundedCornerShape(14.dp))
-            .border(1.dp, Color(0xFFDCE4F0), RoundedCornerShape(14.dp))
-            .padding(12.dp)
+            .shadow(2.dp, RoundedCornerShape(16.dp), clip = false)
+            .background(Color.White, RoundedCornerShape(16.dp))
+            .border(1.dp, Color(0xFFDDE5F0), RoundedCornerShape(16.dp))
+            .padding(horizontal = 16.dp, vertical = 16.dp)
     ) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text("🗓️ Number Of Questions", color = Color(0xFF26365D), fontSize = 12.sp, fontWeight = FontWeight.Bold)
-            Text("Total: 287", color = Color(0xFF6581FF), fontSize = 10.sp, fontWeight = FontWeight.Bold)
-        }
-        SpacerH(10)
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            val bars = listOf(
-                "Mon" to 12,
-                "Tue" to 16,
-                "Wed" to 11,
-                "Thu" to 28,
-                "Fri" to 25,
-                "Sat" to 25,
-                "Sun" to 25,
+            Text(
+                "📅 Number of Questions",
+                color = Color.Black,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.ExtraBold,
+                letterSpacing = (-0.3).sp
             )
-            bars.forEachIndexed { idx, (d, value) ->
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Box(
-                        modifier = Modifier
-                            .width(16.dp)
-                            .height((18 + (value / 2)).dp)
-                            .background(
-                                if (idx == 3) Color(0xFFF0A330) else Color(0xFFD8DEE9),
-                                RoundedCornerShape(4.dp)
-                            )
-                    )
-                    SpacerH(4)
-                    Text(d, color = Color(0xFF9AA8BE), fontSize = 8.sp)
-                    Text(value.toString(), color = Color(0xFF9AA8BE), fontSize = 8.sp)
+            Text(
+                "Total: 287",
+                color = Color(0xFF1A56C4),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        SpacerH(7)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(84.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.dp, start = 2.dp, end = 2.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                repeat(bars.size) {
+                    Box(modifier = Modifier.size(9.dp), contentAlignment = Alignment.Center) {
+                        Box(
+                            modifier = Modifier
+                                .size(9.dp)
+                                .background(Color.White, CircleShape)
+                                .border(1.2.dp, Color(0xFF1A56C4), CircleShape)
+                        )
+                    }
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                bars.forEachIndexed { idx, (day, value, barHeight) ->
+                    Column(
+                        modifier = Modifier.width(36.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .width(27.dp)
+                                .height(barHeight)
+                                .background(
+                                    when {
+                                        idx <= 2 -> Color(0xFF101828)
+                                        idx == 3 -> Color(0xFFF5A623)
+                                        else -> Color(0x6999A1AF)
+                                    },
+                                    RoundedCornerShape(topStart = 6.dp, topEnd = 6.dp)
+                                )
+                        )
+                        SpacerH(4)
+                        Text(
+                            day,
+                            color = if (idx == 3) Color(0xFFD4881A) else Color(0xFF8FA4BE),
+                            fontSize = 9.5.sp,
+                            fontWeight = if (idx == 3) FontWeight.Bold else FontWeight.SemiBold
+                        )
+                        Text(
+                            value.toString(),
+                            color = Color(0xFF8FA4BE),
+                            fontSize = 9.sp,
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
                 }
             }
         }
-        SpacerH(8)
+        SpacerH(6)
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
-            LegendDot(Color(0xFF111827), "Completed")
-            LegendDot(Color(0xFFF0A330), "Target")
+            QuestionsLegendItem(
+                label = "Completed",
+                color = Color(0xFF1A2744),
+                isTarget = false
+            )
+            QuestionsLegendItem(
+                label = "Target",
+                color = Color(0xFF1A56C4),
+                isTarget = true
+            )
         }
+    }
+}
+
+@Composable
+private fun QuestionsLegendItem(
+    label: String,
+    color: Color,
+    isTarget: Boolean,
+) {
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+        if (isTarget) {
+            Box(
+                modifier = Modifier
+                    .width(18.dp)
+                    .height(9.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(Color(0xFF1A2744))
+                )
+                Box(
+                    modifier = Modifier
+                        .size(9.dp)
+                        .background(Color.White, CircleShape)
+                        .border(1.2.dp, color, CircleShape)
+                )
+            }
+        } else {
+            Box(
+                modifier = Modifier
+                    .size(9.dp)
+                    .background(color, RoundedCornerShape(3.dp))
+            )
+        }
+        Text(
+            label,
+            color = Color(0xFF5A7096),
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Normal
+        )
     }
 }
 
@@ -487,37 +1031,61 @@ private fun SubjectAccuracyCard() {
             .fillMaxWidth()
             .background(Color.White, RoundedCornerShape(14.dp))
             .border(1.dp, Color(0xFFDCE4F0), RoundedCornerShape(14.dp))
-            .padding(12.dp)
+            .padding(12.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text("📍 Subject Accuracy", color = Color(0xFF26365D), fontSize = 12.sp, fontWeight = FontWeight.Bold)
             Text("Across all MCQ's", color = Color(0xFFA1AFC4), fontSize = 9.sp)
         }
-        SpacerH(8)
-        rows.forEach { row ->
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Box(modifier = Modifier.size(6.dp).background(row.third, CircleShape))
-                Text(row.first, color = Color(0xFF445572), fontSize = 11.sp, modifier = Modifier.width(74.dp))
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(6.dp)
-                        .background(Color(0xFFE8EDF5), RoundedCornerShape(6.dp))
+        Column(verticalArrangement = Arrangement.spacedBy(7.dp)) {
+            rows.forEach { row ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
+                    Box(modifier = Modifier.size(6.dp).background(row.third, CircleShape))
+                    Text(row.first, color = Color(0xFF445572), fontSize = 11.sp, modifier = Modifier.width(74.dp))
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth(row.second)
+                            .weight(1f)
                             .height(6.dp)
-                            .background(row.third, RoundedCornerShape(6.dp))
-                    )
+                            .background(Color(0xFFE8EDF5), RoundedCornerShape(6.dp))
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(row.second)
+                                .height(6.dp)
+                                .background(row.third, RoundedCornerShape(6.dp))
+                        )
+                    }
+                    Text("${(row.second * 100).toInt()}%", color = row.third, fontSize = 11.sp, fontWeight = FontWeight.Bold)
                 }
-                Text("${(row.second * 100).toInt()}%", color = row.third, fontSize = 11.sp, fontWeight = FontWeight.Bold)
             }
-            SpacerH(7)
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(0xFFFEF0F0), RoundedCornerShape(12.dp))
+                .border(1.dp, Color(0xFFFFCECE), RoundedCornerShape(12.dp))
+                .padding(13.dp),
+            verticalArrangement = Arrangement.spacedBy(5.dp)
+        ) {
+            Text(
+                "⚠️ FOCUS AREAS",
+                color = Color(0xFFC02828),
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 0.7.sp
+            )
+            Text(
+                "Economy (44%) and Geography (38%) need\nimmediate attention. Dedicate 30 min daily this\nweek to these subjects.",
+                color = Color(0xFF1A2744),
+                fontSize = 12.5.sp,
+                fontWeight = FontWeight.Normal,
+                lineHeight = 20.63.sp
+            )
         }
     }
 }

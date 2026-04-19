@@ -201,7 +201,35 @@ fun App() {
                             }
                         )
                         is Screen.PerformanceAnalysis -> PerformanceAnalysisScreen(
-                            onBack = { currentScreen = Screen.Home }
+                            onBack = { currentScreen = Screen.Home },
+                            onNeedsWorkView = { currentScreen = Screen.PerformanceWeakAreasTracker },
+                            onStudyStreakView = { currentScreen = Screen.PerformanceStudyStreakTracker },
+                            onDailyTrioView = { currentScreen = Screen.PerformanceDailyTrioTracker },
+                            onTestHistoryView = { currentScreen = Screen.PerformanceCompleteTestHistory },
+                            onAchievementAllView = { currentScreen = Screen.PerformanceAchievementBadges },
+                            onWeeklyLeaderboardView = { currentScreen = Screen.PerformanceWeeklyLeaderboard },
+                            onJeetAIReportView = { currentScreen = Screen.PerformanceJeetAIReport }
+                        )
+                        is Screen.PerformanceStudyStreakTracker -> PerformanceStudyStreakTrackerScreen(
+                            onBack = { currentScreen = Screen.PerformanceAnalysis }
+                        )
+                        is Screen.PerformanceWeakAreasTracker -> PerformanceWeakAreasTrackerScreen(
+                            onBack = { currentScreen = Screen.PerformanceAnalysis }
+                        )
+                        is Screen.PerformanceDailyTrioTracker -> PerformanceDailyTrioTrackerScreen(
+                            onBack = { currentScreen = Screen.PerformanceAnalysis }
+                        )
+                        is Screen.PerformanceCompleteTestHistory -> PerformanceCompleteTestHistoryScreen(
+                            onBack = { currentScreen = Screen.PerformanceAnalysis }
+                        )
+                        is Screen.PerformanceAchievementBadges -> PerformanceAchievementBadgesScreen(
+                            onBack = { currentScreen = Screen.PerformanceAnalysis }
+                        )
+                        is Screen.PerformanceWeeklyLeaderboard -> PerformanceWeeklyLeaderboardScreen(
+                            onBack = { currentScreen = Screen.PerformanceAnalysis }
+                        )
+                        is Screen.PerformanceJeetAIReport -> PerformanceJeetAIReportScreen(
+                            onBack = { currentScreen = Screen.PerformanceAnalysis }
                         )
                         is Screen.TestAnalytics -> TestAnalyticsScreen(
                             onBack = { currentScreen = Screen.Home }

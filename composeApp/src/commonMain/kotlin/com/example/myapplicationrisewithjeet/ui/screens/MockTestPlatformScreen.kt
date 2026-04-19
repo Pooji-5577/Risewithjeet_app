@@ -153,55 +153,46 @@ private fun PrelimsMainsToggle(
     mode: TestMode,
     onSelect: (TestMode) -> Unit
 ) {
-    Box(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(52.dp)
-            .background(Color.White, RoundedCornerShape(30.dp))
+            .height(62.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .padding(start = 8.dp, top = 1.dp)
-                .width(141.dp)
-                .height(51.dp)
-                .background(if (mode == TestMode.Prelims) Color(0xFF0D1B2E) else Color.Transparent, RoundedCornerShape(30.dp))
-                .clickable { onSelect(TestMode.Prelims) },
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                "🎯 Prelims",
-                color = if (mode == TestMode.Prelims) Color.White else Color(0xFF666666),
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-        Box(
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .padding(end = 22.dp)
-                .clickable { onSelect(TestMode.Mains) },
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                "✍️ Mains",
-                color = if (mode == TestMode.Mains) Color(0xFF0D1B2E) else Color(0xFF666666),
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-        if (mode == TestMode.Mains) {
-            Box(
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .padding(end = 6.dp)
-                    .width(141.dp)
-                    .height(39.dp)
-                    .background(Color(0xFF0D1B2E), RoundedCornerShape(10.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("✍️ Mains", color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Bold)
-            }
-        }
+        TogglePill(
+            text = "🎯 Prelims",
+            selected = mode == TestMode.Prelims,
+            modifier = Modifier.weight(1f)
+        ) { onSelect(TestMode.Prelims) }
+        TogglePill(
+            text = "✍️ Mains",
+            selected = mode == TestMode.Mains,
+            modifier = Modifier.weight(1f)
+        ) { onSelect(TestMode.Mains) }
+    }
+}
+
+@Composable
+private fun TogglePill(
+    text: String,
+    selected: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = modifier
+            .height(62.dp)
+            .background(if (selected) Color(0xFF121B33) else Color.White, RoundedCornerShape(32.dp))
+            .border(1.dp, if (selected) Color(0xFF1A2542) else Color(0xFFC9D2DE), RoundedCornerShape(32.dp))
+            .clickable { onClick() },
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = text,
+            color = if (selected) Color.White else Color(0xFF5D6B8C),
+            fontSize = 22.sp / 2,
+            fontWeight = FontWeight.Bold
+        )
     }
 }
 
