@@ -416,7 +416,7 @@ private fun EvaluationResultsContent(
                         modifier = Modifier.size(14.dp)
                     )
                     Spacer(Modifier.width(6.dp))
-                    Text("View Markup", color = EVWhite, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                    Text("View Markup", color = Color(0xFF6B7280), fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
                 }
             }
             Box(

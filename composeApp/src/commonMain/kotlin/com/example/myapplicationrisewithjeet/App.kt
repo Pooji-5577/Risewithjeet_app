@@ -193,10 +193,16 @@ fun App() {
                             onBack = { currentScreen = Screen.MockTestPlatform },
                             onEditConfiguration = { currentScreen = Screen.MockTestPlatform },
                             onGenerateTestNow = {
+                                currentScreen = Screen.MockTestGenerating(screen.isMains)
+                            }
+                        )
+                        is Screen.MockTestGenerating -> MockTestGeneratingScreen(
+                            onBack = { currentScreen = Screen.MockTestSummary(isMains = screen.isMains) },
+                            onDone = {
                                 currentScreen = if (screen.isMains) {
-                                    Screen.DailyMainsChallenge
+                                    Screen.MainsMockQuestions
                                 } else {
-                                    Screen.DailyMCQChallenge
+                                    Screen.DailyMCQQuestion
                                 }
                             }
                         )
@@ -262,8 +268,12 @@ fun App() {
                             onBack          = { currentScreen = Screen.Home },
                             onStartMockTest = { currentScreen = Screen.MockTestAnswer }
                         )
+                        is Screen.MainsMockQuestions -> MainsMockQuestionsScreen(
+                            onBack = { currentScreen = Screen.MockTestSummary(isMains = true) },
+                            onWriteEvaluate = { currentScreen = Screen.MockTestAnswer }
+                        )
                         is Screen.MockTestAnswer -> MockTestAnswerScreen(
-                            onBack   = { currentScreen = Screen.DailyMainsChallenge },
+                            onBack   = { currentScreen = Screen.MainsMockQuestions },
                             onSubmit = { currentScreen = Screen.EvaluationResult }
                         )
                         is Screen.EvaluationResult -> EvaluationScreen(
@@ -325,10 +335,15 @@ fun App() {
                             onBack   = { currentScreen = Screen.DailyMCQSetup },
                             onSubmit = { currentScreen = Screen.DailyMCQResult }
                         )
+                        is Screen.DailyMCQQuestion -> DailyMCQChallengeScreen(
+                            startImmediately = true,
+                            onBack   = { currentScreen = Screen.MockTestPlatform },
+                            onSubmit = { currentScreen = Screen.DailyMCQResult }
+                        )
                         is Screen.DailyMCQResult -> DailyMCQResultScreen(
-                            onBack         = { currentScreen = Screen.DailyMCQChallenge },
+                            onBack         = { currentScreen = Screen.DailyMCQQuestion },
                             onViewAnalysis = { currentScreen = Screen.DailyMCQReview },
-                            onNextSteps    = { currentScreen = Screen.DailyMCQReview }
+                            onNextSteps    = { currentScreen = Screen.DailyMCQNextSteps }
                         )
                         is Screen.DailyMCQReview -> DailyMCQReviewScreen(
                             onBack      = { currentScreen = Screen.DailyMCQResult },

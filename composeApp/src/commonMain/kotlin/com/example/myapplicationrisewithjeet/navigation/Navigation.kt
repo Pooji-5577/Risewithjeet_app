@@ -32,6 +32,7 @@ sealed class Screen {
     data object StudyPlanner        : Screen()
     data object MockTestPlatform    : Screen()
     data class  MockTestSummary(val isMains: Boolean) : Screen()
+    data class  MockTestGenerating(val isMains: Boolean) : Screen()
     data object PerformanceAnalysis : Screen()
     data object PerformanceStudyStreakTracker : Screen()
     data object PerformanceWeakAreasTracker : Screen()
@@ -45,6 +46,7 @@ sealed class Screen {
     data object FocusSession        : Screen()
     data object PlanComplete        : Screen()
     data object DailyMainsChallenge : Screen()
+    data object MainsMockQuestions  : Screen()
     data object MockTestAnswer      : Screen()
     data object EvaluationResult    : Screen()
     data object ExaminerMarkup      : Screen()
@@ -63,6 +65,7 @@ sealed class Screen {
     // Daily MCQ flow
     data object DailyMCQSetup       : Screen()
     data object DailyMCQChallenge   : Screen()
+    data object DailyMCQQuestion    : Screen()
     data object DailyMCQResult      : Screen()
     data object DailyMCQReview      : Screen()
     data object DailyMCQNextSteps   : Screen()

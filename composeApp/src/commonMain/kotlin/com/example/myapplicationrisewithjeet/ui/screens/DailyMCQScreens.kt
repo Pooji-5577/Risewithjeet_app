@@ -294,10 +294,11 @@ fun DailyMCQSetupScreen(
 // ═══════════════════════════════════════════════════════════
 @Composable
 fun DailyMCQChallengeScreen(
+    startImmediately: Boolean = false,
     onBack: () -> Unit = {},
     onSubmit: () -> Unit = {}
 ) {
-    var started         by remember { mutableStateOf(false) }
+    var started         by remember { mutableStateOf(startImmediately) }
     var currentQuestion by remember { mutableStateOf(0) }
     var selectedAnswer  by remember { mutableStateOf<String?>(null) }
     var answers         by remember { mutableStateOf(mapOf<Int, String>()) }
@@ -416,7 +417,9 @@ fun DailyMCQChallengeScreen(
             ) {
                 Text("←", color = Color(0xFF6B7280), fontSize = 16.sp,
                     modifier = Modifier.clickable {
-                        if (currentQuestion == 0) started = false
+                        if (currentQuestion == 0) {
+                            if (startImmediately) onBack() else started = false
+                        }
                         else currentQuestion--
                     })
                 Spacer(Modifier.weight(1f))
@@ -641,9 +644,9 @@ fun DailyMCQResultScreen(
                 }
             }
             Spacer(Modifier.height(14.dp))
-            Text("Daily MCQs Completed!", color = White, fontSize = 20.sp,
+            Text("Mock Test Session Complete", color = White, fontSize = 20.sp,
                 fontWeight = FontWeight.Bold)
-            Text("Great effort! Here's your performance analysis",
+            Text("Ancient India · 10 Questions · Exam Mode",
                 color = White70, fontSize = 12.sp)
         }
 
@@ -812,7 +815,7 @@ fun DailyMCQReviewScreen(
                 .padding(top = 12.dp, start = 16.dp, end = 16.dp, bottom = 20.dp)
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                listOf("All (10)", "Wrong (3)", "Correct (6)").forEach { tab ->
+                listOf("All (10)", "Wrong (3)", "Correct (6)", "Skipped").forEach { tab ->
                     val key = tab.substringBefore(" ")
                     val sel = filter == key
                     Box(

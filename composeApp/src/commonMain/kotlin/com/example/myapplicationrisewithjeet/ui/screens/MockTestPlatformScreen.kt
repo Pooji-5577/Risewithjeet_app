@@ -30,6 +30,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplicationrisewithjeet.ui.theme.GoldGradient
@@ -40,7 +41,7 @@ private enum class TestMode { Prelims, Mains }
 fun MockTestPlatformScreen(
     onPreviewTestSummary: (isMains: Boolean) -> Unit = {}
 ) {
-    var mode by remember { mutableStateOf(TestMode.Prelims) }
+    var mode by remember { mutableStateOf(TestMode.Mains) }
 
     LazyColumn(
         modifier = Modifier
@@ -74,7 +75,7 @@ fun MockTestPlatformScreen(
                         .clickable { onPreviewTestSummary(mode == TestMode.Mains) },
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("Preview Test Summary ➜", color = Color(0xFF1A2744), fontSize = 14.sp, fontWeight = FontWeight.ExtraBold)
+                    Text("Preview Test Summary➜", color = Color(0xFF1A2744), fontSize = 14.5.sp, fontWeight = FontWeight.ExtraBold)
                 }
                 SpacerH(16)
             }
@@ -156,7 +157,7 @@ private fun PrelimsMainsToggle(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(62.dp),
+            .height(51.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         TogglePill(
@@ -181,7 +182,7 @@ private fun TogglePill(
 ) {
     Box(
         modifier = modifier
-            .height(62.dp)
+            .height(51.dp)
             .background(if (selected) Color(0xFF121B33) else Color.White, RoundedCornerShape(32.dp))
             .border(1.dp, if (selected) Color(0xFF1A2542) else Color(0xFFC9D2DE), RoundedCornerShape(32.dp))
             .clickable { onClick() },
@@ -190,7 +191,7 @@ private fun TogglePill(
         Text(
             text = text,
             color = if (selected) Color.White else Color(0xFF5D6B8C),
-            fontSize = 22.sp / 2,
+            fontSize = 13.sp,
             fontWeight = FontWeight.Bold
         )
     }
@@ -200,19 +201,19 @@ private fun TogglePill(
 private fun StepExamMode(mode: TestMode) {
     StepCard("1", "EXAM MODE — SELECT PAPER TYPE") {
         if (mode == TestMode.Prelims) {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OptionCard("📘", "GS Paper I", "General Studies –\nGeography, Society", Modifier.weight(1f), selected = true)
-                OptionCard("🧮", "CSAT — Paper II", "Aptitude, Comprehension,\nLogical Reasoning", Modifier.weight(1f))
+            Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) {
+                OptionCard("📘", "GS Paper I", "General Studies –\nGeography, Society", Modifier.weight(1f), selected = true, cardHeight = 126.dp)
+                OptionCard("🧮", "CSAT — Paper II", "Aptitude, Comprehension,\nLogical Reasoning", Modifier.weight(1f), cardHeight = 126.dp)
             }
         } else {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OptionCard("📖", "GS Paper I", "History, Culture,\nGeography, Society", Modifier.weight(1f), selected = true)
-                OptionCard("⚡", "GS Paper II", "Governance, Polity,\nConstitution, Social Issues", Modifier.weight(1f))
+            Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) {
+                OptionCard("📖", "GS Paper I", "History, Culture,\nGeography, Society,\nWorld & Indian\nGeography", Modifier.weight(1f), selected = true, cardHeight = 146.dp)
+                OptionCard("⚖️", "GS Paper II", "Governance, Polity,\nConstitution, Social\nJustice & IR", Modifier.weight(1f), cardHeight = 146.dp)
             }
-            SpacerH(8)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OptionCard("📈", "GS Paper III", "Economy, Science & Tech,\nEnvironment, Internal Sec.", Modifier.weight(1f))
-                OptionCard("⚖️", "GS Paper IV", "Ethics, Integrity &\nAptitude — Case Studies", Modifier.weight(1f))
+            SpacerH(9)
+            Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) {
+                OptionCard("📈", "GS Paper III", "Economy, Science & Tech,\nEnvironment, Internal Sec,\nDisaster Management", Modifier.weight(1f), cardHeight = 146.dp)
+                OptionCard("⚖️", "GS Paper IV", "Ethics, Integrity &\nAptitude — Case Studies", Modifier.weight(1f), cardHeight = 146.dp)
             }
         }
     }
@@ -234,15 +235,15 @@ private fun StepFocusTopic(mode: TestMode) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(38.dp)
+                    .height(41.dp)
                     .background(Color(0xFFEEF2F8), RoundedCornerShape(10.dp))
                     .border(1.dp, Color(0xFFDDE5F0), RoundedCornerShape(10.dp))
                     .padding(horizontal = 12.dp),
                 contentAlignment = Alignment.CenterStart
             ) {
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                    Text("Choose subject...", color = Color(0xFF6B7C93), fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
-                    Text("⌄", color = Color(0xFF6B7C93), fontSize = 14.sp)
+                    Text("Choose subject...", color = Color(0xFF1A2744), fontSize = 13.5.sp, fontWeight = FontWeight.SemiBold)
+                    Text("⌄", color = Color(0xFF6B7C93), fontSize = 15.sp)
                 }
             }
         }
@@ -252,13 +253,13 @@ private fun StepFocusTopic(mode: TestMode) {
 @Composable
 private fun StepQuestionSource() {
     StepCard("3", "QUESTION SOURCE") {
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            SourceCard("📁", "Sectional", "Single subject", Modifier.weight(1f))
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            SourceCard("📄", "Sectional", "Single subject", Modifier.weight(1f), selected = true)
             SourceCard("🎲", "Mix Bag", "All subjects", Modifier.weight(1f))
             SourceCard("📅", "PYQ Based", "Past papers", Modifier.weight(1f))
         }
-        SpacerH(8)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        SpacerH(9)
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             SourceCard("🏆", "Full Length", "P1 + 100 Q's", Modifier.weight(1f))
             SourceCard("📚", "NCERT", "Book-wise", Modifier.weight(1f))
             SourceCard("🗞️", "Curr. Affairs", "Last 6 months", Modifier.weight(1f))
@@ -354,7 +355,7 @@ private fun StepCard(step: String, title: String, body: @Composable () -> Unit) 
             .fillMaxWidth()
             .background(Color.White, RoundedCornerShape(18.dp))
             .border(1.dp, Color(0xFFDDE5F0), RoundedCornerShape(18.dp))
-            .padding(14.dp)
+            .padding(horizontal = 14.dp, vertical = 16.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(7.dp)) {
             Box(
@@ -378,18 +379,37 @@ private fun OptionCard(
     title: String,
     subtitle: String,
     modifier: Modifier = Modifier,
-    selected: Boolean = false
+    selected: Boolean = false,
+    cardHeight: Dp = 99.dp
 ) {
     Column(
         modifier = modifier
-            .height(99.dp)
+            .height(cardHeight)
             .background(if (selected) Color(0xFFFEF8ED) else Color(0xFFEEF2F8), RoundedCornerShape(14.dp))
-            .border(1.dp, if (selected) Color(0xFFFDE68A) else Color(0xFFDDE5F0), RoundedCornerShape(14.dp))
+            .border(1.dp, if (selected) Color(0xFFF5A623) else Color(0xFFDDE5F0), RoundedCornerShape(14.dp))
             .padding(12.dp)
     ) {
-        Text(emoji, fontSize = 26.sp)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(emoji, fontSize = 26.sp)
+            if (selected) {
+                Box(
+                    modifier = Modifier
+                        .size(19.dp)
+                        .background(Color(0xFFF5A623), RoundedCornerShape(9.5.dp)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("✓", color = Color(0xFF1A2744), fontSize = 10.sp, fontWeight = FontWeight.ExtraBold)
+                }
+            }
+        }
+        SpacerH(3)
         Text(title, color = Color(0xFF1A2744), fontSize = 13.sp, fontWeight = FontWeight.ExtraBold)
-        Text(subtitle, color = Color(0xFF5A7096), fontSize = 10.5.sp, lineHeight = 16.sp)
+        SpacerH(1)
+        Text(subtitle, color = Color(0xFF5A7096), fontSize = 10.5.sp, lineHeight = 15.75.sp)
     }
 }
 
@@ -416,18 +436,19 @@ private fun FlowChips(chips: List<String>, selected: String) {
 }
 
 @Composable
-private fun SourceCard(icon: String, title: String, sub: String, modifier: Modifier = Modifier) {
+private fun SourceCard(icon: String, title: String, sub: String, modifier: Modifier = Modifier, selected: Boolean = false) {
     Column(
         modifier = modifier
-            .height(79.dp)
-            .background(Color.White, RoundedCornerShape(12.dp))
-            .border(1.dp, Color(0xFFDDE5F0), RoundedCornerShape(12.dp))
-            .padding(top = 8.dp),
+            .height(103.dp)
+            .background(if (selected) Color(0xFF0D1B2E) else Color.White, RoundedCornerShape(16.dp))
+            .border(1.dp, if (selected) Color(0xFF0D1B2E) else Color(0xFFDDE5F0), RoundedCornerShape(16.dp))
+            .padding(top = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(icon, fontSize = 20.sp)
-        Text(title, color = Color(0xFF1A2744), fontSize = 10.5.sp, fontWeight = FontWeight.Bold)
-        Text(sub, color = Color(0xFF8FA4BE), fontSize = 8.sp)
+        Text(icon, fontSize = 28.sp)
+        SpacerH(2)
+        Text(title, color = if (selected) Color.White else Color(0xFF666666), fontSize = 12.sp, fontWeight = FontWeight.ExtraBold)
+        Text(sub, color = if (selected) Color.White.copy(alpha = 0.6f) else Color(0xFF999999), fontSize = 9.sp, fontWeight = FontWeight.SemiBold)
     }
 }
 

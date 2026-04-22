@@ -34,11 +34,11 @@ fun MockTestSummaryScreen(
     onGenerateTestNow: () -> Unit,
     onEditConfiguration: () -> Unit
 ) {
-    val paperLabel = if (isMains) "GS Paper I" else "GS Paper I"
-    val topicLabel = "🗂️ All Topics"
-    val sourceLabel = if (isMains) "Daily MCQ" else "Daily MCQ"
-    val timeLabel = "~30 min"
-    val guidelineTitle = if (isMains) "⚡ WRITING GUIDELINES" else "⚡ WRITING GUIDELINES"
+    val paperLabel = if (isMains) "GS Paper II" else "GS Paper I"
+    val topicLabel = if (isMains) "Governance" else "🗂️ All Topics"
+    val sourceLabel = if (isMains) "Mains PYQ Mix" else "Daily MCQ"
+    val timeLabel = if (isMains) "~45 min" else "~30 min"
+    val guidelineTitle = if (isMains) "⚡ WRITING GUIDELINES" else "⚡ TEST GUIDELINES"
     val guidelineBullets = if (isMains) {
         listOf(
             "• Clear introduction with statement understanding",
@@ -48,10 +48,10 @@ fun MockTestSummaryScreen(
         )
     } else {
         listOf(
-            "• Clear introduction with statement understanding",
-            "• Body with examples (2–3 from recent cases)",
-            "• Balance both sides of the argument",
-            "• Conclude with personal opinion backed by logic"
+            "• Read each question fully before answering",
+            "• Skip and revisit uncertain questions",
+            "• Eliminate clearly incorrect options first",
+            "• Maintain speed with accuracy balance"
         )
     }
 
@@ -79,32 +79,32 @@ fun MockTestSummaryScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(50.dp)
-                        .background(GoldGradient, RoundedCornerShape(12.dp))
+                        .height(54.5.dp)
+                        .background(GoldGradient, RoundedCornerShape(14.dp))
                         .clickable { onGenerateTestNow() },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         "⚡ Generate Test Now",
                         color = Color(0xFF14213D),
-                        fontSize = 16.sp,
+                        fontSize = 15.sp,
                         fontWeight = FontWeight.ExtraBold
                     )
                 }
-                SpacerH(10)
+                SpacerH(8)
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(46.dp)
-                        .background(Color(0xFF1A2744), RoundedCornerShape(12.dp))
+                        .height(46.25.dp)
+                        .background(Color(0xFF1A2744), RoundedCornerShape(14.dp))
                         .clickable { onEditConfiguration() },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         "← Edit Configuration",
                         color = Color.White,
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.SemiBold
+                        fontSize = 13.5.sp,
+                        fontWeight = FontWeight.Bold
                     )
                 }
             }
@@ -117,50 +117,56 @@ private fun SummaryHeader(onBack: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(182.dp)
+            .height(182.375.dp)
             .background(Color(0xFF08162A))
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 14.dp, vertical = 14.dp)
+                .padding(horizontal = 18.dp, vertical = 14.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 "←",
-                color = Color(0xFF88A2C4),
-                fontSize = 17.sp,
-                modifier = Modifier.clickable { onBack() }
+                color = Color(0xFF5A7096),
+                fontSize = 12.5.sp,
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .clickable { onBack() }
             )
-            SpacerH(14)
+            SpacerH(12)
             Box(
                 modifier = Modifier
-                    .background(Color(0xFFEAF8EE), RoundedCornerShape(16.dp))
-                    .padding(horizontal = 10.dp, vertical = 4.dp)
+                    .background(Color(0xFFEDF9F3), RoundedCornerShape(20.dp))
+                    .border(0.8.dp, Color(0xFFB2EDD0), RoundedCornerShape(20.dp))
+                    .padding(horizontal = 13.dp, vertical = 4.dp)
             ) {
                 Text(
                     "✅ TEST SUMMARY — READY TO BEGIN!",
-                    color = Color(0xFF3E8F58),
-                    fontSize = 9.sp,
+                    color = Color(0xFF0E8A56),
+                    fontSize = 10.sp,
                     fontWeight = FontWeight.Bold
                 )
             }
-            SpacerH(10)
+            SpacerH(11)
             Text(
                 buildAnnotatedString {
                     append("You're All Set!\nLet's ")
                     withStyle(SpanStyle(color = Color(0xFFF5A623))) { append("Crush It.") }
                 },
                 color = Color.White,
-                fontSize = 38.sp,
-                lineHeight = 44.sp,
-                fontWeight = FontWeight.ExtraBold
+                fontSize = 23.sp,
+                lineHeight = 27.6.sp,
+                fontWeight = FontWeight.ExtraBold,
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center
             )
-            SpacerH(7)
+            SpacerH(6)
             Text(
                 "Review your configuration below then hit\nGenerate to start.",
                 color = Color(0xFF6F8AAF),
-                fontSize = 14.sp,
-                lineHeight = 20.sp
+                fontSize = 12.5.sp,
+                lineHeight = 20.6.sp,
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center
             )
         }
     }
@@ -179,66 +185,70 @@ private fun SummaryCard(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.White, RoundedCornerShape(22.dp))
-            .border(1.dp, Color(0xFFDDE5F0), RoundedCornerShape(22.dp))
-            .padding(12.dp)
+            .border(0.8.dp, Color(0xFFDDE5F0), RoundedCornerShape(22.dp))
+            .padding(0.8.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color(0xFF0D1B2E), RoundedCornerShape(16.dp))
-                .padding(horizontal = 10.dp, vertical = 12.dp),
+                .padding(horizontal = 16.dp, vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = Modifier
-                    .size(34.dp)
-                    .background(Color(0xFF1A2744), RoundedCornerShape(11.dp)),
+                    .size(50.dp)
+                    .background(Color.White.copy(alpha = 0.1f), RoundedCornerShape(15.dp))
+                    .border(0.8.dp, Color.White.copy(alpha = 0.15f), RoundedCornerShape(15.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                Text("⚡", color = Color(0xFFF5A623), fontSize = 18.sp)
+                Text("⚡", color = Color(0xFFF5A623), fontSize = 25.sp)
             }
             Text(
                 " Are you ready?",
                 color = Color.White,
-                fontSize = 34.sp,
+                fontSize = 30.sp,
                 fontWeight = FontWeight.ExtraBold
             )
         }
-        SpacerH(12)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(modifier = Modifier.padding(16.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             SummaryTile("📄 PAPER", paperLabel, "History, Geography,\nSociety", Modifier.weight(1f))
             SummaryTile("📍 TOPIC", topicLabel, "Mixed across all\nchapters", Modifier.weight(1f))
         }
-        SpacerH(8)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            SummaryTile("❓ QUESTIONS", "25", "~30 min · Free tier", Modifier.weight(1f), highlight = true)
-            SummaryTile("⚡ DIFFICULTY", "Medium", "UPSC standard level", Modifier.weight(1f), highlight = true)
-        }
-        SpacerH(8)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            SummaryTile("📚 SOURCE", sourceLabel, "Curated daily picks", Modifier.weight(1f))
-            SummaryTile("⏱ TIME", timeLabel, "Standard exam pace", Modifier.weight(1f))
+        SpacerH(10)
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            SummaryTile("❓ QUESTIONS", "25", "~30 min · Free tier", Modifier.weight(1f), valueColor = Color(0xFF1A56C4), valueSize = 33.sp, tileHeight = 98.1.dp)
+            SummaryTile("⚡ DIFFICULTY", "Medium", "UPSC standard level", Modifier.weight(1f), valueColor = Color(0xFFD4881A), valueSize = 14.sp, tileHeight = 98.1.dp)
         }
         SpacerH(10)
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            SummaryTile("📚 SOURCE", sourceLabel, "Curated daily picks", Modifier.weight(1f), tileHeight = 86.1.dp)
+            SummaryTile("⏱ TIME", timeLabel, "Standard exam pace", Modifier.weight(1f), tileHeight = 86.1.dp)
+        }
+        SpacerH(12)
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFFE8EEF8), RoundedCornerShape(13.dp))
-                .padding(horizontal = 10.dp, vertical = 9.dp)
+                .background(Color(0xFFE0EBF9), RoundedCornerShape(16.dp))
+                .border(0.8.dp, Color(0xFFC0D9F5), RoundedCornerShape(16.dp))
+                .padding(horizontal = 13.8.dp, vertical = 13.8.dp)
         ) {
-            Text(guidelineTitle, color = Color(0xFF5A7096), fontSize = 9.5.sp, fontWeight = FontWeight.Bold)
-            SpacerH(5)
+            Text(guidelineTitle, color = Color(0xFF1A56C4), fontSize = 10.5.sp, fontWeight = FontWeight.Bold)
+            SpacerH(8)
             guidelineBullets.forEach {
-                Text(it, color = Color(0xFF1D2D4F), fontSize = 10.5.sp, lineHeight = 16.sp)
+                Text(it, color = Color(0xFF1A2744), fontSize = 12.sp, lineHeight = 20.4.sp)
             }
         }
-        SpacerH(10)
+        }
+        SpacerH(12)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFFF9FBFF), RoundedCornerShape(12.dp))
-                .border(1.dp, Color(0xFFE3EAF5), RoundedCornerShape(12.dp))
-                .padding(horizontal = 10.dp, vertical = 10.dp),
+                .height(66.35.dp)
+                .background(Color.White, RoundedCornerShape(15.dp))
+                .border(0.8.dp, Color(0xFFDDE5F0), RoundedCornerShape(15.dp))
+                .padding(horizontal = 13.8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
@@ -251,11 +261,10 @@ private fun SummaryCard(
             Text(
                 " 247 students are taking tests right now",
                 color = Color(0xFF1E2C49),
-                fontSize = 12.sp,
-                fontWeight = FontWeight.SemiBold
+                fontSize = 12.5.sp,
+                fontWeight = FontWeight.Bold
             )
-            Text("  ", fontSize = 10.sp)
-            Text("💞", fontSize = 11.sp)
+            Text(" 🎯", color = Color(0xFF5A7096), fontSize = 12.5.sp, fontWeight = FontWeight.Normal)
         }
     }
 }
@@ -266,27 +275,31 @@ private fun SummaryTile(
     value: String,
     subtitle: String,
     modifier: Modifier = Modifier,
-    highlight: Boolean = false
+    valueColor: Color = Color(0xFF1A2744),
+    valueSize: androidx.compose.ui.unit.TextUnit = 14.sp,
+    tileHeight: androidx.compose.ui.unit.Dp = 102.6.dp
 ) {
     Column(
         modifier = modifier
-            .height(95.dp)
-            .background(Color(0xFFF2F5FB), RoundedCornerShape(12.dp))
-            .padding(9.dp)
+            .height(tileHeight)
+            .background(Color(0xFFEEF2F8), RoundedCornerShape(13.dp))
+            .border(0.8.dp, Color(0xFFDDE5F0), RoundedCornerShape(13.dp))
+            .padding(horizontal = 12.dp, vertical = 12.dp)
     ) {
-        Text(title, color = Color(0xFFA3B3C8), fontSize = 8.5.sp, fontWeight = FontWeight.Bold)
-        SpacerH(5)
+        Text(title, color = Color(0xFF8FA4BE), fontSize = 10.sp, fontWeight = FontWeight.Bold)
+        SpacerH(4)
         Text(
             value,
-            color = if (highlight) Color(0xFF1B3E9A) else Color(0xFF243B67),
-            fontSize = if (highlight) 22.sp else 18.sp,
+            color = valueColor,
+            fontSize = valueSize,
             fontWeight = FontWeight.ExtraBold
         )
+        SpacerH(1)
         Text(
             subtitle,
-            color = Color(0xFF7E93AF),
-            fontSize = 10.5.sp,
-            lineHeight = 14.sp
+            color = Color(0xFF5A7096),
+            fontSize = 11.sp,
+            lineHeight = 16.5.sp
         )
     }
 }
