@@ -87,7 +87,7 @@ fun App() {
                             onVideoLecturesClick          = { currentScreen = Screen.VideoLectures },
                             onStudyMaterialClick          = { currentScreen = Screen.Prelims },
                             onCurrentAffairsClick         = { currentScreen = Screen.DailyNews },
-                            onTestSeriesClick             = { currentScreen = Screen.DailyMCQSetup },
+                            onTestSeriesClick             = { currentScreen = Screen.TestSeriesCatalog },
                             onPersonalMentorshipClick     = { currentScreen = Screen.HelpSupport },
                             onDailyMainsClick             = { currentScreen = Screen.DailyMainsChallenge },
                             onDailyNewsClick              = { currentScreen = Screen.DailyNews },
@@ -239,6 +239,43 @@ fun App() {
                         )
                         is Screen.TestAnalytics -> TestAnalyticsScreen(
                             onBack = { currentScreen = Screen.Home }
+                        )
+                        is Screen.TestSeriesCatalog -> TestSeriesCatalogScreen(
+                            onBack = { currentScreen = Screen.Home },
+                            onOpenSeries = { currentScreen = Screen.TestSeriesDetail }
+                        )
+                        is Screen.TestSeriesDetail -> TestSeriesDetailScreen(
+                            onBack = { currentScreen = Screen.TestSeriesCatalog },
+                            onEnrollNow = { currentScreen = Screen.TestSeriesCheckout }
+                        )
+                        is Screen.TestSeriesCheckout -> TestSeriesCheckoutScreen(
+                            onBack = { currentScreen = Screen.TestSeriesDetail },
+                            onPayNow = { currentScreen = Screen.TestSeriesDashboard }
+                        )
+                        is Screen.TestSeriesDashboard -> TestSeriesDashboardScreen(
+                            onBack = { currentScreen = Screen.TestSeriesCatalog },
+                            onStartTest = { currentScreen = Screen.TestSeriesReady }
+                        )
+                        is Screen.TestSeriesReady -> TestSeriesReadyScreen(
+                            onBack = { currentScreen = Screen.TestSeriesDashboard },
+                            onStartChallenge = { currentScreen = Screen.TestSeriesQuestion }
+                        )
+                        is Screen.TestSeriesQuestion -> TestSeriesQuestionScreen(
+                            onBack = { currentScreen = Screen.TestSeriesReady },
+                            onSubmit = { currentScreen = Screen.TestSeriesResult }
+                        )
+                        is Screen.TestSeriesResult -> TestSeriesResultScreen(
+                            onBack = { currentScreen = Screen.TestSeriesQuestion },
+                            onViewFullAnalysis = { currentScreen = Screen.TestSeriesReport },
+                            onAiReport = { currentScreen = Screen.TestSeriesIntelligence }
+                        )
+                        is Screen.TestSeriesReport -> TestSeriesReportScreen(
+                            onBack = { currentScreen = Screen.TestSeriesResult },
+                            onAiReport = { currentScreen = Screen.TestSeriesIntelligence }
+                        )
+                        is Screen.TestSeriesIntelligence -> TestSeriesIntelligenceScreen(
+                            onBack = { currentScreen = Screen.TestSeriesReport },
+                            onHistory = { currentScreen = Screen.TestSeriesCatalog }
                         )
                         is Screen.BuildStudyPlan -> BuildStudyPlanScreen(
                             onBack      = { currentScreen = Screen.StudyPlanner },

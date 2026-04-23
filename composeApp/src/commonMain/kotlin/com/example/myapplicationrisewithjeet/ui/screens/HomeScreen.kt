@@ -17,8 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
@@ -33,6 +36,34 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import myapplicationrisewithjeet.composeapp.generated.resources.Res
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_current_affairs
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_daily_answer_writing
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_daily_mcq
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_discussions
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_flashcards
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_go_premium
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_jeet_ai
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_leaderboard
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_logout
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_mindmaps
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_mock_tests
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_overview
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_performance_analytics
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_personal_mentorship
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_premium_plans
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_previous_year_questions
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_q_and_a_forum
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_settings
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_spaced_repetition
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_study_groups
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_study_material
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_study_mode
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_study_planner
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_syllabus_tracker
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_test_analytics
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_test_series
+import myapplicationrisewithjeet.composeapp.generated.resources.drawer_video_lectures
+import myapplicationrisewithjeet.composeapp.generated.resources.home_study_planner
 import myapplicationrisewithjeet.composeapp.generated.resources.rev_flashcards
 import myapplicationrisewithjeet.composeapp.generated.resources.rev_mindmaps
 import myapplicationrisewithjeet.composeapp.generated.resources.rev_spaced_rep
@@ -58,6 +89,8 @@ private val HeroBottom  = Color(0xFF0A1736)
 private val HeroChipBg  = Color(0xFF1E293B)
 private val HeroChipBorder = Color(0xFF374151)
 private val CardTint    = Color(0xFFEDF0F6)
+private val HomeContentTopShape = RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp)
+private val HomeContentOverlap = 20.dp
 
 private data class SyllabusProgressItem(
     val emoji: String,
@@ -240,7 +273,8 @@ fun HomeScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
+                            .offset(y = -HomeContentOverlap)
+                            .clip(HomeContentTopShape)
                             .background(HomeBg)
                     ) {
                         Spacer(Modifier.height(10.dp))
@@ -260,11 +294,6 @@ fun HomeScreen(
                     }
                 }
             }
-            FloatingProfileBubble(
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .offset(x = (-18).dp, y = 150.dp)
-            )
         }
     }
 }
@@ -375,50 +404,49 @@ private fun HomeHamburgerDrawer(
             verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             DrawerGroupTitle("DASHBOARD")
-            DrawerItem("📋", "Overview", onOverviewClick)
-            DrawerItem("📅", "Study Planner", onStudyPlannerClick)
-            DrawerItem("🤖", "Jeet AI", onJeetAIMenuClick)
-            DrawerItem("🧭", "Syllabus Tracker", onSyllabusTrackerClick)
+            DrawerItem(Res.drawable.drawer_overview, "Overview", onOverviewClick)
+            DrawerItem(Res.drawable.drawer_study_planner, "Study Planner", onStudyPlannerClick)
+            DrawerItem(Res.drawable.drawer_jeet_ai, "Jeet AI", onJeetAIMenuClick)
+            DrawerItem(Res.drawable.drawer_syllabus_tracker, "Syllabus Tracker", onSyllabusTrackerClick)
 
             Spacer(Modifier.height(8.dp))
             DrawerGroupTitle("LEARNING")
-            DrawerItem("🎬", "Video Lectures", onVideoLecturesClick)
-            DrawerItem("📚", "Study Material", onStudyMaterialClick)
-            DrawerItem("📰", "Current Affairs", onCurrentAffairsClick)
-            DrawerItem("🧪", "Test Series", onTestSeriesClick)
-            DrawerItem("🧑‍🏫", "Personal Mentorship", onPersonalMentorshipClick)
+            DrawerItem(Res.drawable.drawer_video_lectures, "Video Lectures", onVideoLecturesClick)
+            DrawerItem(Res.drawable.drawer_study_material, "Study Material", onStudyMaterialClick)
+            DrawerItem(Res.drawable.drawer_current_affairs, "Current Affairs", onCurrentAffairsClick)
+            DrawerItem(Res.drawable.drawer_test_series, "Test Series", onTestSeriesClick)
+            DrawerItem(Res.drawable.drawer_personal_mentorship, "Personal Mentorship", onPersonalMentorshipClick)
 
             Spacer(Modifier.height(8.dp))
             DrawerGroupTitle("PRACTICE")
-            DrawerItem("🎯", "Daily MCQ", onDailyMcqClick)
-            DrawerItem("✍️", "Daily Answer Writing", onDailyAnswerWritingClick)
-            DrawerItem("📝", "Mock Tests", onMockTestsClick)
-            DrawerItem("📜", "Previous Year Questions", onPreviousYearQuestionsClick)
-            DrawerItem("📘", "PYQs", onPyqsMenuClick)
+            DrawerItem(Res.drawable.drawer_daily_mcq, "Daily MCQ", onDailyMcqClick)
+            DrawerItem(Res.drawable.drawer_daily_answer_writing, "Daily Answer Writing", onDailyAnswerWritingClick)
+            DrawerItem(Res.drawable.drawer_mock_tests, "Mock Tests", onMockTestsClick)
+            DrawerItem(Res.drawable.drawer_previous_year_questions, "Previous Year Questions", onPreviousYearQuestionsClick)
 
             Spacer(Modifier.height(8.dp))
             DrawerGroupTitle("ANALYTICS")
-            DrawerItem("📊", "Performance Analytics", onPerformanceAnalyticsClick)
-            DrawerItem("🔎", "Test Analytics", onTestAnalyticsClick)
+            DrawerItem(Res.drawable.drawer_performance_analytics, "Performance Analytics", onPerformanceAnalyticsClick)
+            DrawerItem(Res.drawable.drawer_test_analytics, "Test Analytics", onTestAnalyticsClick)
 
             Spacer(Modifier.height(8.dp))
             DrawerGroupTitle("REVISION TOOLS")
-            DrawerItem("🃏", "Flashcards", onFlashcardsClick)
-            DrawerItem("🧩", "Mindmaps", onMindmapsClick)
-            DrawerItem("🔁", "Spaced Repetition", onSpacedRepetitionClick)
+            DrawerItem(Res.drawable.drawer_flashcards, "Flashcards", onFlashcardsClick)
+            DrawerItem(Res.drawable.drawer_mindmaps, "Mindmaps", onMindmapsClick)
+            DrawerItem(Res.drawable.drawer_spaced_repetition, "Spaced Repetition", onSpacedRepetitionClick)
 
             Spacer(Modifier.height(8.dp))
             DrawerGroupTitle("COMMUNITY")
-            DrawerItem("👥", "Study Groups", onStudyGroupsClick)
-            DrawerItem("🏅", "Leaderboard", onLeaderboardClick)
-            DrawerItem("💬", "Discussions", onDiscussionsClick)
-            DrawerItem("❓", "Q&A Forum", onQaForumClick)
+            DrawerItem(Res.drawable.drawer_study_groups, "Study Groups", onStudyGroupsClick)
+            DrawerItem(Res.drawable.drawer_leaderboard, "Leaderboard", onLeaderboardClick)
+            DrawerItem(Res.drawable.drawer_discussions, "Discussions", onDiscussionsClick)
+            DrawerItem(Res.drawable.drawer_q_and_a_forum, "Q&A Forum", onQaForumClick)
 
             Spacer(Modifier.height(8.dp))
             DrawerGroupTitle("ACCOUNT")
-            DrawerItem("👑", "Premium Plans", onPremiumPlansClick)
-            DrawerItem("⚙️", "Settings", onSettingsClick)
-            DrawerItem("🚪", "Logout", onLogoutClick)
+            DrawerItem(Res.drawable.drawer_premium_plans, "Premium Plans", onPremiumPlansClick)
+            DrawerItem(Res.drawable.drawer_settings, "Settings", onSettingsClick)
+            DrawerItem(Res.drawable.drawer_logout, "Logout", onLogoutClick)
 
             Spacer(Modifier.weight(1f))
 
@@ -432,7 +460,15 @@ private fun HomeHamburgerDrawer(
                     .padding(horizontal = 14.dp, vertical = 12.dp)
             ) {
                 Column {
-                    Text("💡  Study Mode", color = Color(0xFF2C3553), fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Image(
+                            painter = painterResource(Res.drawable.drawer_study_mode),
+                            contentDescription = "Study Mode",
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(Modifier.width(6.dp))
+                        Text("Study Mode", color = Color(0xFF2C3553), fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                    }
                     Text("Distraction-free focus", color = TextLight, fontSize = 12.sp)
                 }
             }
@@ -449,7 +485,15 @@ private fun HomeHamburgerDrawer(
                     .padding(horizontal = 14.dp, vertical = 12.dp)
             ) {
                 Column {
-                    Text("👑  Go Premium", color = GoldAccent, fontSize = 15.sp, fontWeight = FontWeight.ExtraBold)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Image(
+                            painter = painterResource(Res.drawable.drawer_go_premium),
+                            contentDescription = "Go Premium",
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(Modifier.width(6.dp))
+                        Text("Go Premium", color = GoldAccent, fontSize = 15.sp, fontWeight = FontWeight.ExtraBold)
+                    }
                     Text("7-day free trial", color = TextLight, fontSize = 12.sp)
                 }
             }
@@ -480,6 +524,26 @@ private fun DrawerItem(icon: String, label: String, onClick: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(icon, fontSize = 20.sp)
+        Spacer(Modifier.width(12.dp))
+        Text(label, color = Color(0xFF2D3858), fontSize = 17.sp, fontWeight = FontWeight.SemiBold)
+    }
+}
+
+@Composable
+private fun DrawerItem(iconRes: DrawableResource, label: String, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp))
+            .clickable { onClick() }
+            .padding(horizontal = 10.dp, vertical = 11.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(iconRes),
+            contentDescription = label,
+            modifier = Modifier.size(22.dp)
+        )
         Spacer(Modifier.width(12.dp))
         Text(label, color = Color(0xFF2D3858), fontSize = 17.sp, fontWeight = FontWeight.SemiBold)
     }
@@ -706,7 +770,22 @@ private fun StudyPlanSection(onStudyPlanClick: () -> Unit = {}) {
             .padding(horizontal = 12.dp)
             .padding(10.dp)
     ) {
-        SectionHeader("🗓️ Today's Study Plan", "Set Up →")
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = painterResource(Res.drawable.home_study_planner),
+                    contentDescription = "Today's Study Plan",
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(Modifier.width(6.dp))
+                Text("Today's Study Plan", color = TextDark, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+            }
+            Text("Set Up →", color = GoldAccent, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+        }
         Spacer(Modifier.height(10.dp))
 
         // Filled plan
@@ -785,7 +864,22 @@ private fun StudyPlanSection(onStudyPlanClick: () -> Unit = {}) {
         }
 
         Spacer(Modifier.height(12.dp))
-        SectionHeader("🗓️ Today's Study Plan", "Planner →")
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = painterResource(Res.drawable.home_study_planner),
+                    contentDescription = "Today's Study Plan",
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(Modifier.width(6.dp))
+                Text("Today's Study Plan", color = TextDark, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+            }
+            Text("Planner →", color = GoldAccent, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+        }
         Spacer(Modifier.height(10.dp))
 
         // Empty planner widget
@@ -803,7 +897,11 @@ private fun StudyPlanSection(onStudyPlanClick: () -> Unit = {}) {
             contentAlignment = Alignment.Center
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("📅", fontSize = 36.sp)
+                Image(
+                    painter = painterResource(Res.drawable.home_study_planner),
+                    contentDescription = "Study Planner",
+                    modifier = Modifier.size(36.dp)
+                )
                 Spacer(Modifier.height(8.dp))
                 Text("No tasks added yet!", color = TextDark, fontSize = 18.sp, fontWeight = FontWeight.ExtraBold)
                 Spacer(Modifier.height(4.dp))
@@ -876,21 +974,21 @@ private fun SyllabusTrackerSection(onStartTracking: () -> Unit = {}) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
+                    horizontalArrangement = Arrangement.spacedBy(7.dp, Alignment.CenterHorizontally)
                 ) {
                     listOf("⚖️ Polity","🏛 History","🌍 Geo","📈 Economy","🌿 Env").forEach { item ->
                         val (emoji, label) = item.split(" ", limit = 2).let { it[0] to it[1] }
                         Column(
                             modifier = Modifier
-                                .width(62.dp)
-                                .clip(RoundedCornerShape(14.dp))
+                                .width(58.dp)
+                                .clip(RoundedCornerShape(12.dp))
                                 .background(Color(0xFFFFFFFF))
-                                .border(1.dp, Color(0xFFE6EAF0), RoundedCornerShape(14.dp))
-                                .padding(vertical = 7.dp),
+                                .border(1.dp, Color(0xFFE6EAF0), RoundedCornerShape(12.dp))
+                                .padding(vertical = 6.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(emoji, fontSize = 18.sp)
-                            Text(label, color = TextDark, fontSize = 9.sp, textAlign = TextAlign.Center, fontWeight = FontWeight.SemiBold)
+                            Text(emoji, fontSize = 16.sp)
+                            Text(label, color = TextDark, fontSize = 8.sp, textAlign = TextAlign.Center, fontWeight = FontWeight.SemiBold)
                         }
                     }
                 }
@@ -970,7 +1068,8 @@ private fun SyllabusTrackerSection(onStartTracking: () -> Unit = {}) {
                             .height(8.dp)
                             .clip(RoundedCornerShape(999.dp)),
                         color = Color(0xFFF5A623),
-                        trackColor = Color(0xFFF5F5F5)
+                        trackColor = Color(0xFFF5F5F5),
+                        drawStopIndicator = {}
                     )
                 }
             }
@@ -999,6 +1098,7 @@ private fun RevisionSuiteSection(onExploreClick: () -> Unit = {}) {
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
                 .background(Color(0xFFF8FAFC))
+                .insideRoundedBorder(1.dp, Color(0xFFD8DEE9), 16.dp)
                 .padding(14.dp)
         ) {
             Column {
@@ -1008,9 +1108,36 @@ private fun RevisionSuiteSection(onExploreClick: () -> Unit = {}) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    RevStatCard(Modifier.weight(1f), Res.drawable.rev_flashcards, "2,847", GoldAccent, "Flashcards", "Active Recall", Color(0xFF59A95F))
-                    RevStatCard(Modifier.weight(1f), Res.drawable.rev_mindmaps, "24", Color(0xFFCC3E7B), "Mindmaps", "Visual Thinking", Color(0xFFE0A62B))
-                    RevStatCard(Modifier.weight(1f), Res.drawable.rev_spaced_rep, "91%", Color(0xFF5F8FDB), "Spaced Rep", "Smart Scheduling", Color(0xFFA9B8CF))
+                    RevStatCard(
+                        Modifier.weight(1f),
+                        Res.drawable.rev_flashcards,
+                        "2,847",
+                        GoldAccent,
+                        "Flashcards",
+                        "Active Recall",
+                        topStripColor = Color(0xFF59A95F),
+                        strokeColor = Color(0xFF0E8A56)
+                    )
+                    RevStatCard(
+                        Modifier.weight(1f),
+                        Res.drawable.rev_mindmaps,
+                        "24",
+                        Color(0xFFCC3E7B),
+                        "Mindmaps",
+                        "Visual Thinking",
+                        topStripColor = Color(0xFFE0A62B),
+                        strokeColor = Color(0xFFEC9B28)
+                    )
+                    RevStatCard(
+                        Modifier.weight(1f),
+                        Res.drawable.rev_spaced_rep,
+                        "91%",
+                        Color(0xFF5F8FDB),
+                        "Spaced Rep",
+                        "Smart Scheduling",
+                        topStripColor = Color(0xFFA9B8CF),
+                        strokeColor = Color(0xFFA8B8C8)
+                    )
                 }
             }
         }
@@ -1022,60 +1149,61 @@ private fun RevisionSuiteSection(onExploreClick: () -> Unit = {}) {
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(18.dp))
                 .background(Brush.linearGradient(listOf(Color(0xFF1A2540), Color(0xFF16233D))))
-                .padding(horizontal = 14.dp, vertical = 12.dp)
+                .padding(horizontal = 18.dp, vertical = 16.dp)
         ) {
-            Row(verticalAlignment = Alignment.Top) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     modifier = Modifier
-                        .size(56.dp)
-                        .clip(RoundedCornerShape(14.dp))
+                        .size(96.dp)
+                        .clip(RoundedCornerShape(18.dp))
                         .background(Color(0xFF33415F)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("🎧", fontSize = 24.sp)
+                    Text("🎧", fontSize = 44.sp)
                 }
-                Spacer(Modifier.width(12.dp))
+                Spacer(Modifier.width(16.dp))
                 Column(modifier = Modifier.weight(1f)) {
+                    Text("FOCUS SESSION", color = White40, fontSize = 9.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.1.sp)
+                    Text(
+                        "Study Mode",
+                        color = Color.White,
+                        fontSize = 34.sp,
+                        lineHeight = 34.sp
+                    )
+                    Spacer(Modifier.height(8.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.Top
                     ) {
-                        Column {
-                            Text("FOCUS SESSION", color = White40, fontSize = 9.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.1.sp)
-                            Text(
-                                "Study Mode",
-                                color = Color.White,
-                                fontSize = 33.sp,
-                                lineHeight = 33.sp
-                            )
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text("Distraction Free · Time Tracked ·", color = White70, fontSize = 13.sp)
+                            Text("Streak protected", color = White70, fontSize = 13.sp)
                         }
+                        Spacer(Modifier.width(12.dp))
                         Box(
                             modifier = Modifier
-                                .padding(top = 14.dp)
                                 .clip(RoundedCornerShape(14.dp))
                                 .background(GoldGradient)
-                                .padding(horizontal = 16.dp, vertical = 10.dp)
+                                .padding(horizontal = 22.dp, vertical = 14.dp)
                                 .clickable {}
                         ) {
-                            Text("Enter →", color = Color(0xFF1A1A1A), fontSize = 14.sp, fontWeight = FontWeight.ExtraBold)
+                            Text("Enter →", color = Color(0xFF1A1A1A), fontSize = 18.sp, fontWeight = FontWeight.ExtraBold)
                         }
                     }
-                    Text("Distraction Free · Time Tracked ·", color = White70, fontSize = 13.sp)
-                    Text("Streak protected", color = White70, fontSize = 13.sp)
-                    Spacer(Modifier.height(8.dp))
+                    Spacer(Modifier.height(12.dp))
                     Row(
                         modifier = Modifier.horizontalScroll(rememberScrollState()),
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         listOf("📚 Deep Study", "📚 Deep Study", "📚 Deep Study").forEach { tag ->
                             Box(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(999.dp))
                                     .background(White15)
-                                    .padding(horizontal = 10.dp, vertical = 4.dp)
+                                    .padding(horizontal = 14.dp, vertical = 7.dp)
                             ) {
-                                Text(tag, color = White70, fontSize = 10.sp, fontWeight = FontWeight.SemiBold)
+                                Text(tag, color = White70, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
                             }
                         }
                     }
@@ -1093,14 +1221,21 @@ private fun RevStatCard(
     valueColor: Color,
     label: String,
     sub: String,
-    topStripColor: Color
+    topStripColor: Color,
+    strokeColor: Color
 ) {
     Column(
         modifier = modifier
             .heightIn(min = 180.dp)
+            .shadow(
+                elevation = 1.dp,
+                shape = RoundedCornerShape(16.dp),
+                ambientColor = strokeColor,
+                spotColor = strokeColor
+            )
             .clip(RoundedCornerShape(16.dp))
             .background(Color.White)
-            .border(1.dp, Color(0xFFD2DBE8), RoundedCornerShape(16.dp))
+            .insideRoundedBorder(1.dp, strokeColor, 16.dp)
             .padding(bottom = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -1124,6 +1259,24 @@ private fun RevStatCard(
     }
 }
 
+private fun Modifier.insideRoundedBorder(
+    strokeWidth: Dp,
+    color: Color,
+    cornerRadius: Dp
+): Modifier = drawWithContent {
+    drawContent()
+    val strokePx = strokeWidth.toPx()
+    val inset = strokePx / 2f
+    val radius = (cornerRadius.toPx() - inset).coerceAtLeast(0f)
+    drawRoundRect(
+        color = color,
+        topLeft = Offset(inset, inset),
+        size = Size(size.width - strokePx, size.height - strokePx),
+        cornerRadius = CornerRadius(radius, radius),
+        style = Stroke(width = strokePx)
+    )
+}
+
 private fun Modifier.dashedBorder(
     strokeWidth: Dp,
     color: Color,
@@ -1141,34 +1294,6 @@ private fun Modifier.dashedBorder(
         style = stroke
     )
 }
-
-@Composable
-private fun FloatingProfileBubble(modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier
-            .size(64.dp)
-            .shadow(10.dp, CircleShape)
-            .clip(CircleShape)
-            .background(Color(0xFF2A2444))
-            .border(4.dp, Color(0xFF181628), CircleShape)
-            .clickable { },
-        contentAlignment = Alignment.Center
-    ) {
-        Box(
-            modifier = Modifier
-                .size(50.dp)
-                .clip(CircleShape)
-                .background(Color(0xFF4B3AC8)),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("P", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold)
-        }
-    }
-}
-
-// ─────────────────────────────────────────────
-// Quote
-// ─────────────────────────────────────────────
 
 @Composable
 private fun QuoteSection() {
