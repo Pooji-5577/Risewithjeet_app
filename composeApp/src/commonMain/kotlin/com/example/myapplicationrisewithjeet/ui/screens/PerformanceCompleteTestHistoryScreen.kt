@@ -24,9 +24,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
+private val HistoryScoreColumnWidth = 72.dp
+private val HistoryActionColumnWidth = 52.dp
 
 @Composable
 fun PerformanceCompleteTestHistoryScreen(onBack: () -> Unit = {}) {
@@ -187,11 +191,31 @@ fun PerformanceCompleteTestHistoryScreen(onBack: () -> Unit = {}) {
                                 .padding(horizontal = 16.dp, vertical = 8.dp)
                                 .border(1.dp, Color(0xFFF0F4F8))
                                 .padding(top = 8.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text("TEST NAME", color = Color(0xFF8FA4BE), fontSize = 10.sp, fontWeight = FontWeight.Bold)
-                            Text("SCORE", color = Color(0xFF8FA4BE), fontSize = 10.sp, fontWeight = FontWeight.Bold)
-                            Text("VIEW", color = Color(0xFF8FA4BE), fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                            Text(
+                                text = "TEST NAME",
+                                color = Color(0xFF8FA4BE),
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.weight(1f)
+                            )
+                            Text(
+                                text = "SCORE",
+                                color = Color(0xFF8FA4BE),
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.End,
+                                modifier = Modifier.width(HistoryScoreColumnWidth)
+                            )
+                            Text(
+                                text = "VIEW",
+                                color = Color(0xFF8FA4BE),
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.End,
+                                modifier = Modifier.width(HistoryActionColumnWidth)
+                            )
                         }
 
                         rows.forEachIndexed { index, row ->
@@ -323,8 +347,21 @@ private fun FullHistoryRow(row: HistoryEntry) {
                 Text(row.meta, color = Color(0xFF5A7096), fontSize = 11.sp)
             }
         }
-        Text(row.score, color = row.scoreColor, fontSize = 13.sp, fontWeight = FontWeight.ExtraBold)
-        Spacer(modifier = Modifier.width(12.dp))
-        Text("View →", color = Color(0xFF0E8A56), fontSize = 11.5.sp, fontWeight = FontWeight.SemiBold)
+        Text(
+            text = row.score,
+            color = row.scoreColor,
+            fontSize = 13.sp,
+            fontWeight = FontWeight.ExtraBold,
+            textAlign = TextAlign.End,
+            modifier = Modifier.width(HistoryScoreColumnWidth)
+        )
+        Text(
+            text = "View →",
+            color = Color(0xFF0E8A56),
+            fontSize = 11.5.sp,
+            fontWeight = FontWeight.SemiBold,
+            textAlign = TextAlign.End,
+            modifier = Modifier.width(HistoryActionColumnWidth)
+        )
     }
 }

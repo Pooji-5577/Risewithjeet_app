@@ -7,11 +7,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,16 +26,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
+private val HistoryScoreColumnWidth = 72.dp
+private val HistoryActionColumnWidth = 52.dp
 
 @Composable
 fun PerformanceAnalysisScreen(
@@ -45,30 +56,47 @@ fun PerformanceAnalysisScreen(
     onWeeklyLeaderboardView: () -> Unit = {},
     onJeetAIReportView: () -> Unit = {}
 ) {
-    LazyColumn(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFFF0F4F8))
     ) {
-        item { Header(onBack = onBack) }
-        item {
+        Header(onBack = onBack)
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFF071326))
+        ) {
             Column(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
+                    .background(Color(0xFFF0F4FA))
+                    .padding(top = 8.dp)
             ) {
-                KpiCards()
-                StudyTimeCard()
-                TimeDistributionCard()
-                SectionLabel("STRONG & WEAK AREAS")
-                StrongWeakCards(onNeedsWorkView = onNeedsWorkView)
-                StudyStreakCard(onViewAll = onStudyStreakView)
-                DailyTrioCard(onViewAll = onDailyTrioView)
-                TestHistoryCard(onViewAll = onTestHistoryView)
-                AchievementSection(onAllClick = onAchievementAllView)
-                SectionLabel("WEEKLY LEADERBOARD")
-                WeeklyLeaderboardCard(onViewAll = onWeeklyLeaderboardView)
-                AiInsightsCard(onFullReport = onJeetAIReportView)
-                Spacer(modifier = Modifier.height(16.dp))
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp, vertical = 10.dp)
+                ) {
+                    item {
+                        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                            KpiCards()
+                            StudyTimeCard()
+                            TimeDistributionCard()
+                            SectionLabel("STRONG & WEAK AREAS")
+                            StrongWeakCards(onNeedsWorkView = onNeedsWorkView)
+                            StudyStreakCard(onViewAll = onStudyStreakView)
+                            DailyTrioCard(onViewAll = onDailyTrioView)
+                            TestHistoryCard(onViewAll = onTestHistoryView)
+                            AchievementSection(onAllClick = onAchievementAllView)
+                            SectionLabel("WEEKLY LEADERBOARD")
+                            WeeklyLeaderboardCard(onViewAll = onWeeklyLeaderboardView)
+                            AiInsightsCard(onFullReport = onJeetAIReportView)
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
+                    }
+                }
             }
         }
     }
@@ -117,7 +145,7 @@ private fun Header(onBack: () -> Unit) {
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
         Text(
             buildAnnotatedString {
@@ -148,31 +176,34 @@ private fun Header(onBack: () -> Unit) {
 @Composable
 private fun KpiCards() {
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        KpiCard("🔥 Day Streak", "38", "↑ 8 days this month", Color(0xFFE8950F), Color(0xFFE8950F), Modifier.weight(1f))
-        KpiCard("🎯 Qs Attempted", "847", "↑ 162 this week", Color(0xFFEF4444), Color(0xFF071224), Modifier.weight(1f))
+        KpiCard("🔥 Day Streak", "38", "↑ 8 days this month", Color(0xFFFFA500), Color(0xFFE8950F), Modifier.weight(1f))
+        KpiCard("🎯 Qs Attempted", "847", "↑ 162 this week", Color(0xFFFF0000), Color(0xFF071224), Modifier.weight(1f))
         KpiCard("⏱️ Study Time", "124h", "↑ 18h this week", Color(0xFF1A56C4), Color(0xFF3B82F6), Modifier.weight(1f))
     }
 }
 
 @Composable
 private fun KpiCard(label: String, value: String, note: String, topColor: Color, valueColor: Color, modifier: Modifier = Modifier) {
+    val cardShape = RoundedCornerShape(13.dp)
     Column(
         modifier = modifier
-            .height(78.dp)
-            .background(Color.White, RoundedCornerShape(13.dp))
-            .border(1.dp, Color(0xFFE2E8F0), RoundedCornerShape(13.dp))
-            .padding(horizontal = 11.dp, vertical = 10.dp)
+            .heightIn(min = 78.dp)
+            .performanceCardShadow(cardShape)
+            .clip(cardShape)
+            .background(Color.White, cardShape)
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(3.dp)
-                .background(topColor, RoundedCornerShape(topStart = 11.dp, topEnd = 11.dp))
+                .background(topColor)
         )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(label, color = Color(0xFF8FA3C0), fontSize = 8.sp, fontWeight = FontWeight.Bold, letterSpacing = 0.8.sp)
-        Text(value, color = valueColor, fontSize = 22.sp, fontWeight = FontWeight.Bold, lineHeight = 22.sp)
-        Text(note, color = Color(0xFF22C55E), fontSize = 8.5.sp, fontWeight = FontWeight.Bold)
+        Column(modifier = Modifier.padding(horizontal = 11.dp, vertical = 10.dp)) {
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(label, color = Color(0xFF8FA3C0), fontSize = 8.sp, fontWeight = FontWeight.Bold, letterSpacing = 0.8.sp)
+            Text(value, color = valueColor, fontSize = 22.sp, fontWeight = FontWeight.Bold, lineHeight = 22.sp)
+            Text(note, color = Color(0xFF22C55E), fontSize = 8.5.sp, fontWeight = FontWeight.Bold)
+        }
     }
 }
 
@@ -220,8 +251,8 @@ private fun StudyTimeCard() {
                             .background(bar.first)
                     )
                     Spacer(modifier = Modifier.height(3.dp))
-                    Text(day, color = if (day == "Thu") Color(0xFFE8950F) else Color(0xFF8FA3C0), fontSize = 8.sp, fontWeight = FontWeight.Bold)
-                    Text(time, color = if (day == "Thu") Color(0xFFE8950F) else Color(0xFF8FA3C0), fontSize = 7.5.sp, fontWeight = FontWeight.Bold)
+                    Text(day, color = if (day == "Thu") Color(0xFFE8950F) else Color(0xFF8FA3C0), fontSize = 8.sp, lineHeight = 8.sp, fontWeight = FontWeight.Bold)
+                    Text(time, color = if (day == "Thu") Color(0xFFE8950F) else Color(0xFF8FA3C0), fontSize = 7.5.sp, lineHeight = 7.5.sp, fontWeight = FontWeight.Bold)
                 }
             }
         }
@@ -231,8 +262,8 @@ private fun StudyTimeCard() {
 @Composable
 private fun StatBlock(value: String, label: String, color: Color, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
-        Text(value, color = color, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-        Text(label, color = Color(0xFF8FA3C0), fontSize = 8.sp, fontWeight = FontWeight.Bold)
+        Text(value, color = color, fontSize = 16.sp, lineHeight = 16.sp, fontWeight = FontWeight.Bold)
+        Text(label, color = Color(0xFF8FA3C0), fontSize = 8.sp, lineHeight = 8.sp, fontWeight = FontWeight.Bold)
     }
 }
 
@@ -316,7 +347,10 @@ private fun SectionLabel(text: String) {
 
 @Composable
 private fun StrongWeakCards(onNeedsWorkView: () -> Unit) {
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    Row(
+        modifier = Modifier.height(IntrinsicSize.Min),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
         SubjectStrengthCard(
             title = "💪 Strong Areas",
             showView = false,
@@ -361,12 +395,15 @@ private fun SubjectStrengthCard(
     modifier: Modifier = Modifier,
     onView: (() -> Unit)? = null
 ) {
+    val cardShape = RoundedCornerShape(14.dp)
     Column(
         modifier = modifier
-            .background(Color.White, RoundedCornerShape(14.dp))
-            .border(1.dp, Color(0xFFE2E8F0), RoundedCornerShape(14.dp))
+            .fillMaxHeight()
+            .performanceCardShadow(cardShape)
+            .background(Color.White, cardShape)
+            .border(1.dp, Color(0xFFE2E8F0), cardShape)
             .padding(14.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(title, color = Color(0xFF071326), fontSize = 12.sp, fontWeight = FontWeight.Bold)
@@ -408,9 +445,9 @@ private fun SubjectStrengthCard(
                         }
                         Spacer(modifier = Modifier.width(4.dp))
                     }
-                    Text(it.questions, color = Color(0xFF8FA3C0), fontSize = 8.sp)
+                    Text(it.questions, color = Color(0xFF8FA3C0), fontSize = 8.sp, lineHeight = 8.sp)
                 }
-                Text("${it.score}%", color = it.scoreColor, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                Text("${it.score}%", color = it.scoreColor, fontSize = 10.sp, lineHeight = 10.sp, fontWeight = FontWeight.Bold)
             }
         }
     }
@@ -468,7 +505,7 @@ private fun StudyStreakCard(onViewAll: () -> Unit) {
 
         Spacer(modifier = Modifier.height(3.dp))
 
-        weeks.forEach { week ->
+        weeks.forEachIndexed { index, week ->
             Row(horizontalArrangement = Arrangement.spacedBy(3.dp), modifier = Modifier.fillMaxWidth()) {
                 week.forEach { day ->
                     val level = day?.second ?: -1
@@ -508,16 +545,18 @@ private fun StudyStreakCard(onViewAll: () -> Unit) {
                     }
                 }
             }
-            Spacer(modifier = Modifier.height(3.dp))
+            if (index < weeks.lastIndex) {
+                Spacer(modifier = Modifier.height(2.dp))
+            }
         }
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
+        Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(Color(0xFFF0F4F8)))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .border(1.dp, Color(0xFFF0F4F8), RoundedCornerShape(0.dp))
-                .padding(top = 11.dp),
+                .padding(top = 6.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             BottomMetric("4h 32m", "AVG DAILY", Color(0xFF071326), Modifier.weight(1f))
@@ -538,9 +577,13 @@ private fun LegendItem(text: String, color: Color) {
 
 @Composable
 private fun BottomMetric(value: String, label: String, valueColor: Color, modifier: Modifier = Modifier) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
-        Text(value, color = valueColor, fontSize = 15.sp, fontWeight = FontWeight.Bold)
-        Text(label, color = Color(0xFF8FA3C0), fontSize = 7.5.sp, fontWeight = FontWeight.Bold)
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(1.dp),
+        modifier = modifier
+    ) {
+        Text(value, color = valueColor, fontSize = 15.sp, lineHeight = 15.sp, fontWeight = FontWeight.Bold)
+        Text(label, color = Color(0xFF8FA3C0), fontSize = 7.5.sp, lineHeight = 7.5.sp, fontWeight = FontWeight.Bold)
     }
 }
 
@@ -585,8 +628,8 @@ private fun TrioRow(icon: String, title: String, subtitle: String, value: String
             Text(icon, fontSize = 17.sp)
         }
         Column(modifier = Modifier.weight(1f)) {
-            Text(title, color = Color(0xFF071326), fontSize = 12.sp, fontWeight = FontWeight.Bold)
-            Text(subtitle, color = Color(0xFF8FA3C0), fontSize = 9.5.sp)
+            Text(title, color = Color(0xFF071326), fontSize = 12.sp, lineHeight = 12.sp, fontWeight = FontWeight.Bold)
+            Text(subtitle, color = Color(0xFF8FA3C0), fontSize = 9.5.sp, lineHeight = 9.5.sp)
         }
         Column(horizontalAlignment = Alignment.End) {
             Text(value, color = valueColor, fontSize = 13.sp, fontWeight = FontWeight.Bold)
@@ -597,6 +640,7 @@ private fun TrioRow(icon: String, title: String, subtitle: String, value: String
 
 @Composable
 private fun TestHistoryCard(onViewAll: () -> Unit) {
+    val cardShape = RoundedCornerShape(16.dp)
     val rows = listOf(
         TestRow("Prelims Mock Test 8", "Full Mock", "100 Q · 2d ago", "94/200", Color(0xFFC95212)),
         TestRow("Current Affairs Test 4", "CA Daily", "30 Q · 5d ago", "43/60", Color(0xFF1A56C4)),
@@ -609,9 +653,10 @@ private fun TestHistoryCard(onViewAll: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
+            .performanceCardShadow(cardShape)
+            .clip(cardShape)
             .background(Color.White)
-            .border(1.dp, Color(0xFFDDE5F0), RoundedCornerShape(16.dp))
+            .border(1.dp, Color(0xFFDDE5F0), cardShape)
     ) {
         Text("📋 Complete Test History", color = Color(0xFF071326), fontSize = 12.5.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(16.dp, 12.dp, 16.dp, 0.dp))
 
@@ -621,11 +666,31 @@ private fun TestHistoryCard(onViewAll: () -> Unit) {
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .border(1.dp, Color(0xFFF0F4F8), RoundedCornerShape(0.dp))
                 .padding(top = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("TEST NAME", color = Color(0xFF8FA4BE), fontSize = 10.sp, fontWeight = FontWeight.Bold)
-            Text("SCORE", color = Color(0xFF8FA4BE), fontSize = 10.sp, fontWeight = FontWeight.Bold)
-            Text("VIEW", color = Color(0xFF8FA4BE), fontSize = 10.sp, fontWeight = FontWeight.Bold)
+            Text(
+                text = "TEST NAME",
+                color = Color(0xFF8FA4BE),
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f)
+            )
+            Text(
+                text = "SCORE",
+                color = Color(0xFF8FA4BE),
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.End,
+                modifier = Modifier.width(HistoryScoreColumnWidth)
+            )
+            Text(
+                text = "VIEW",
+                color = Color(0xFF8FA4BE),
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.End,
+                modifier = Modifier.width(HistoryActionColumnWidth)
+            )
         }
 
         rows.forEachIndexed { idx, row ->
@@ -664,18 +729,31 @@ private fun HistoryRow(row: TestRow) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            Text(row.title, color = Color(0xFF1A2744), fontSize = 12.5.sp, fontWeight = FontWeight.Bold)
+            Text(row.title, color = Color(0xFF1A2744), fontSize = 12.5.sp, lineHeight = 12.5.sp, fontWeight = FontWeight.Bold)
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(modifier = Modifier.clip(RoundedCornerShape(20.dp)).background(if (row.tag == "CA Daily") Color(0xFFFEF5EC) else Color(0xFFF0F4F8)).padding(horizontal = 8.dp, vertical = 2.dp)) {
                     Text(row.tag, color = if (row.tag == "CA Daily") Color(0xFFC95212) else Color(0xFF0D1B2E), fontSize = 9.5.sp, fontWeight = FontWeight.Bold)
                 }
                 Spacer(modifier = Modifier.width(6.dp))
-                Text(row.meta, color = Color(0xFF5A7096), fontSize = 11.sp)
+                Text(row.meta, color = Color(0xFF5A7096), fontSize = 11.sp, lineHeight = 11.sp)
             }
         }
-        Text(row.score, color = row.scoreColor, fontSize = 13.sp, fontWeight = FontWeight.ExtraBold)
-        Spacer(modifier = Modifier.width(12.dp))
-        Text("View →", color = Color(0xFF0E8A56), fontSize = 11.5.sp, fontWeight = FontWeight.SemiBold)
+        Text(
+            text = row.score,
+            color = row.scoreColor,
+            fontSize = 13.sp,
+            fontWeight = FontWeight.ExtraBold,
+            textAlign = TextAlign.End,
+            modifier = Modifier.width(HistoryScoreColumnWidth)
+        )
+        Text(
+            text = "View →",
+            color = Color(0xFF0E8A56),
+            fontSize = 11.5.sp,
+            fontWeight = FontWeight.SemiBold,
+            textAlign = TextAlign.End,
+            modifier = Modifier.width(HistoryActionColumnWidth)
+        )
     }
 }
 
@@ -684,8 +762,14 @@ private fun AchievementSection(onAllClick: () -> Unit) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
         Text("🏅 Achievement Badges", color = Color(0xFF071326), fontSize = 16.sp, fontWeight = FontWeight.Bold)
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(modifier = Modifier.clip(RoundedCornerShape(19.dp)).border(1.dp, Color(0xFFE2E8F0), RoundedCornerShape(19.dp)).padding(horizontal = 10.dp, vertical = 4.dp)) {
-                Text("8 Earned", color = Color(0xFF071326), fontSize = 11.sp, fontWeight = FontWeight.Bold)
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(Color(0xFFFFF8ED))
+                    .border(1.dp, Color(0x47F5A623), RoundedCornerShape(20.dp))
+                    .padding(horizontal = 10.dp, vertical = 4.dp)
+            ) {
+                Text("8 Earned", color = Color(0xFFE8950F), fontSize = 9.sp, fontWeight = FontWeight.Bold)
             }
             Spacer(modifier = Modifier.width(6.dp))
             Text(
@@ -698,7 +782,7 @@ private fun AchievementSection(onAllClick: () -> Unit) {
         }
     }
 
-    Spacer(modifier = Modifier.height(8.dp))
+    Spacer(modifier = Modifier.height(4.dp))
 
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
         AchievementBadge("🔥", "30-Day Streak", "✓ Earned", true, Modifier.weight(1f))
@@ -710,31 +794,35 @@ private fun AchievementSection(onAllClick: () -> Unit) {
 
 @Composable
 private fun AchievementBadge(icon: String, title: String, status: String, earned: Boolean, modifier: Modifier = Modifier) {
+    val cardShape = RoundedCornerShape(13.dp)
     Column(
         modifier = modifier
             .height(98.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(Color.White)
-            .border(1.dp, Color(0xFFE2E8F0), RoundedCornerShape(12.dp))
-            .padding(9.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .performanceCardShadow(cardShape)
+            .then(if (!earned) Modifier.alpha(0.45f) else Modifier)
+            .clip(cardShape)
+            .background(if (earned) Color(0xFFFFF8ED) else Color.White)
+            .border(1.dp, if (earned) Color(0x47F5A623) else Color(0xFFE2E8F0), cardShape)
+            .padding(horizontal = 9.dp, vertical = 12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(3.dp)
     ) {
         Text(icon, fontSize = 24.sp)
-        Spacer(modifier = Modifier.height(3.dp))
-        Text(title, color = Color(0xFF071326), fontSize = 10.sp, lineHeight = 12.sp, fontWeight = FontWeight.SemiBold)
-        Spacer(modifier = Modifier.height(3.dp))
-        Text(status, color = if (earned) Color(0xFF22C55E) else Color(0xFF8FA3C0), fontSize = 10.sp)
+        Text(title, color = Color(0xFF071326), fontSize = 9.sp, lineHeight = 12.6.sp, fontWeight = FontWeight.Bold)
+        Text(status, color = if (earned) Color(0xFF22C55E) else Color(0xFF8FA3C0), fontSize = 8.sp, fontWeight = FontWeight.Bold)
     }
 }
 
 @Composable
 private fun WeeklyLeaderboardCard(onViewAll: () -> Unit) {
+    val cardShape = RoundedCornerShape(14.dp)
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(14.dp))
+            .performanceCardShadow(cardShape)
+            .clip(cardShape)
             .background(Color.White)
-            .border(1.dp, Color(0xFFE2E8F0), RoundedCornerShape(14.dp))
+            .border(1.dp, Color(0xFFE2E8F0), cardShape)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 13.dp, vertical = 12.dp),
@@ -757,7 +845,22 @@ private fun WeeklyLeaderboardCard(onViewAll: () -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color(0xFFFFF8ED))
-                .border(1.dp, Color(0xFFF5A623), RoundedCornerShape(0.dp))
+                .drawBehind {
+                    // Mixed inside stroke: left = 3dp, bottom = 1dp, top/right = 0dp
+                    val leftStroke = 3.dp.toPx()
+                    val bottomStroke = 1.dp.toPx()
+                    val strokeColor = Color(0xFFF5A623)
+                    drawRect(
+                        color = strokeColor,
+                        topLeft = androidx.compose.ui.geometry.Offset(0f, 0f),
+                        size = androidx.compose.ui.geometry.Size(leftStroke, size.height)
+                    )
+                    drawRect(
+                        color = strokeColor,
+                        topLeft = androidx.compose.ui.geometry.Offset(0f, size.height - bottomStroke),
+                        size = androidx.compose.ui.geometry.Size(size.width, bottomStroke)
+                    )
+                }
                 .padding(horizontal = 13.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -798,10 +901,12 @@ private fun LeaderRow(rank: String, initials: String, name: String, score: Strin
 
 @Composable
 private fun AiInsightsCard(onFullReport: () -> Unit) {
+    val cardShape = RoundedCornerShape(14.dp)
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(14.dp))
+            .performanceCardShadow(cardShape)
+            .clip(cardShape)
             .background(Brush.linearGradient(listOf(Color(0xFF162240), Color(0xFF1C2E50))))
             .padding(top = 8.dp, bottom = 16.dp)
     ) {
@@ -862,13 +967,24 @@ private fun CardShell(
     modifier: Modifier = Modifier,
     body: @Composable () -> Unit
 ) {
+    val cardShape = RoundedCornerShape(14.dp)
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(Color.White, RoundedCornerShape(14.dp))
-            .border(1.dp, Color(0xFFE2E8F0), RoundedCornerShape(14.dp))
+            .performanceCardShadow(cardShape)
+            .background(Color.White, cardShape)
+            .border(1.dp, Color(0xFFE2E8F0), cardShape)
             .padding(14.dp)
     ) {
         body()
     }
 }
+
+private fun Modifier.performanceCardShadow(shape: Shape): Modifier =
+    this.shadow(
+        elevation = 12.dp,
+        shape = shape,
+        clip = false,
+        ambientColor = Color(0x14162240),
+        spotColor = Color(0x14162240)
+    )
