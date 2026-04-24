@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
@@ -56,7 +57,7 @@ fun PerformanceAchievementBadgesScreen(onBack: () -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F4F8))
+            .background(Color(0xFF071224))
     ) {
         Column(
             modifier = Modifier
@@ -114,7 +115,10 @@ fun PerformanceAchievementBadgesScreen(onBack: () -> Unit = {}) {
         }
 
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
+                .background(Color(0xFFF0F4F8)),
             contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp, vertical = 10.dp)
         ) {
             item {
@@ -210,6 +214,7 @@ private fun AchievementProgressCard() {
             text = "Badges Earned",
             color = Color.White,
             fontSize = 12.sp,
+            lineHeight = 13.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
@@ -218,6 +223,7 @@ private fun AchievementProgressCard() {
             text = "20 more to unlock · Keep grinding!",
             color = Color.White.copy(alpha = 0.45f),
             fontSize = 10.sp,
+            lineHeight = 11.sp,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
 
@@ -251,7 +257,7 @@ private fun EarnedBadgeCard(badge: EarnedBadge, modifier: Modifier = Modifier) {
             .border(1.dp, Color(0xFFF5A623).copy(alpha = 0.28f), RoundedCornerShape(13.dp))
             .padding(horizontal = 9.dp, vertical = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(3.dp)
+        verticalArrangement = Arrangement.spacedBy(1.dp)
     ) {
         Text(text = badge.icon, color = Color(0xFF071326), fontSize = 24.sp)
         Text(
@@ -266,6 +272,7 @@ private fun EarnedBadgeCard(badge: EarnedBadge, modifier: Modifier = Modifier) {
             text = "✓ Earned",
             color = Color(0xFF22C55E),
             fontSize = 8.sp,
+            lineHeight = 9.sp,
             fontWeight = FontWeight.Bold
         )
     }
@@ -275,27 +282,29 @@ private fun EarnedBadgeCard(badge: EarnedBadge, modifier: Modifier = Modifier) {
 private fun LockedBadgeCard(badge: LockedBadge, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
-            .height(85.dp)
-            .clip(RoundedCornerShape(13.dp))
-            .background(Color.White.copy(alpha = 0.45f))
-            .border(1.dp, Color(0xFFE2E8F0), RoundedCornerShape(13.dp))
-            .padding(horizontal = 9.dp, vertical = 12.dp),
+            .height(102.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(0xFFF3F6FB))
+            .border(1.dp, Color(0xFFE6EBF2), RoundedCornerShape(16.dp))
+            .alpha(0.72f)
+            .padding(horizontal = 9.dp, vertical = 11.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(3.dp)
+        verticalArrangement = Arrangement.spacedBy(1.dp)
     ) {
-        Text(text = badge.icon, color = Color(0xFF071326), fontSize = 24.sp)
+        Text(text = badge.icon, color = Color(0xFF8F98A8), fontSize = 29.sp)
         Text(
             text = badge.title,
-            color = Color(0xFF071326),
-            fontSize = 9.sp,
-            fontWeight = FontWeight.Bold,
-            lineHeight = 12.6.sp,
+            color = Color(0xFF7E8795),
+            fontSize = 9.5.sp,
+            fontWeight = FontWeight.ExtraBold,
+            lineHeight = 12.8.sp,
             textAlign = TextAlign.Center
         )
         Text(
             text = badge.progressText,
-            color = Color(0xFF8FA3C0),
-            fontSize = 8.sp,
+            color = Color(0xFFB7C1D0),
+            fontSize = 7.8.sp,
+            lineHeight = 8.8.sp,
             fontWeight = FontWeight.Bold
         )
     }

@@ -28,7 +28,9 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -155,7 +157,10 @@ fun PerformanceWeeklyLeaderboardScreen(onBack: () -> Unit = {}) {
                 color = Color.White.copy(alpha = 0.4f),
                 fontSize = 10.5.sp,
                 lineHeight = 16.27.sp,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp)
             )
 
             Spacer(modifier = Modifier.height(44.dp))
@@ -165,7 +170,7 @@ fun PerformanceWeeklyLeaderboardScreen(onBack: () -> Unit = {}) {
             modifier = Modifier
                 .fillMaxSize()
                 .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
-                .background(Color(0xFFF0F4FA))
+                .background(Color(0xFFF0F4F8))
                 .padding(horizontal = 16.dp, vertical = 14.dp)
         ) {
             Row(
@@ -176,15 +181,24 @@ fun PerformanceWeeklyLeaderboardScreen(onBack: () -> Unit = {}) {
                     .padding(horizontal = 14.dp, vertical = 14.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("#428", color = Color(0xFFF5A623), fontSize = 28.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    "#428",
+                    color = Color(0xFFF5A623),
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.Monospace
+                )
                 Spacer(modifier = Modifier.width(12.dp))
-                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    Text("Your Rank This Week", color = Color.White, fontSize = 13.5.sp, fontWeight = FontWeight.Bold)
-                    Text("Top 1.4% nationally · ↑ +56 from last\nweek", color = Color.White.copy(alpha = 0.4f), fontSize = 10.sp)
+                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(0.dp)) {
+                    Text("Your Rank This Week", color = Color.White, fontSize = 13.5.sp, lineHeight = 15.sp, fontWeight = FontWeight.Bold)
+                    Text("Top 1.4% nationally · ↑ +56 from last\nweek", color = Color.White.copy(alpha = 0.4f), fontSize = 10.sp, lineHeight = 12.sp)
                 }
-                Column(horizontalAlignment = Alignment.End) {
-                    Text("↑ +56", color = Color(0xFF22C55E), fontSize = 17.sp, fontWeight = FontWeight.Bold)
-                    Text("improvement", color = Color.White.copy(alpha = 0.4f), fontSize = 9.sp)
+                Column(
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.spacedBy((-2).dp)
+                ) {
+                    Text("↑ +56", color = Color(0xFF22C55E), fontSize = 17.sp, lineHeight = 18.sp, fontWeight = FontWeight.Bold)
+                    Text("improvement", color = Color.White.copy(alpha = 0.4f), fontSize = 9.sp, lineHeight = 10.sp)
                 }
             }
 
@@ -246,7 +260,7 @@ fun PerformanceWeeklyLeaderboardScreen(onBack: () -> Unit = {}) {
 
 @Composable
 private fun PodiumItemView(item: PodiumItem) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
             modifier = Modifier
                 .size(item.avatarSize)
@@ -257,9 +271,13 @@ private fun PodiumItemView(item: PodiumItem) {
         ) {
             Text(item.initials, color = Color.White, fontSize = item.initialsSize.sp, fontWeight = FontWeight.Bold)
         }
+        Spacer(modifier = Modifier.height(2.dp))
         Text(item.medal, color = Color(0xFF071326), fontSize = 16.sp)
+        Spacer(modifier = Modifier.height(0.dp))
         Text(item.name, color = Color(0xFF071326), fontSize = 9.5.sp, fontWeight = FontWeight.Bold)
-        Text(item.points, color = item.pointsColor, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(0.dp))
+        Text(item.points, color = item.pointsColor, fontSize = 10.sp, lineHeight = 11.sp, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(1.dp))
         Box(
             modifier = Modifier
                 .width(26.dp)
@@ -338,9 +356,10 @@ private fun LeaderboardRow(row: RankRow) {
                 text = row.score,
                 color = if (row.isUser || row.rank == "1") Color(0xFFE8950F) else Color(0xFF071326),
                 fontSize = 12.sp,
+                lineHeight = 13.sp,
                 fontWeight = FontWeight.Bold
             )
-            Text(text = row.delta, color = row.deltaColor, fontSize = 9.sp, fontWeight = FontWeight.Bold)
+            Text(text = row.delta, color = row.deltaColor, fontSize = 9.sp, lineHeight = 10.sp, fontWeight = FontWeight.Bold)
         }
     }
 }

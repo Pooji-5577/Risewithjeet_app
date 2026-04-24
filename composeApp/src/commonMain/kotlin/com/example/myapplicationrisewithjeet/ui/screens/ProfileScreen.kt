@@ -110,7 +110,7 @@ fun ProfileScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp))
+                .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
                 .background(Color(0xFFF0F4FA))
                 .padding(horizontal = 12.dp)
                 .padding(top = 4.dp, bottom = 32.dp)

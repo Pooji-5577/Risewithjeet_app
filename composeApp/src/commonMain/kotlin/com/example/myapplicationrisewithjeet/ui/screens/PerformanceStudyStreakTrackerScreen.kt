@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,7 +44,7 @@ fun PerformanceStudyStreakTrackerScreen(onBack: () -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F4F8))
+            .background(Color(0xFF071224))
     ) {
         Column(
             modifier = Modifier
@@ -79,61 +80,29 @@ fun PerformanceStudyStreakTrackerScreen(onBack: () -> Unit = {}) {
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            Box(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(Color(0xFFF5A623).copy(alpha = 0.18f))
-                    .border(1.dp, Color(0xFFF5A623).copy(alpha = 0.32f), RoundedCornerShape(20.dp))
-                    .padding(horizontal = 13.dp, vertical = 4.dp)
-            ) {
-                Text(
-                    text = "📊PERFORMANCE ANALYTICS DASHBOARD",
-                    color = Color(0xFFF5A623),
-                    fontSize = 9.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 0.9.sp
-                )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
             Text(
                 text = buildAnnotatedString {
-                    append("Study Streak ")
-                    withStyle(SpanStyle(color = Color(0xFFF5A623))) { append("Tracker") }
+                    append("Study ")
+                    withStyle(SpanStyle(color = Color(0xFFF5A623))) { append("Streak") }
                 },
                 color = Color.White,
                 fontSize = 21.sp,
                 fontWeight = FontWeight.ExtraBold,
                 lineHeight = 25.sp,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "Track your daily consistency with a detailed streak calendar,\nintensity levels, and month-wise productivity trends.",
+                text = "Your complete UPSC preparation analytics — streaks, subject mastery,\nweak areas and smart notes.",
                 color = Color.White.copy(alpha = 0.4f),
                 fontSize = 10.5.sp,
                 lineHeight = 16.sp,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(13.dp))
-                    .background(Color(0xFF192333))
-                    .padding(horizontal = 13.dp, vertical = 13.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                HeaderStat("42", "CURRENT STREAK", Color(0xFFE8950F), Modifier.weight(1f), withDivider = true)
-                HeaderStat("57", "BEST STREAK", Color.White, Modifier.weight(1f), withDivider = true)
-                HeaderStat("26/28", "ACTIVE DAYS", Color(0xFF22C55E), Modifier.weight(1f), withDivider = false)
-            }
 
             Spacer(modifier = Modifier.height(12.dp))
         }
@@ -142,7 +111,7 @@ fun PerformanceStudyStreakTrackerScreen(onBack: () -> Unit = {}) {
             modifier = Modifier
                 .fillMaxSize()
                 .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
-                .background(Color(0xFFF0F4FA))
+                .background(Color(0xFFF0F4F8))
                 .padding(top = 8.dp)
         ) {
             LazyColumn(
@@ -150,6 +119,10 @@ fun PerformanceStudyStreakTrackerScreen(onBack: () -> Unit = {}) {
                 contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp, vertical = 10.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
+                item {
+                    DayStreakSummaryCard()
+                }
+
                 item {
                     Column(
                         modifier = Modifier
@@ -164,7 +137,7 @@ fun PerformanceStudyStreakTrackerScreen(onBack: () -> Unit = {}) {
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text("📅 February 2026", color = Color(0xFF071326), fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                            Text("📅 Study Streak — February 2026", color = Color(0xFF071326), fontSize = 13.sp, fontWeight = FontWeight.Bold)
                             Box(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(99.dp))
@@ -176,7 +149,7 @@ fun PerformanceStudyStreakTrackerScreen(onBack: () -> Unit = {}) {
                             }
                         }
 
-                        Spacer(modifier = Modifier.height(9.dp))
+                        Spacer(modifier = Modifier.height(1.dp))
 
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             LevelLegend("None", Color(0xFFF0F4F8))
@@ -185,7 +158,7 @@ fun PerformanceStudyStreakTrackerScreen(onBack: () -> Unit = {}) {
                             LevelLegend("Intense", Color(0xFF22C55E))
                         }
 
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(0.dp))
 
                         Row(horizontalArrangement = Arrangement.spacedBy(3.dp), modifier = Modifier.fillMaxWidth()) {
                             dayLabels.forEach {
@@ -246,13 +219,13 @@ fun PerformanceStudyStreakTrackerScreen(onBack: () -> Unit = {}) {
                             Spacer(modifier = Modifier.height(3.dp))
                         }
 
-                        Spacer(modifier = Modifier.height(7.dp))
+                        Spacer(modifier = Modifier.height(4.dp))
 
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .border(1.dp, Color(0xFFF0F4F8))
-                                .padding(top = 11.dp),
+                                .padding(top = 8.dp),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             BottomStat("4h 32m", "AVG DAILY", Color(0xFF071326), Modifier.weight(1f))
@@ -263,50 +236,56 @@ fun PerformanceStudyStreakTrackerScreen(onBack: () -> Unit = {}) {
                 }
 
                 item {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(14.dp))
-                            .background(Color.White)
-                            .border(1.dp, Color(0xFFE2E8F0), RoundedCornerShape(14.dp))
-                            .padding(14.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Text("🎯 Streak Milestones", color = Color(0xFF071326), fontSize = 13.sp, fontWeight = FontWeight.Bold)
-                        MilestoneRow("✅", "7-day streak completed", "Unlocked")
-                        MilestoneRow("✅", "14-day streak completed", "Unlocked")
-                        MilestoneRow("✅", "30-day streak completed", "Unlocked")
-                        MilestoneRow("🔒", "60-day streak target", "18 days to go")
-                    }
+                    StudyConsistencyCard()
                 }
+
             }
         }
     }
 }
 
 @Composable
-private fun HeaderStat(
-    value: String,
-    label: String,
-    valueColor: Color,
-    modifier: Modifier = Modifier,
-    withDivider: Boolean
-) {
-    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-        Column(
-            modifier = Modifier.weight(1f),
-            horizontalAlignment = Alignment.CenterHorizontally
+private fun DayStreakSummaryCard() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(14.dp))
+            .background(Color(0xFF071326))
+            .padding(horizontal = 14.dp, vertical = 13.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text("🔥", fontSize = 42.sp)
+        Text("42", color = Color(0xFFF5A623), fontSize = 30.sp, lineHeight = 32.sp, fontWeight = FontWeight.ExtraBold)
+        Text("Day Streak!", color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            "You haven't missed a single day since Jan 10, 2026. Top 3% of all\naspirants on the platform.",
+            color = Color.White.copy(alpha = 0.42f),
+            fontSize = 10.5.sp,
+            lineHeight = 16.sp,
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(Color.White.copy(alpha = 0.12f))
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = value, color = valueColor, fontSize = 15.sp, fontWeight = FontWeight.Bold)
-            Text(text = label, color = Color.White.copy(alpha = 0.35f), fontSize = 8.sp, fontWeight = FontWeight.Bold)
-        }
-        if (withDivider) {
-            Box(
-                modifier = Modifier
-                    .height(34.dp)
-                    .width(1.dp)
-                    .background(Color.White.copy(alpha = 0.1f))
-            )
+            BottomStat("38", "CURRENT", Color(0xFFF5A623), Modifier.weight(1f), labelColor = Color.White.copy(alpha = 0.35f))
+            BottomStat("42", "BEST EVER", Color.White, Modifier.weight(1f), labelColor = Color.White.copy(alpha = 0.35f))
+            BottomStat("26/28", "FEB DAYS", Color(0xFF22C55E), Modifier.weight(1f), labelColor = Color.White.copy(alpha = 0.35f))
         }
     }
 }
@@ -321,32 +300,83 @@ private fun LevelLegend(label: String, color: Color) {
 }
 
 @Composable
-private fun BottomStat(value: String, label: String, valueColor: Color, modifier: Modifier = Modifier) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
-        Text(value, color = valueColor, fontSize = 15.sp, fontWeight = FontWeight.Bold)
-        Text(label, color = Color(0xFF8FA3C0), fontSize = 7.5.sp, fontWeight = FontWeight.Bold)
+private fun BottomStat(
+    value: String,
+    label: String,
+    valueColor: Color,
+    modifier: Modifier = Modifier,
+    labelColor: Color = Color(0xFF8FA3C0)
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy((-1).dp),
+        modifier = modifier
+    ) {
+        Text(value, color = valueColor, fontSize = 15.sp, lineHeight = 16.sp, fontWeight = FontWeight.Bold)
+        Text(label, color = labelColor, fontSize = 7.5.sp, lineHeight = 8.sp, fontWeight = FontWeight.Bold)
     }
 }
 
 @Composable
-private fun MilestoneRow(icon: String, title: String, status: String) {
-    Row(
+private fun StudyConsistencyCard() {
+    val days = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+    val heights = listOf(22.dp, 28.dp, 34.dp, 34.dp, 30.dp, 40.dp, 22.dp)
+    val colors = listOf(
+        Color(0xFFCBEFD5),
+        Color(0xFF9BD79E),
+        Color(0xFF74C166),
+        Color(0xFF74C166),
+        Color(0xFF9BD79E),
+        Color(0xFFE0A836),
+        Color(0xFFCBEFD5)
+    )
+
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(10.dp))
-            .background(Color(0xFFF8FAFD))
-            .border(1.dp, Color(0xFFEDF2F7), RoundedCornerShape(10.dp))
-            .padding(horizontal = 10.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+            .clip(RoundedCornerShape(14.dp))
+            .background(Color.White)
+            .border(1.dp, Color(0xFFE2E8F0), RoundedCornerShape(14.dp))
+            .padding(14.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text(icon, fontSize = 12.sp)
-        Text(title, color = Color(0xFF1F2937), fontSize = 10.5.sp, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
+        Text("📊 Study Consistency by Day", color = Color(0xFF071326), fontSize = 13.sp, fontWeight = FontWeight.Bold)
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(44.dp),
+            horizontalArrangement = Arrangement.spacedBy(3.dp),
+            verticalAlignment = Alignment.Bottom
+        ) {
+            days.indices.forEach { index ->
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(heights[index])
+                        .clip(RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp))
+                        .background(colors[index])
+                )
+            }
+        }
+
+        Row(horizontalArrangement = Arrangement.spacedBy(3.dp), modifier = Modifier.fillMaxWidth()) {
+            days.forEachIndexed { index, day ->
+                Text(
+                    text = day,
+                    color = if (day == "Sat") Color(0xFFE0A836) else Color(0xFF8FA3C0),
+                    fontSize = 8.5.sp,
+                    modifier = Modifier.weight(1f),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                )
+            }
+        }
+
         Text(
-            status,
-            color = if (status == "Unlocked") Color(0xFF22C55E) else Color(0xFFE8950F),
-            fontSize = 9.sp,
-            fontWeight = FontWeight.Bold
+            "Wednesdays & Thursdays are your best study days. Schedule hard\nsubjects then.",
+            color = Color(0xFF8FA3C0),
+            fontSize = 10.5.sp,
+            lineHeight = 16.sp
         )
     }
 }

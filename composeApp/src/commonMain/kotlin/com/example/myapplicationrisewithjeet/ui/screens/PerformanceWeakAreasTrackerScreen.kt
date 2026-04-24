@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,7 +46,7 @@ fun PerformanceWeakAreasTrackerScreen(onBack: () -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F4F8))
+            .background(Color(0xFF071224))
     ) {
         Column(
             modifier = Modifier
@@ -119,7 +120,10 @@ fun PerformanceWeakAreasTrackerScreen(onBack: () -> Unit = {}) {
                 color = Color.White.copy(alpha = 0.4f),
                 fontSize = 10.5.sp,
                 lineHeight = 16.sp,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -133,7 +137,7 @@ fun PerformanceWeakAreasTrackerScreen(onBack: () -> Unit = {}) {
             modifier = Modifier
                 .fillMaxSize()
                 .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
-                .background(Color(0xFFF0F4FA))
+                .background(Color(0xFFF0F4F8))
                 .padding(top = 8.dp)
         ) {
             LazyColumn(
@@ -254,7 +258,7 @@ private fun TrackerSubjectRow(row: TrackerRow, showDivider: Boolean) {
             )
         }
 
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(3.dp))
 
         Box(
             modifier = Modifier
@@ -272,7 +276,7 @@ private fun TrackerSubjectRow(row: TrackerRow, showDivider: Boolean) {
             )
         }
 
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(3.dp))
 
         Row(
             verticalAlignment = Alignment.CenterVertically,

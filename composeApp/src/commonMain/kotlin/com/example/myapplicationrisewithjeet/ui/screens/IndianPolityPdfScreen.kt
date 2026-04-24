@@ -29,7 +29,7 @@ fun IndianPolityPdfScreen(
     onBack: () -> Unit = {}
 ) {
     LazyColumn(
-        modifier = Modifier.background(Color(0xFFF0F4FA))
+        modifier = Modifier.background(Color(0xFFF0F4FA), RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
     ) {
         item { PdfTopBar(onBack = onBack) }
         item { PdfHeaderInfo() }

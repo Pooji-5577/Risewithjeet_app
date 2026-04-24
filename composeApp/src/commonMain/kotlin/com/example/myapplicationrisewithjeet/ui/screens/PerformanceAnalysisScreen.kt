@@ -202,7 +202,7 @@ private fun KpiCard(label: String, value: String, note: String, topColor: Color,
             Spacer(modifier = Modifier.height(4.dp))
             Text(label, color = Color(0xFF8FA3C0), fontSize = 8.sp, fontWeight = FontWeight.Bold, letterSpacing = 0.8.sp)
             Text(value, color = valueColor, fontSize = 22.sp, fontWeight = FontWeight.Bold, lineHeight = 22.sp)
-            Text(note, color = Color(0xFF22C55E), fontSize = 8.5.sp, fontWeight = FontWeight.Bold)
+            Text(note, color = Color(0xFF22C55E), fontSize = 8.5.sp, lineHeight = 9.sp, fontWeight = FontWeight.Bold)
         }
     }
 }
@@ -805,11 +805,11 @@ private fun AchievementBadge(icon: String, title: String, status: String, earned
             .border(1.dp, if (earned) Color(0x47F5A623) else Color(0xFFE2E8F0), cardShape)
             .padding(horizontal = 9.dp, vertical = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(3.dp)
+        verticalArrangement = Arrangement.spacedBy(1.dp)
     ) {
         Text(icon, fontSize = 24.sp)
         Text(title, color = Color(0xFF071326), fontSize = 9.sp, lineHeight = 12.6.sp, fontWeight = FontWeight.Bold)
-        Text(status, color = if (earned) Color(0xFF22C55E) else Color(0xFF8FA3C0), fontSize = 8.sp, fontWeight = FontWeight.Bold)
+        Text(status, color = if (earned) Color(0xFF22C55E) else Color(0xFF8FA3C0), fontSize = 8.sp, lineHeight = 9.sp, fontWeight = FontWeight.Bold)
     }
 }
 
@@ -919,9 +919,12 @@ private fun AiInsightsCard(onFullReport: () -> Unit) {
         ) {
             Text("🤖", fontSize = 20.sp)
             Spacer(modifier = Modifier.width(9.dp))
-            Column(modifier = Modifier.weight(1f)) {
-                Text("Jeet AI Weekly Insights", color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Bold)
-                Text("Auto-generated · 8 Mar 2026", color = Color.White.copy(alpha = 0.4f), fontSize = 9.5.sp)
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(0.dp)
+            ) {
+                Text("Jeet AI Weekly Insights", color = Color.White, fontSize = 13.sp, lineHeight = 14.sp, fontWeight = FontWeight.Bold)
+                Text("Auto-generated · 8 Mar 2026", color = Color.White.copy(alpha = 0.4f), fontSize = 9.5.sp, lineHeight = 10.sp)
             }
             Box(
                 modifier = Modifier
@@ -952,9 +955,12 @@ private fun InsightRow(icon: String, iconBg: Color, title: String, desc: String,
         Box(modifier = Modifier.size(30.dp).clip(RoundedCornerShape(9.dp)).background(iconBg), contentAlignment = Alignment.Center) {
             Text(icon, fontSize = 14.sp)
         }
-        Column(modifier = Modifier.weight(1f)) {
-            Text(title, color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-            Text(desc, color = Color.White.copy(alpha = 0.5f), fontSize = 10.sp, lineHeight = 16.sp)
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(0.dp)
+        ) {
+            Text(title, color = Color.White, fontSize = 12.sp, lineHeight = 13.sp, fontWeight = FontWeight.Bold)
+            Text(desc, color = Color.White.copy(alpha = 0.5f), fontSize = 10.sp, lineHeight = 14.sp)
             Box(modifier = Modifier.clip(RoundedCornerShape(20.dp)).background(tagBg).padding(horizontal = 8.dp, vertical = 2.dp)) {
                 Text(tag, color = tagColor, fontSize = 8.sp, fontWeight = FontWeight.Bold)
             }

@@ -50,7 +50,6 @@ fun App() {
 
         // Main app — with bottom nav
         val showBottomBar = when (currentScreen) {
-            is Screen.Home,
             is Screen.Prelims,
             is Screen.Mains,
             is Screen.Revision,

@@ -58,7 +58,7 @@ fun MockTestSummaryScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F4FA))
+            .background(Color(0xFFF0F4FA), RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
     ) {
         item {
             SummaryHeader(onBack = onBack)

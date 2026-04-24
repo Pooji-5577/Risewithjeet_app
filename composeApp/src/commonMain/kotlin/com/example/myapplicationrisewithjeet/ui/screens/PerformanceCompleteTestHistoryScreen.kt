@@ -1,5 +1,6 @@
 package com.example.myapplicationrisewithjeet.ui.screens
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -20,7 +21,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -52,7 +57,7 @@ fun PerformanceCompleteTestHistoryScreen(onBack: () -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F4F8))
+            .background(Color(0xFF071224))
     ) {
         Column(
             modifier = Modifier
@@ -152,7 +157,7 @@ fun PerformanceCompleteTestHistoryScreen(onBack: () -> Unit = {}) {
             modifier = Modifier
                 .fillMaxSize()
                 .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
-                .background(Color(0xFFF0F4FA))
+                .background(Color(0xFFF0F4F8))
                 .padding(top = 8.dp)
         ) {
             LazyColumn(
@@ -161,12 +166,7 @@ fun PerformanceCompleteTestHistoryScreen(onBack: () -> Unit = {}) {
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 item {
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                        FilterChip("All", true, Modifier.weight(1f))
-                        FilterChip("Full Mock", false, Modifier.weight(1f))
-                        FilterChip("Sectional", false, Modifier.weight(1f))
-                        FilterChip("CA Daily", false, Modifier.weight(1f))
-                    }
+                    ScoreProgressionCard()
                 }
 
                 item {
@@ -243,6 +243,133 @@ fun PerformanceCompleteTestHistoryScreen(onBack: () -> Unit = {}) {
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ScoreProgressionCard() {
+    val values = listOf(74f, 76f, 78f, 77f, 84f, 90f, 95f, 116f, 123f)
+    val labels = listOf("M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8", "M9")
+    val minY = 70f
+    val maxY = 125f
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(
+                elevation = 18.dp,
+                shape = RoundedCornerShape(16.dp),
+                ambientColor = Color(0x40233657),
+                spotColor = Color(0x30233657)
+            )
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color.White)
+            .border(1.dp, Color(0xFFDDE5F0), RoundedCornerShape(16.dp))
+            .padding(horizontal = 14.dp, vertical = 12.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("📈 Score Progression", color = Color(0xFF071326), fontSize = 12.5.sp, fontWeight = FontWeight.Bold)
+            Text("↑ +49 pts growth", color = Color(0xFF22C55E), fontSize = 11.sp, fontWeight = FontWeight.Bold)
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Box(modifier = Modifier.fillMaxWidth().height(88.dp)) {
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                val leftPadding = 4f
+                val rightPadding = 4f
+                val topPadding = 8f
+                val bottomPadding = 10f
+                val plotWidth = size.width - leftPadding - rightPadding
+                val plotHeight = size.height - topPadding - bottomPadding
+                val xStep = if (values.size > 1) plotWidth / (values.size - 1) else 0f
+
+                fun mapY(v: Float): Float {
+                    val normalized = ((v - minY) / (maxY - minY)).coerceIn(0f, 1f)
+                    return topPadding + (1f - normalized) * plotHeight
+                }
+
+                val points = values.mapIndexed { index, value ->
+                    Offset(
+                        x = leftPadding + index * xStep,
+                        y = mapY(value)
+                    )
+                }
+
+                drawLine(
+                    color = Color(0xFFE7EDF6),
+                    start = Offset(leftPadding, topPadding + plotHeight * 0.22f),
+                    end = Offset(size.width - rightPadding, topPadding + plotHeight * 0.22f),
+                    strokeWidth = 1.5f
+                )
+                drawLine(
+                    color = Color(0xFFE7EDF6),
+                    start = Offset(leftPadding, topPadding + plotHeight),
+                    end = Offset(size.width - rightPadding, topPadding + plotHeight),
+                    strokeWidth = 1.5f
+                )
+
+                // Figma overlay: #162240 at 15% -> 0% (left to right), only across chart plot area.
+                drawRect(
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(Color(0x26162240), Color(0x00162240)),
+                        startX = leftPadding,
+                        endX = size.width - rightPadding
+                    ),
+                    topLeft = Offset(leftPadding, topPadding + plotHeight * 0.22f),
+                    size = androidx.compose.ui.geometry.Size(
+                        width = plotWidth,
+                        height = plotHeight * 0.78f
+                    )
+                )
+
+                for (i in 0 until points.lastIndex) {
+                    drawLine(
+                        color = Color(0xFF111827),
+                        start = points[i],
+                        end = points[i + 1],
+                        strokeWidth = 4f,
+                        cap = StrokeCap.Round
+                    )
+                }
+
+                points.forEachIndexed { index, point ->
+                    if (index == points.lastIndex) {
+                        drawCircle(color = Color.White, radius = 8f, center = point)
+                        drawCircle(color = Color(0xFFF5A623), radius = 6f, center = point)
+                    } else {
+                        drawCircle(color = Color(0xFF111827), radius = 5f, center = point)
+                    }
+                }
+            }
+
+            Text(
+                text = "74",
+                color = Color(0xFF071326),
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.align(Alignment.BottomStart).padding(start = 0.dp, bottom = 14.dp)
+            )
+            Text(
+                text = "123",
+                color = Color(0xFFC87915),
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.align(Alignment.TopEnd)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(2.dp))
+
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            labels.forEach {
+                Text(it, color = Color(0xFF9AA9BF), fontSize = 10.sp)
             }
         }
     }

@@ -35,8 +35,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplicationrisewithjeet.ui.theme.GoldGradient
@@ -58,31 +62,88 @@ fun TestSeriesCatalogScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(TsBg)
-            .statusBarsPadding(),
+            .background(Color(0xFFF0F4FA)),
         contentPadding = PaddingValues(bottom = 24.dp)
     ) {
         item {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Brush.verticalGradient(listOf(Color(0xFF0A1733), Color(0xFF122447))))
-                    .padding(16.dp)
+                    .statusBarsPadding()
+                    .background(Brush.verticalGradient(listOf(Color(0xFF0A1733), Color(0xFF132852))))
+                    .padding(horizontal = 12.dp, vertical = 14.dp)
             ) {
-                Text("01  •  SERIES CATALOG", color = Color.White.copy(alpha = 0.6f), fontSize = 10.sp)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        "←",
+                        modifier = Modifier.clickable { onBack() },
+                        color = Color.White.copy(alpha = 0.85f),
+                        fontSize = 16.sp
+                    )
+                    Spacer(Modifier.weight(1f))
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(18.dp))
+                            .background(Color.White.copy(alpha = 0.12f))
+                            .border(1.dp, Color.White.copy(alpha = 0.15f), RoundedCornerShape(18.dp))
+                            .padding(horizontal = 10.dp, vertical = 5.dp)
+                    ) {
+                        Text("🗓 This Week ▾", color = Color.White.copy(alpha = 0.88f), fontSize = 9.sp, fontWeight = FontWeight.SemiBold)
+                    }
+                }
+
                 Spacer(Modifier.height(12.dp))
-                TopBarTitle("Choose Your Battle Plan.", onBack)
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .clip(RoundedCornerShape(99.dp))
+                        .background(Color(0x1AF3B33A))
+                        .border(1.dp, Color(0x66F3B33A), RoundedCornerShape(99.dp))
+                        .padding(horizontal = 9.dp, vertical = 4.dp)
+                ) {
+                    Text("🧾 TEST SERIES", color = Color(0xFFF3B33A), fontSize = 8.sp, fontWeight = FontWeight.Bold)
+                }
+                Spacer(Modifier.height(8.dp))
                 Text(
-                    "From NCERT foundations to full prelims war-room simulations.",
-                    color = Color.White.copy(alpha = 0.55f),
-                    fontSize = 11.sp
+                    buildAnnotatedString {
+                        withStyle(SpanStyle(color = Color.White)) { append("Choose Your ") }
+                        withStyle(SpanStyle(color = Color(0xFFF3B33A))) { append("Battle Plan.") }
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    fontSize = 33.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    lineHeight = 36.sp
                 )
-                Spacer(Modifier.height(12.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    HeroMetric("847", "ACTIVE", Modifier.weight(1f))
-                    HeroMetric("1.2L+", "STUDENTS", Modifier.weight(1f))
-                    HeroMetric("42,980+", "TESTS", Modifier.weight(1f))
-                    HeroMetric("86%", "SUCCESS", Modifier.weight(1f))
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    "From NCERT foundations to full Prelims war-room simulations —\neach series is crafted to mirror real UPSC patterns.",
+                    color = Color(0xFF8F9BB5),
+                    fontSize = 9.sp,
+                    lineHeight = 13.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(Modifier.height(10.dp))
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color.White.copy(alpha = 0.08f))
+                        .border(1.dp, Color.White.copy(alpha = 0.09f), RoundedCornerShape(10.dp))
+                        .padding(vertical = 8.dp)
+                ) {
+                    CatalogHeroMetric("847", "ACTIVE", Color(0xFFE2A22D), Modifier.weight(1f))
+                    Box(modifier = Modifier.width(1.dp).height(24.dp).align(Alignment.CenterVertically).background(Color.White.copy(alpha = 0.12f)))
+                    CatalogHeroMetric("1.2L+", "STUDENTS", Color(0xFF4A78FF), Modifier.weight(1f))
+                    Box(modifier = Modifier.width(1.dp).height(24.dp).align(Alignment.CenterVertically).background(Color.White.copy(alpha = 0.12f)))
+                    CatalogHeroMetric("42,980+", "TESTS TAKEN", Color(0xFFFFFFFF), Modifier.weight(1f))
+                    Box(modifier = Modifier.width(1.dp).height(24.dp).align(Alignment.CenterVertically).background(Color.White.copy(alpha = 0.12f)))
+                    CatalogHeroMetric("86%", "SUCCESS RATE", Color(0xFFE2A22D), Modifier.weight(1f))
                 }
             }
         }
@@ -91,66 +152,98 @@ fun TestSeriesCatalogScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
-                    .background(TsBg)
-                    .padding(12.dp)
+                    .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
+                    .background(Color(0xFFF0F4FA))
             ) {
-                HorizontalTags(listOf("All Series", "Prelims", "Mains", "Foundation", "CA", "PYQ", "CSAT"))
-                Spacer(Modifier.height(12.dp))
-                SectionTitle("Your Enrolled Series", "View all")
-                SeriesMiniCard("Prelims Assault 2026", "20 tests done · Resume mock")
-                Spacer(Modifier.height(8.dp))
-                SeriesMiniCard("Current Affairs Radar", "4/14 tests done · CA test due today")
-                Spacer(Modifier.height(14.dp))
+                Column(modifier = Modifier.padding(12.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        CatalogFilterChip("All Series", selected = true, modifier = Modifier.weight(1f))
+                        CatalogFilterChip("Prelims", "🎯", modifier = Modifier.weight(1f))
+                        CatalogFilterChip("Mains", "✍️", modifier = Modifier.weight(1f))
+                        CatalogFilterChip("Foundation", "🏁", modifier = Modifier.weight(1f))
+                    }
+                    Spacer(Modifier.height(6.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        CatalogFilterChip("Curr. Affairs", "📰", modifier = Modifier.weight(1.35f))
+                        CatalogFilterChip("PYQ", "📜", modifier = Modifier.weight(0.85f))
+                        CatalogFilterChip("CSAT", "🧮", modifier = Modifier.weight(1f))
+                        CatalogFilterChip("Free", "🎁", textColor = Color(0xFFC98B1B), modifier = Modifier.weight(0.85f))
+                    }
 
-                SectionTitle("Explore All Programs", "10 series")
-                OfferCard(
-                    title = "PYQ Decoder Pro",
-                    subtitle = "11 tests · 3 months · 4.7",
-                    description = "Deep-dive into Polity, Constitution, Amendments and PYQ patterns.",
-                    price = "₹999",
-                    oldPrice = "₹1,299",
-                    ctaPrimary = "Enroll",
-                    ctaSecondary = "Details",
-                    onPrimary = onOpenSeries,
-                    onSecondary = onOpenSeries
-                )
-                Spacer(Modifier.height(10.dp))
-                OfferCard(
-                    title = "Zero to Hero Series",
-                    subtitle = "30 tests · 6 weeks · 4.6",
-                    description = "20-question concept tests with no negative marking.",
-                    price = "Free",
-                    oldPrice = null,
-                    ctaPrimary = "Start Free",
-                    ctaSecondary = "",
-                    onPrimary = onOpenSeries,
-                    onSecondary = {}
-                )
-                Spacer(Modifier.height(10.dp))
-                OfferCard(
-                    title = "CSAT Crack Code",
-                    subtitle = "25 tests · 2 weeks · 4.7",
-                    description = "Comprehension, Maths, Reasoning and DI drills.",
-                    price = "₹799",
-                    oldPrice = "₹1,299",
-                    ctaPrimary = "Enroll",
-                    ctaSecondary = "Details",
-                    onPrimary = onOpenSeries,
-                    onSecondary = onOpenSeries
-                )
-                Spacer(Modifier.height(10.dp))
-                OfferCard(
-                    title = "Current Affairs Radar",
-                    subtitle = "16 tests · Ongoing · 4.8",
-                    description = "Weekly CA paper drills with evolving trends.",
-                    price = "₹1,199",
-                    oldPrice = "₹1,999",
-                    ctaPrimary = "Enroll",
-                    ctaSecondary = "Details",
-                    onPrimary = onOpenSeries,
-                    onSecondary = onOpenSeries
-                )
+                    Spacer(Modifier.height(12.dp))
+                    SectionTitle("Your Enrolled Series", "View all ▸")
+                    SeriesMiniCard(
+                        title = "Prelims Assault 2026",
+                        subtitleLeft = "8/20 tests done",
+                        subtitleHighlight = "Resume Mock 9",
+                        icon = "🎯",
+                        progress = 0.40f
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    SeriesMiniCard(
+                        title = "Current Affairs Radar",
+                        subtitleLeft = "4/16 tests done",
+                        subtitleHighlight = "CA Test 5 due today",
+                        icon = "📅",
+                        progress = 0.25f
+                    )
+                    Spacer(Modifier.height(14.dp))
+
+                    SectionTitle("Explore All Programs", "10 series")
+                    OfferCard(
+                        title = "PYQ Decoder Pro",
+                        subtitle = "11.3K  ·  11 TESTS  ·  3 months  ·  4.7",
+                        description = "Deep-dive into Polity, Constitution, Amendments,\nActs. 500+ per test with video solutions.",
+                        price = "₹999",
+                        oldPrice = "₹1,299",
+                        ctaPrimary = "Enroll ▸",
+                        ctaSecondary = "Details",
+                        onPrimary = onOpenSeries,
+                        onSecondary = onOpenSeries
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    OfferCard(
+                        title = "Zero to Hero Series",
+                        subtitle = "22.4K  ·  30 TESTS  ·  6 Weeks  ·  4.6",
+                        description = "20-question concept tests, no negative marking.\nPerfect Day 1 start. Fully free — no signup fees.",
+                        price = "Free",
+                        oldPrice = null,
+                        ctaPrimary = "Start Free ▸",
+                        ctaSecondary = "",
+                        onPrimary = onOpenSeries,
+                        onSecondary = {}
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    OfferCard(
+                        title = "CSAT Crack Code",
+                        subtitle = "18.4K  ·  25 TESTS  ·  2 Weeks  ·  4.7",
+                        description = "Comprehension, Maths, Reasoning & DI. CSAT full\nmock with speed-building drills.",
+                        price = "₹799",
+                        oldPrice = "₹1,299",
+                        ctaPrimary = "Enroll ▸",
+                        ctaSecondary = "Details",
+                        onPrimary = onOpenSeries,
+                        onSecondary = onOpenSeries
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    OfferCard(
+                        title = "Current Affairs Radar",
+                        subtitle = "18.2K  ·  16 TESTS  ·  Ongoing  ·  4.8",
+                        description = "Weekly CA paper drills with evolving trends.",
+                        price = "₹1,199",
+                        oldPrice = "₹1,999",
+                        ctaPrimary = "Enroll ▸",
+                        ctaSecondary = "Details",
+                        onPrimary = onOpenSeries,
+                        onSecondary = onOpenSeries
+                    )
+                }
             }
         }
     }
@@ -164,30 +257,62 @@ fun TestSeriesDetailScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(TsBg)
-            .statusBarsPadding(),
+            .background(Color(0xFFF0F4FA)),
         contentPadding = PaddingValues(bottom = 24.dp)
     ) {
         item {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .statusBarsPadding()
                     .background(Brush.verticalGradient(listOf(Color(0xFF0B1938), Color(0xFF152953))))
-                    .padding(16.dp)
+                    .padding(horizontal = 14.dp, vertical = 14.dp)
             ) {
-                Text("02  •  SERIES DETAIL", color = Color.White.copy(0.6f), fontSize = 10.sp)
-                Spacer(Modifier.height(8.dp))
-                TopBarTitle("PrelimsBlitz 2026", onBack)
-                Text("20 tests · 2 months · 14,320 enrolled", color = Color.White.copy(0.65f), fontSize = 11.sp)
-                Spacer(Modifier.height(12.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    HeroMetric("20", "MOCK TESTS", Modifier.weight(1f))
-                    HeroMetric("2 Mo.", "DURATION", Modifier.weight(1f))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("←", color = Color.White.copy(alpha = 0.85f), fontSize = 15.sp, modifier = Modifier.clickable { onBack() })
+                    Spacer(Modifier.weight(1f))
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(Color.White.copy(alpha = 0.12f))
+                            .padding(horizontal = 10.dp, vertical = 4.dp)
+                    ) {
+                        Text("📅 This Week ▾", color = Color.White.copy(alpha = 0.9f), fontSize = 9.sp, fontWeight = FontWeight.SemiBold)
+                    }
                 }
                 Spacer(Modifier.height(8.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    HeroMetric("14,320", "ENROLLED", Modifier.weight(1f))
-                    HeroMetric("4.9", "RATING", Modifier.weight(1f))
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(99.dp))
+                        .background(Color(0x1AF3B33A))
+                        .border(1.dp, Color(0x66F3B33A), RoundedCornerShape(99.dp))
+                        .padding(horizontal = 10.dp, vertical = 4.dp)
+                ) {
+                    Text("🧾 FULL MOCKS", color = Color(0xFFF3B33A), fontSize = 8.sp, fontWeight = FontWeight.Bold)
+                }
+                Spacer(Modifier.height(8.dp))
+                Text("PrelimsBlitz2026", color = Color.White, fontSize = 23.sp, fontWeight = FontWeight.ExtraBold, lineHeight = 25.sp)
+                Text("Train like it's exam day — every single test mirrors the real UPSC pattern.", color = Color.White.copy(0.62f), fontSize = 10.sp, lineHeight = 14.sp)
+                Spacer(Modifier.height(10.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Color.White.copy(alpha = 0.09f))
+                        .border(1.dp, Color.White.copy(alpha = 0.10f), RoundedCornerShape(12.dp))
+                        .padding(vertical = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    CatalogHeroMetric("20", "MOCK TESTS", Color.White, Modifier.weight(1f))
+                    Box(modifier = Modifier.width(1.dp).height(24.dp).background(Color.White.copy(alpha = 0.13f)))
+                    CatalogHeroMetric("2Mo.", "DURATION", Color.White, Modifier.weight(1f))
+                    Box(modifier = Modifier.width(1.dp).height(24.dp).background(Color.White.copy(alpha = 0.13f)))
+                    CatalogHeroMetric("14,320", "ENROLLED", Color.White, Modifier.weight(1f))
+                    Box(modifier = Modifier.width(1.dp).height(24.dp).background(Color.White.copy(alpha = 0.13f)))
+                    CatalogHeroMetric("4.9", "RATING", Color(0xFFF3B33A), Modifier.weight(1f))
                 }
             }
         }
@@ -196,67 +321,137 @@ fun TestSeriesDetailScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
-                    .background(TsBg)
-                    .padding(12.dp)
+                    .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
+                    .background(Color(0xFFF0F4FA))
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(14.dp))
-                        .background(TsCard)
-                        .border(1.dp, TsBorder, RoundedCornerShape(14.dp))
-                        .padding(12.dp)
-                ) {
-                    PriceStrip("₹799", "₹1,499", "Early bird applied")
-                    Spacer(Modifier.height(10.dp))
-                    PrimaryButton("Enroll Now", onEnrollNow)
-                    Spacer(Modifier.height(10.dp))
-                    Text("This enrollment includes:", fontWeight = FontWeight.SemiBold, fontSize = 12.sp, color = TsDark)
-                    InfoLine("60 full-access tests")
-                    InfoLine("Detailed analytics after each test")
-                    InfoLine("National leaderboard rank certificate")
-                    InfoLine("Write + mobile access")
-                }
-                Spacer(Modifier.height(10.dp))
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(14.dp))
-                        .background(TsCard)
-                        .border(1.dp, TsBorder, RoundedCornerShape(14.dp))
-                        .padding(12.dp)
-                ) {
-                    Text("Why enroll in PrelimsBlitz 2026?", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = TsDark)
-                    Spacer(Modifier.height(8.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        WhyCard("Purpose tests", "10 full-length tests")
-                        WhyCard("Deep analytics", "AI-led tracking")
+                Column(modifier = Modifier.padding(12.dp)) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(Color.White)
+                            .border(1.dp, Color(0xFFE1E7F1), RoundedCornerShape(16.dp))
+                            .padding(12.dp)
+                    ) {
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            DetailMiniStat("20", "MOCK TESTS", Modifier.weight(1f))
+                            DetailMiniStat("2Mo.", "DURATION", Modifier.weight(1f))
+                        }
+                        Spacer(Modifier.height(8.dp))
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            DetailMiniStat("14,320", "ENROLLED", Modifier.weight(1f))
+                            DetailMiniStat("4.9", "RATING", Modifier.weight(1f), valueColor = Color(0xFFE2A22D))
+                        }
+                        Spacer(Modifier.height(10.dp))
+
+                        Row(verticalAlignment = Alignment.Bottom) {
+                            Text("₹799", color = TsDark, fontWeight = FontWeight.ExtraBold, fontSize = 28.sp)
+                            Spacer(Modifier.width(6.dp))
+                            Text("₹1,499", color = Color(0xFFA7B3C8), fontSize = 11.sp, textDecoration = TextDecoration.LineThrough)
+                            Spacer(Modifier.width(6.dp))
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .background(Color(0xFFEAF8EC))
+                                    .padding(horizontal = 7.dp, vertical = 3.dp)
+                            ) {
+                                Text("🔥 Save ₹700 · 47% OFF", color = Color(0xFF3BA565), fontSize = 8.sp, fontWeight = FontWeight.Bold)
+                            }
+                        }
+                        Spacer(Modifier.height(10.dp))
+                        PrimaryButton("Enroll Now ▸", onEnrollNow)
+                        Spacer(Modifier.height(10.dp))
+
+                        Text("This enrollment includes:", color = Color(0xFF5C6781), fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                        DetailBullet("60 full-access tests")
+                        DetailBullet("Detailed analytics after each test")
+                        DetailBullet("National leaderboard rank certificate")
+                        DetailBullet("Write + mobile access. Lifetime management")
                     }
-                    Spacer(Modifier.height(8.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        WhyCard("Rank benchmarking", "Compare cohorts")
-                        WhyCard("Expert insights", "Live evaluations")
-                    }
-                }
-                Spacer(Modifier.height(10.dp))
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(14.dp))
-                        .background(TsCard)
-                        .border(1.dp, TsBorder, RoundedCornerShape(14.dp))
-                        .padding(12.dp)
-                ) {
-                    Text("Student Reviews", fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = TsDark)
-                    Spacer(Modifier.height(6.dp))
-                    Text("4.9 / 5", fontWeight = FontWeight.Bold, color = TsDark)
-                    LinearProgressIndicator(progress = { 0.79f }, modifier = Modifier.fillMaxWidth(), color = TsGreen, trackColor = TsChip)
+
                     Spacer(Modifier.height(10.dp))
-                    Text("Frequently Asked Questions", fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = TsDark)
-                    Faq("What is PrelimsBlitz and how does it help?")
-                    Faq("Are UPSC PYQ included?")
-                    Faq("Is PrelimsBlitz available in Hindi?")
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(Color.White)
+                            .border(1.dp, Color(0xFFE1E7F1), RoundedCornerShape(16.dp))
+                            .padding(12.dp)
+                    ) {
+                        Text("Why enroll in PrelimsBlitz 2026?", color = TsDark, fontSize = 12.sp, fontWeight = FontWeight.ExtraBold)
+                        Spacer(Modifier.height(8.dp))
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            DetailFeatureCard("🎯", "Purpose-built tests", "20 full + sectionals", Modifier.weight(1f))
+                            DetailFeatureCard("📊", "Deep analytics", "AI insights", Modifier.weight(1f))
+                        }
+                        Spacer(Modifier.height(8.dp))
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            DetailFeatureCard("🏆", "Rank & Benchmarking", "Performance vs top rankers", Modifier.weight(1f))
+                            DetailFeatureCard("🧠", "Expert insights", "Detailed subject-wise score breakdown", Modifier.weight(1f))
+                        }
+                        Spacer(Modifier.height(8.dp))
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            DetailFeatureCard("🎥", "Video solutions", "Explanation for every paper", Modifier.weight(1f))
+                            DetailFeatureCard("📄", "Pdf AI Report", "Complete post-test intelligence", Modifier.weight(1f))
+                        }
+                        Spacer(Modifier.height(8.dp))
+                        Text("✨ What you will achieve", color = Color(0xFF5C6781), fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                        Spacer(Modifier.height(4.dp))
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            DetailFeatureCard("✅", "Build exam-day confidence thru repeated practice", "", Modifier.weight(1f), compact = true)
+                            DetailFeatureCard("✅", "Know exact weak areas with subject analytics", "", Modifier.weight(1f), compact = true)
+                        }
+                        Spacer(Modifier.height(6.dp))
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            DetailFeatureCard("✅", "Best test-topper strategy with scorecard", "", Modifier.weight(1f), compact = true)
+                            DetailFeatureCard("✅", "Earn rank certificates to share on LinkedIn", "", Modifier.weight(1f), compact = true)
+                        }
+                    }
+
+                    Spacer(Modifier.height(10.dp))
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(Color.White)
+                            .border(1.dp, Color(0xFFE1E7F1), RoundedCornerShape(16.dp))
+                            .padding(12.dp)
+                    ) {
+                        Text("Student Reviews", color = TsDark, fontSize = 12.sp, fontWeight = FontWeight.ExtraBold)
+                        Spacer(Modifier.height(8.dp))
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text("4.9", color = TsDark, fontSize = 28.sp, fontWeight = FontWeight.ExtraBold)
+                            Spacer(Modifier.width(6.dp))
+                            Column {
+                                Text("⭐⭐⭐⭐⭐", fontSize = 10.sp)
+                                Text("1,450 reviews", color = Color(0xFF95A3BA), fontSize = 8.sp)
+                            }
+                            Spacer(Modifier.weight(1f))
+                            Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                                ReviewBar("5★", 0.72f)
+                                ReviewBar("4★", 0.18f)
+                                ReviewBar("3★", 0.06f)
+                                ReviewBar("2★", 0.03f)
+                                ReviewBar("1★", 0.01f)
+                            }
+                        }
+                    }
+
+                    Spacer(Modifier.height(10.dp))
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(Color.White)
+                            .border(1.dp, Color(0xFFE1E7F1), RoundedCornerShape(16.dp))
+                            .padding(12.dp)
+                    ) {
+                        Text("Frequently Asked Questions", color = TsDark, fontSize = 12.sp, fontWeight = FontWeight.ExtraBold)
+                        Faq("What is PrelimsBlitz and how does it help?")
+                        Faq("Are UPSC PYQ included?")
+                        Faq("What sources do the questions cover?")
+                        Faq("Is PrelimsBlitz available in Hindi?")
+                    }
                 }
             }
         }
@@ -266,13 +461,13 @@ fun TestSeriesDetailScreen(
                 modifier = Modifier
                     .padding(horizontal = 12.dp)
                     .fillMaxWidth()
-                    .height(52.dp)
+                    .height(50.dp)
                     .clip(RoundedCornerShape(14.dp))
                     .background(GoldGradient)
                     .clickable { onEnrollNow() },
                 contentAlignment = Alignment.Center
             ) {
-                Text("Enroll Now  •  ₹799 only", fontWeight = FontWeight.Bold, color = Color(0xFF1E1E1E))
+                Text("Enroll Now — ₹799 Only ▸", fontWeight = FontWeight.Bold, color = Color(0xFF1E1E1E), fontSize = 12.sp)
             }
         }
     }
@@ -771,6 +966,47 @@ private fun HeroMetric(value: String, label: String, modifier: Modifier = Modifi
 }
 
 @Composable
+private fun CatalogHeroMetric(value: String, label: String, valueColor: Color, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(value, color = valueColor, fontWeight = FontWeight.ExtraBold, fontSize = 14.sp)
+        Text(label, color = Color.White.copy(alpha = 0.58f), fontSize = 8.sp, fontWeight = FontWeight.SemiBold)
+    }
+}
+
+@Composable
+private fun CatalogFilterChip(
+    text: String,
+    icon: String? = null,
+    selected: Boolean = false,
+    textColor: Color = Color(0xFF6A7691),
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .clip(RoundedCornerShape(16.dp))
+            .background(if (selected) Color(0xFF111F3E) else Color.White)
+            .border(1.dp, if (selected) Color(0xFF111F3E) else Color(0xFFD8E0ED), RoundedCornerShape(16.dp))
+            .padding(horizontal = 9.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        if (icon != null) {
+            Text(icon, fontSize = 10.sp)
+            Spacer(Modifier.width(3.dp))
+        }
+        Text(
+            text,
+            color = if (selected) Color.White else textColor,
+            fontSize = 10.sp,
+            fontWeight = FontWeight.SemiBold
+        )
+    }
+}
+
+@Composable
 private fun HorizontalTags(tags: List<String>) {
     Row(
         modifier = Modifier
@@ -811,30 +1047,62 @@ private fun SectionTitle(title: String, action: String) {
 }
 
 @Composable
-private fun SeriesMiniCard(title: String, subtitle: String) {
-    Row(
+private fun SeriesMiniCard(
+    title: String,
+    subtitleLeft: String,
+    subtitleHighlight: String,
+    icon: String,
+    progress: Float
+) {
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(Color(0xFF1E2B4A))
-            .padding(12.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .clip(RoundedCornerShape(20.dp))
+            .background(Color(0xFF1B2847))
+            .border(1.dp, Color(0xFF2D3A59), RoundedCornerShape(20.dp))
+            .padding(horizontal = 14.dp, vertical = 12.dp)
     ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Color.White.copy(alpha = 0.08f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(icon, fontSize = 20.sp)
+            }
+            Spacer(Modifier.width(10.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(title, color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 12.5.sp)
+                Text(
+                    buildAnnotatedString {
+                        withStyle(SpanStyle(color = Color(0xFFB8C2D8))) { append(subtitleLeft) }
+                        append(" · ")
+                        withStyle(SpanStyle(color = Color(0xFFF3B33A))) { append(subtitleHighlight) }
+                    },
+                    fontSize = 10.sp,
+                    lineHeight = 14.sp
+                )
+            }
+            Text("›", color = Color(0xFF97A4C0), fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        }
+        Spacer(Modifier.height(8.dp))
         Box(
             modifier = Modifier
-                .size(26.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(Color.White.copy(alpha = 0.15f)),
-            contentAlignment = Alignment.Center
+                .fillMaxWidth()
+                .height(7.dp)
+                .clip(RoundedCornerShape(99.dp))
+                .background(Color(0xFF4A5878))
         ) {
-            Text("🧭", fontSize = 12.sp)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(progress.coerceIn(0f, 1f))
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(99.dp))
+                    .background(Color(0xFFF3B33A))
+            )
         }
-        Spacer(Modifier.width(10.dp))
-        Column(modifier = Modifier.weight(1f)) {
-            Text(title, color = Color.White, fontWeight = FontWeight.SemiBold, fontSize = 12.sp)
-            Text(subtitle, color = Color.White.copy(0.64f), fontSize = 10.sp)
-        }
-        Text("OPEN", color = Color(0xFF87D37C), fontSize = 10.sp, fontWeight = FontWeight.Bold)
     }
 }
 
@@ -850,32 +1118,102 @@ private fun OfferCard(
     onPrimary: () -> Unit,
     onSecondary: () -> Unit
 ) {
+    val cardBackground = if (title.contains("Zero")) Color(0xFFEDF9F3) else TsCard
+    val cardBorder = if (title.contains("Zero")) Color(0xFFB2EDD0) else TsBorder
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(14.dp))
-            .background(TsCard)
-            .border(1.dp, TsBorder, RoundedCornerShape(14.dp))
-            .padding(12.dp)
+            .background(cardBackground)
+            .border(1.dp, cardBorder, RoundedCornerShape(14.dp))
+            .padding(horizontal = 14.dp, vertical = 14.dp)
     ) {
-        Text(title, color = TsDark, fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
-        Text(subtitle, color = TsMuted, fontSize = 10.sp)
-        Spacer(Modifier.height(6.dp))
-        Text(description, color = Color(0xFF556079), fontSize = 11.sp)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .clip(RoundedCornerShape(9.dp))
+                    .background(
+                        when {
+                            title.contains("PYQ") -> Color(0xFFF2F1EE)
+                            title.contains("Zero") -> Color(0xFFEAF9EE)
+                            title.contains("CSAT") -> Color(0xFFEFF2FB)
+                            else -> Color(0xFFF9EFEF)
+                        }
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    when {
+                        title.contains("PYQ") -> "📘"
+                        title.contains("Zero") -> "🛡️"
+                        title.contains("CSAT") -> "🧠"
+                        else -> "📰"
+                    },
+                    fontSize = 13.sp
+                )
+            }
+            Spacer(Modifier.width(8.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(title, color = TsDark, fontWeight = FontWeight.Bold, fontSize = 14.5.sp)
+                Text(subtitle, color = TsMuted, fontSize = 10.sp, lineHeight = 14.sp)
+            }
+            Text(
+                when {
+                    title.contains("Zero") -> "FREE"
+                    title.contains("Current") -> "🔴 LIVE"
+                    else -> "OPEN"
+                },
+                color = when {
+                    title.contains("Zero") -> Color(0xFF36A56D)
+                    title.contains("Current") -> Color(0xFFDA5A5A)
+                    else -> Color(0xFF36A56D)
+                },
+                fontSize = 8.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
         Spacer(Modifier.height(8.dp))
+        Text(description, color = Color(0xFF556079), fontSize = 11.sp, lineHeight = 16.sp)
+        Spacer(Modifier.height(10.dp))
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-                Text(price, color = TsDark, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text(price, color = TsDark, fontWeight = FontWeight.ExtraBold, fontSize = 20.sp)
                 if (oldPrice != null) {
                     Spacer(Modifier.width(6.dp))
-                    Text(oldPrice, color = TsMuted, fontSize = 12.sp)
+                    Text(oldPrice, color = TsMuted, fontSize = 10.sp, textDecoration = TextDecoration.LineThrough)
+                    Spacer(Modifier.width(4.dp))
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(Color(0xFFFFECEC))
+                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                    ) {
+                        Text(
+                            if (title.contains("Current")) "-40%" else "-23%",
+                            color = Color(0xFFDA5A5A),
+                            fontSize = 8.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
             if (ctaSecondary.isNotBlank()) {
-                GhostButton(ctaSecondary, Modifier.width(82.dp).height(38.dp), onSecondary)
+                GhostButton(ctaSecondary, Modifier.width(76.dp).height(36.dp), onSecondary)
                 Spacer(Modifier.width(8.dp))
             }
-            DarkButton(ctaPrimary, Modifier.width(82.dp).height(38.dp), onPrimary)
+            Box(
+                modifier = Modifier
+                    .width(if (ctaSecondary.isBlank()) 112.dp else 86.dp)
+                    .height(36.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(if (title.contains("Zero")) Color(0xFF4BB06E) else TsDark)
+                    .clickable { onPrimary() },
+                contentAlignment = Alignment.Center
+            ) {
+                Text(ctaPrimary, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 10.5.sp)
+            }
         }
     }
 }
@@ -924,6 +1262,66 @@ private fun Faq(question: String) {
     ) {
         Text(question, color = TsDark, fontSize = 11.sp)
         Text("+", color = TsMuted)
+    }
+}
+
+@Composable
+private fun RowScope.DetailMiniStat(
+    value: String,
+    label: String,
+    modifier: Modifier = Modifier,
+    valueColor: Color = TsDark
+) {
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(10.dp))
+            .background(Color(0xFFF7F9FD))
+            .border(1.dp, Color(0xFFE2E8F2), RoundedCornerShape(10.dp))
+            .padding(horizontal = 8.dp, vertical = 10.dp)
+    ) {
+        Text(value, color = valueColor, fontSize = 18.sp, fontWeight = FontWeight.ExtraBold)
+        Text(label, color = Color(0xFFA0AEC4), fontSize = 8.sp, fontWeight = FontWeight.Bold)
+    }
+}
+
+@Composable
+private fun DetailBullet(text: String) {
+    Text("• $text", color = Color(0xFF7A859B), fontSize = 8.8.sp, modifier = Modifier.padding(top = 4.dp))
+}
+
+@Composable
+private fun RowScope.DetailFeatureCard(
+    icon: String,
+    title: String,
+    subtitle: String,
+    modifier: Modifier = Modifier,
+    compact: Boolean = false
+) {
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(10.dp))
+            .background(if (compact) Color(0xFFF8FAFD) else Color(0xFFF7F9FD))
+            .border(1.dp, Color(0xFFE2E8F2), RoundedCornerShape(10.dp))
+            .padding(horizontal = 8.dp, vertical = if (compact) 7.dp else 9.dp)
+    ) {
+        Text("$icon $title", color = TsDark, fontSize = if (compact) 8.sp else 8.8.sp, fontWeight = FontWeight.Bold, lineHeight = 11.sp)
+        if (subtitle.isNotBlank()) {
+            Spacer(Modifier.height(2.dp))
+            Text(subtitle, color = Color(0xFF8A97AF), fontSize = 7.5.sp, lineHeight = 10.sp)
+        }
+    }
+}
+
+@Composable
+private fun ReviewBar(label: String, progress: Float) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(label, color = Color(0xFF8E9AB0), fontSize = 7.sp, modifier = Modifier.width(16.dp))
+        LinearProgressIndicator(
+            progress = { progress },
+            modifier = Modifier.width(70.dp).height(4.dp),
+            color = Color(0xFFE2A22D),
+            trackColor = Color(0xFFE8EEF7)
+        )
     }
 }
 

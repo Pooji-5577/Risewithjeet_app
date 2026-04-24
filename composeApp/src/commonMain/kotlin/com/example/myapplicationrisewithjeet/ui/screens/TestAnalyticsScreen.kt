@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -35,8 +36,10 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -51,28 +54,26 @@ fun TestAnalyticsScreen(onBack: () -> Unit = {}) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFE2E7F0))
+            .background(Color(0xFF0A1631))
     ) {
         item {
             AnalyticsHeader(onBack = onBack)
-            Box(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(26.dp)
-                    .padding(horizontal = 12.dp)
                     .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
                     .background(Color(0xFFF0F4FA))
-            )
-            TabSwitch(tab = tab, onSelect = { tab = it })
-            SpacerH(10)
-        }
-        item {
-            when (tab) {
-                AnalyticsTab.Prelims -> PrelimsTab()
-                AnalyticsTab.Mains -> MainsTab()
-                AnalyticsTab.MockTests -> MockTestsTab()
+                    .padding(top = 16.dp)
+            ) {
+                TabSwitch(tab = tab, onSelect = { tab = it })
+                SpacerH(10)
+                when (tab) {
+                    AnalyticsTab.Prelims -> PrelimsTab()
+                    AnalyticsTab.Mains -> MainsTab()
+                    AnalyticsTab.MockTests -> MockTestsTab()
+                }
+                SpacerH(14)
             }
-            SpacerH(14)
         }
     }
 }
@@ -203,8 +204,8 @@ private fun TabSwitch(tab: AnalyticsTab, onSelect: (AnalyticsTab) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+            .padding(horizontal = 14.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         TabChip("🎯 Prelims", tab == AnalyticsTab.Prelims, Modifier.weight(1f)) { onSelect(AnalyticsTab.Prelims) }
         TabChip("✍️ Mains", tab == AnalyticsTab.Mains, Modifier.weight(1f)) { onSelect(AnalyticsTab.Mains) }
@@ -216,31 +217,21 @@ private fun TabSwitch(tab: AnalyticsTab, onSelect: (AnalyticsTab) -> Unit) {
 private fun TabChip(label: String, selected: Boolean, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Box(
         modifier = modifier
-            .height(36.dp)
+            .height(42.dp)
             .background(if (selected) Color(0xFF1A2744) else Color.White, RoundedCornerShape(20.dp))
             .border(0.8.dp, if (selected) Color(0xFFE0E7EE) else Color(0xFFC9D2DE), RoundedCornerShape(20.dp))
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(horizontal = 12.dp)
-        ) {
-            Text(
-                label.takeWhile { it != ' ' },
-                color = if (selected) Color.White else Color(0xFF1A2744),
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(Modifier.width(6.dp))
-            Text(
-                label.substringAfter(' ', ""),
-                color = if (selected) Color.White else Color(0xFF1A2744),
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
+        Text(
+            text = label,
+            color = if (selected) Color.White else Color(0xFF1A2744),
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Bold,
+            maxLines = 1,
+            overflow = TextOverflow.Clip,
+            modifier = Modifier.padding(horizontal = 14.dp)
+        )
     }
 }
 
@@ -296,23 +287,30 @@ private fun PrelimsTopMetricCard(
     subColor: Color,
     modifier: Modifier = Modifier,
 ) {
+    val cardShape = RoundedCornerShape(16.dp)
     Column(
         modifier = modifier
             .height(123.dp)
-            .background(Color.White, RoundedCornerShape(16.dp))
-            .border(1.dp, Color(0xFFE3EAF2), RoundedCornerShape(16.dp))
-            .clip(RoundedCornerShape(16.dp))
+            .clip(cardShape)
+            .background(Color.White, cardShape)
+            .border(1.dp, Color(0xFFE3EAF2), cardShape)
+            .drawBehind {
+                // Top stroke (not a filled strip) to match the design spec.
+                val inset = 12.dp.toPx()
+                val stroke = 3.dp.toPx()
+                drawLine(
+                    color = topBorder,
+                    start = androidx.compose.ui.geometry.Offset(inset, stroke / 2f),
+                    end = androidx.compose.ui.geometry.Offset(size.width - inset, stroke / 2f),
+                    strokeWidth = stroke,
+                    cap = StrokeCap.Round
+                )
+            }
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(3.dp)
-                .background(topBorder, RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-        )
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 16.8.dp, end = 16.8.dp, top = 10.8.dp, bottom = 10.dp)
+                .padding(start = 16.8.dp, end = 16.8.dp, top = 12.dp, bottom = 10.dp)
         ) {
             Text(
                 title,
@@ -348,7 +346,7 @@ private fun MainsTab() {
         modifier = Modifier.padding(horizontal = 12.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        MainsSummaryStrip()
+        MainsKpiCards()
         MainsTrendCard()
         NumberOfQuestionsCard()
         TimePerQuestionCard()
@@ -358,79 +356,90 @@ private fun MainsTab() {
 }
 
 @Composable
-private fun MainsSummaryStrip() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color(0xFF1A2744), RoundedCornerShape(20.dp))
-            .border(0.8.dp, Color(0xFFE0E7EE), RoundedCornerShape(20.dp))
-            .padding(vertical = 8.dp)
-    ) {
-        MainsSummaryMetric(
-            value = "34",
-            label = "TESTS TAKEN",
-            valueColor = Color(0xFFF5A623),
+private fun MainsKpiCards() {
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        MainsKpiCard(
+            value = "38",
+            line1 = "ANSWERS",
+            line2 = "WRITTEN",
+            topStroke = Color(0xFF0E8A56),
+            valueColor = Color(0xFF1A2744),
             modifier = Modifier.weight(1f)
         )
-        MainsSummaryMetric(
-            value = "127",
-            label = "AVG SCORE",
-            valueColor = Color(0xFF1A56C4),
+        MainsKpiCard(
+            value = "7.4",
+            line1 = "AVG SCORE",
+            line2 = "/10",
+            topStroke = Color(0xFFF07E1A),
+            valueColor = Color(0xFFC58B1B),
             modifier = Modifier.weight(1f)
         )
-        MainsSummaryMetric(
-            value = "87%",
-            label = "ACCURACY",
-            valueColor = Color(0xFF0E8A56),
+        MainsKpiCard(
+            value = "12m",
+            line1 = "AVERAGE",
+            line2 = "TIME",
+            topStroke = Color(0xFF3B5BD6),
+            valueColor = Color(0xFF1A2744),
             modifier = Modifier.weight(1f)
-        )
-        MainsSummaryMetric(
-            value = "42",
-            label = "DAY STREAK",
-            valueColor = Color(0xFF7C3AED),
-            modifier = Modifier.weight(1f),
-            showDivider = false
         )
     }
 }
 
 @Composable
-private fun MainsSummaryMetric(
+private fun MainsKpiCard(
     value: String,
-    label: String,
+    line1: String,
+    line2: String,
+    topStroke: Color,
     valueColor: Color,
     modifier: Modifier = Modifier,
-    showDivider: Boolean = true,
 ) {
-    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
+    val cardShape = RoundedCornerShape(16.dp)
+    Column(
+        modifier = modifier
+            .height(112.dp)
+            .clip(cardShape)
+            .background(Color.White, cardShape)
+            .border(1.dp, Color(0xFFE3EAF2), cardShape)
+            .drawBehind {
+                val inset = 10.dp.toPx()
+                val stroke = 3.dp.toPx()
+                drawLine(
+                    color = topStroke,
+                    start = androidx.compose.ui.geometry.Offset(inset, stroke / 2f),
+                    end = androidx.compose.ui.geometry.Offset(size.width - inset, stroke / 2f),
+                    strokeWidth = stroke,
+                    cap = StrokeCap.Round
+                )
+            }
+            .padding(horizontal = 8.dp, vertical = 10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            value,
+            color = valueColor,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.ExtraBold,
+            letterSpacing = (-0.4).sp
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            line1,
+            color = Color(0xFF1A2744),
+            fontSize = 10.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
+        )
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(vertical = 2.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                value,
-                color = valueColor,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.ExtraBold,
-                letterSpacing = (-0.4).sp
-            )
-            Text(
-                label,
-                color = Color.White.copy(alpha = 0.32f),
-                fontSize = 9.sp,
+                line2,
+                color = Color(0xFF1A2744),
+                fontSize = 10.sp,
                 fontWeight = FontWeight.Bold,
-                letterSpacing = 0.4.sp,
                 textAlign = TextAlign.Center
-            )
-        }
-        if (showDivider) {
-            Box(
-                modifier = Modifier
-                    .width(1.dp)
-                    .height(34.dp)
-                    .background(Color.White.copy(alpha = 0.08f))
             )
         }
     }
@@ -468,6 +477,7 @@ private fun MainsTrendCard() {
                 Text(it, color = Color(0xFF8FA4BE), fontSize = 9.5.sp)
             }
         }
+        Spacer(modifier = Modifier.height(4.dp))
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -568,6 +578,24 @@ private fun MainsTrendChart() {
             for (i in 1 until mapped.size) lineTo(mapped[i].x, mapped[i].y)
         }
 
+        val fillPath = androidx.compose.ui.graphics.Path().apply {
+            moveTo(mapped.first().x, mapped.first().y)
+            for (i in 1 until mapped.size) lineTo(mapped[i].x, mapped[i].y)
+            lineTo(mapped.last().x, size.height)
+            lineTo(mapped.first().x, size.height)
+            close()
+        }
+
+        drawPath(
+            path = fillPath,
+            brush = Brush.verticalGradient(
+                colors = listOf(
+                    Color(0x3DF5A623), // #F5A623 @ 24%
+                    Color(0x05F5A623)  // #F5A623 @ 2%
+                )
+            )
+        )
+
         drawPath(
             path = path,
             color = Color(0xFFF5A623),
@@ -576,8 +604,8 @@ private fun MainsTrendChart() {
 
         mapped.forEachIndexed { index, pt ->
             if (index == mapped.lastIndex || index % 2 == 0) {
-                drawCircle(Color.White, radius = 5.8f, center = pt)
-                drawCircle(Color(0xFFF5A623), radius = 3.7f, center = pt)
+                drawCircle(Color(0xFFF5A623), radius = 5.8f, center = pt)
+                drawCircle(Color.White, radius = 3.7f, center = pt)
             }
         }
     }
@@ -883,43 +911,24 @@ private fun NumberOfQuestionsCard() {
             )
         }
         SpacerH(7)
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(84.dp)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 12.dp, start = 2.dp, end = 2.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                repeat(bars.size) {
-                    Box(modifier = Modifier.size(9.dp), contentAlignment = Alignment.Center) {
-                        Box(
-                            modifier = Modifier
-                                .size(9.dp)
-                                .background(Color.White, CircleShape)
-                                .border(1.2.dp, Color(0xFF1A56C4), CircleShape)
-                        )
-                    }
-                }
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                bars.forEachIndexed { idx, (day, value, barHeight) ->
-                    Column(
-                        modifier = Modifier.width(36.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+            bars.forEachIndexed { idx, (day, value, barHeight) ->
+                Column(
+                    modifier = Modifier.width(36.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .width(27.dp)
+                            .height(34.dp),
+                        contentAlignment = Alignment.BottomCenter
                     ) {
                         Box(
                             modifier = Modifier
-                                .width(27.dp)
+                                .fillMaxWidth()
                                 .height(barHeight)
                                 .background(
                                     when {
@@ -930,20 +939,20 @@ private fun NumberOfQuestionsCard() {
                                     RoundedCornerShape(topStart = 6.dp, topEnd = 6.dp)
                                 )
                         )
-                        SpacerH(4)
-                        Text(
-                            day,
-                            color = if (idx == 3) Color(0xFFD4881A) else Color(0xFF8FA4BE),
-                            fontSize = 9.5.sp,
-                            fontWeight = if (idx == 3) FontWeight.Bold else FontWeight.SemiBold
-                        )
-                        Text(
-                            value.toString(),
-                            color = Color(0xFF8FA4BE),
-                            fontSize = 9.sp,
-                            fontWeight = FontWeight.Normal
-                        )
                     }
+                    SpacerH(4)
+                    Text(
+                        day,
+                        color = if (idx == 3) Color(0xFFD4881A) else Color(0xFF8FA4BE),
+                        fontSize = 9.5.sp,
+                        fontWeight = if (idx == 3) FontWeight.Bold else FontWeight.SemiBold
+                    )
+                    Text(
+                        value.toString(),
+                        color = Color(0xFF8FA4BE),
+                        fontSize = 9.sp,
+                        fontWeight = FontWeight.Normal
+                    )
                 }
             }
         }
@@ -1108,39 +1117,84 @@ private fun FocusAreasCard(title: String, text: String) {
 @Composable
 private fun BottomActions() {
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        ActionCard("🧠", "Practice MCQs", "Improve weak areas", Modifier.weight(1f))
-        ActionCard("✍️", "Write answers", "Boost mains score", Modifier.weight(1f))
+        ActionCard(
+            emoji = "🎯",
+            title = "Practice MCQs",
+            subtitle = "Improve weak areas",
+            iconBg = Color(0xFFEFFAF4),
+            iconBorder = Color(0xFFB7EAC8),
+            modifier = Modifier.weight(1f)
+        )
+        ActionCard(
+            emoji = "✍️",
+            title = "Write answers",
+            subtitle = "Boost mains score",
+            iconBg = Color(0xFFFFF7EC),
+            iconBorder = Color(0xFFF1D39C),
+            modifier = Modifier.weight(1f)
+        )
     }
 }
 
 @Composable
-private fun ActionCard(emoji: String, title: String, subtitle: String, modifier: Modifier = Modifier) {
+private fun ActionCard(
+    emoji: String,
+    title: String,
+    subtitle: String,
+    iconBg: Color,
+    iconBorder: Color,
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier = modifier
-            .height(56.dp)
+            .height(88.dp)
             .background(Color.White, RoundedCornerShape(12.dp))
             .border(1.dp, Color(0xFFDCE4F0), RoundedCornerShape(12.dp))
-            .padding(horizontal = 10.dp),
+            .padding(horizontal = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
-                .size(28.dp)
-                .background(Color(0xFFFFF2D9), RoundedCornerShape(8.dp)),
+                .size(44.dp)
+                .background(iconBg, RoundedCornerShape(12.dp))
+                .border(1.dp, iconBorder, RoundedCornerShape(12.dp)),
             contentAlignment = Alignment.Center
         ) {
-            Text(emoji, fontSize = 13.sp)
+            Text(emoji, fontSize = 20.sp)
         }
-        Spacer(Modifier.width(8.dp))
+        Spacer(Modifier.width(10.dp))
         Column {
-            Text(title, color = Color(0xFF26365D), fontSize = 11.sp, fontWeight = FontWeight.Bold)
-            Text(subtitle, color = Color(0xFFA1AFC4), fontSize = 9.sp)
+            Text(
+                title,
+                color = Color(0xFF26365D),
+                fontSize = 13.sp,
+                fontWeight = FontWeight.ExtraBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                subtitle,
+                color = Color(0xFF8FA4BE),
+                fontSize = 9.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         }
     }
 }
 
 @Composable
 private fun TimePerQuestionCard() {
+    val dayTimes = listOf(
+        Triple("MON", "1m38s", Color(0xFF0E8A56)),
+        Triple("TUE", "1m52s", Color(0xFF0E8A56)),
+        Triple("WED", "1m25s", Color(0xFF0E8A56)),
+        Triple("THU", "1m42s", Color(0xFFC95212)),
+        Triple("FRI", "2m18s", Color(0xFFCF4B4B)),
+        Triple("SAT", "1m16s", Color(0xFF0E8A56)),
+        Triple("SUN", "1m38s", Color(0xFF0E8A56)),
+    )
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -1153,27 +1207,34 @@ private fun TimePerQuestionCard() {
             Text("Ideal: <90s", color = Color(0xFFA1AFC4), fontSize = 9.sp)
         }
         SpacerH(8)
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            listOf(
-                "MON" to "1m 38s",
-                "TUE" to "1m 25s",
-                "WED" to "1m 42s",
-                "THU" to "2m 18s",
-                "FRI" to "1m 16s",
-                "SAT" to "1m 38s",
-                "SUN" to "" 
-            ).forEachIndexed { idx, pair ->
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(pair.second, color = if (idx == 3) Color(0xFFCF4B4B) else Color(0xFF63C084), fontSize = 8.5.sp)
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            dayTimes.forEach { (day, time, color) ->
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = time,
+                        color = color,
+                        fontSize = 11.sp,
+                        fontFamily = FontFamily.Monospace,
+                        fontWeight = FontWeight.Bold
+                    )
                     SpacerH(4)
                     Box(
                         modifier = Modifier
-                            .width(12.dp)
-                            .height((18 + (idx * 3)).dp)
-                            .background(if (idx == 3) Color(0xFFCF4B4B) else Color(0xFF63C084), RoundedCornerShape(4.dp))
+                            .fillMaxWidth()
+                            .height(6.dp)
+                            .background(Color.White, RoundedCornerShape(8.dp))
+                            .border(1.dp, color.copy(alpha = 0.45f), RoundedCornerShape(8.dp))
                     )
                     SpacerH(3)
-                    Text(pair.first, color = Color(0xFFA1AFC4), fontSize = 8.sp)
+                    Text(
+                        text = day,
+                        color = if (day == "FRI") Color(0xFFB13737) else Color(0xFF8FA4BE),
+                        fontSize = 8.5.sp,
+                        fontWeight = if (day == "FRI") FontWeight.Bold else FontWeight.SemiBold
+                    )
                 }
             }
         }
@@ -1185,31 +1246,86 @@ private fun TimePerQuestionCard() {
         }
         SpacerH(8)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            MiniInsight("SLOWEST SUBJECT", "Economy\n2m 18s", Color(0xFFFFF1F1), Color(0xFFCF4B4B), Modifier.weight(1f))
-            MiniInsight("FASTEST SUBJECT", "History\n58s", Color(0xFFF0FFF6), Color(0xFF63C084), Modifier.weight(1f))
+            MiniInsight(
+                label = "🐢 SLOWEST SUBJECT",
+                value = "Economy\n2m 18s",
+                bg = Color(0xFFFEF0F0),
+                border = Color(0xFFFFCECE),
+                accent = Color(0xFFB13737),
+                modifier = Modifier.weight(1f)
+            )
+            MiniInsight(
+                label = "⚡ FASTEST SUBJECT",
+                value = "History\n58s",
+                bg = Color(0xFFEDF9F3),
+                border = Color(0xFFB2EDD0),
+                accent = Color(0xFF0E8A56),
+                modifier = Modifier.weight(1f)
+            )
         }
     }
 }
 
 @Composable
-private fun MiniInsight(label: String, value: String, bg: Color, accent: Color, modifier: Modifier = Modifier) {
+private fun MiniInsight(
+    label: String,
+    value: String,
+    bg: Color,
+    border: Color,
+    accent: Color,
+    modifier: Modifier = Modifier
+) {
+    val lines = value.split("\n", limit = 2)
     Column(
         modifier = modifier
-            .background(bg, RoundedCornerShape(10.dp))
-            .padding(10.dp)
+            .background(bg, RoundedCornerShape(12.dp))
+            .border(1.dp, border, RoundedCornerShape(12.dp))
+            .padding(start = 12.dp, end = 12.dp, top = 12.dp, bottom = 13.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
-        Text(label, color = accent, fontSize = 8.5.sp, fontWeight = FontWeight.Bold)
-        SpacerH(3)
-        Text(value, color = Color(0xFF26365D), fontSize = 12.sp, fontWeight = FontWeight.ExtraBold)
+        Text(
+            label,
+            color = accent,
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
+        )
+        Text(
+            lines.firstOrNull().orEmpty(),
+            color = accent,
+            fontSize = 21.sp,
+            fontWeight = FontWeight.ExtraBold,
+            textAlign = TextAlign.Center
+        )
+        if (lines.size > 1) {
+            Text(
+                lines[1],
+                color = accent,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.ExtraBold,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
 
 @Composable
 private fun RecentMainsCard() {
+    data class RecentRow(
+        val icon: String,
+        val iconBg: Color,
+        val title: String,
+        val meta: String,
+        val score: String,
+        val scoreColor: Color,
+        val rank: String
+    )
+
     val rows = listOf(
-        Triple("Federalism in India - GS II", "123/200", "24 words | 14 mins · Today"),
-        Triple("Indian Economy - Monetary Policy", "43/60", "234 words | 14 mins · Yesterday"),
-        Triple("Climate Change & India's NDC", "88/200", "284 words | 14 mins · 2 days ago")
+        RecentRow("🎯", Color(0xFFF6F0E4), "Federalism in India - GS II", "248 words · 14 mins · Today", "123/200", Color(0xFFC98A1D), "#428 AIR"),
+        RecentRow("📊", Color(0xFFC9D6EE), "Indian Economy - Monetary Policy", "248 words · 14 mins · Yesterday", "43/60", Color(0xFF26365D), "#88 AIR"),
+        RecentRow("📋", Color(0xFFE2EFE5), "Climate Change & India's NDC", "248 words · 14 mins · 2 days ago", "88/200", Color(0xFFCF4B4B), "#198 AIR")
     )
 
     Column(
@@ -1217,22 +1333,53 @@ private fun RecentMainsCard() {
             .fillMaxWidth()
             .background(Color.White, RoundedCornerShape(14.dp))
             .border(1.dp, Color(0xFFDCE4F0), RoundedCornerShape(14.dp))
-            .padding(12.dp)
+            .padding(vertical = 12.dp)
     ) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text("⏳ Recent Mains Challenges", color = Color(0xFF26365D), fontSize = 12.sp, fontWeight = FontWeight.Bold)
-            Text("View All +", color = Color(0xFF4F69DF), fontSize = 10.sp, fontWeight = FontWeight.Bold)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 14.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("🏆 Recent Mains Challenges", color = Color(0xFF1A2744), fontSize = 12.sp, fontWeight = FontWeight.ExtraBold)
+            Text("View All ➜", color = Color(0xFF26365D), fontSize = 11.sp, fontWeight = FontWeight.Bold)
         }
-        SpacerH(8)
-        rows.forEach {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(it.first, color = Color(0xFF26365D), fontSize = 11.sp, fontWeight = FontWeight.Bold)
-                    Text(it.third, color = Color(0xFFA1AFC4), fontSize = 8.5.sp)
+
+        SpacerH(10)
+        Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(Color(0xFFE6ECF4)))
+
+        rows.forEachIndexed { idx, row ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 14.dp, vertical = 10.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(42.dp)
+                        .background(row.iconBg, RoundedCornerShape(12.dp)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(row.icon, fontSize = 22.sp)
                 }
-                Text(it.second, color = Color(0xFF26365D), fontSize = 14.sp, fontWeight = FontWeight.ExtraBold)
+
+                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(1.dp)) {
+                    Text(row.title, color = Color(0xFF1A2744), fontSize = 12.sp, fontWeight = FontWeight.ExtraBold)
+                    Text(row.meta, color = Color(0xFF8FA4BE), fontSize = 9.sp)
+                }
+
+                Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(0.dp)) {
+                    Text(row.score, color = row.scoreColor, fontSize = 14.sp, fontWeight = FontWeight.ExtraBold)
+                    Text(row.rank, color = Color(0xFF8FA4BE), fontSize = 8.5.sp)
+                }
             }
-            SpacerH(8)
+
+            if (idx != rows.lastIndex) {
+                Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(Color(0xFFE6ECF4)))
+            }
         }
     }
 }

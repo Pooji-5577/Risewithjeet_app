@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,7 +34,7 @@ fun PerformanceDailyTrioTrackerScreen(onBack: () -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F4F8))
+            .background(Color(0xFF071224))
     ) {
         Column(
             modifier = Modifier
@@ -88,7 +89,10 @@ fun PerformanceDailyTrioTrackerScreen(onBack: () -> Unit = {}) {
                 color = Color.White.copy(alpha = 0.4f),
                 fontSize = 10.5.sp,
                 lineHeight = 16.sp,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -115,7 +119,7 @@ fun PerformanceDailyTrioTrackerScreen(onBack: () -> Unit = {}) {
             modifier = Modifier
                 .fillMaxSize()
                 .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
-                .background(Color(0xFFF0F4FA))
+                .background(Color(0xFFF0F4F8))
                 .padding(top = 8.dp)
         ) {
             LazyColumn(
@@ -191,13 +195,19 @@ fun PerformanceDailyTrioTrackerScreen(onBack: () -> Unit = {}) {
                                 ) {
                                     Text("📰", fontSize = 18.sp)
                                 }
-                                Column(modifier = Modifier.weight(1f)) {
+                                Column(
+                                    modifier = Modifier.weight(1f),
+                                    verticalArrangement = Arrangement.spacedBy(0.dp)
+                                ) {
                                     Text("Daily News Analysis", color = Color(0xFF071326), fontSize = 13.sp, fontWeight = FontWeight.Bold)
-                                    Text("The Hindu, Indian Express", color = Color(0xFF8FA3C0), fontSize = 9.5.sp)
+                                    Text("The Hindu, Indian Express", color = Color(0xFF8FA3C0), fontSize = 9.5.sp, lineHeight = 10.sp)
                                 }
-                                Column(horizontalAlignment = Alignment.End) {
-                                    Text("4/7", color = Color(0xFFEF4444), fontSize = 15.sp, fontWeight = FontWeight.Bold)
-                                    Text("days", color = Color(0xFF8FA3C0), fontSize = 9.sp)
+                                Column(
+                                    horizontalAlignment = Alignment.End,
+                                    verticalArrangement = Arrangement.spacedBy((-1).dp)
+                                ) {
+                                    Text("4/7", color = Color(0xFFEF4444), fontSize = 15.sp, lineHeight = 16.sp, fontWeight = FontWeight.Bold)
+                                    Text("days", color = Color(0xFF8FA3C0), fontSize = 9.sp, lineHeight = 10.sp)
                                 }
                             }
 
@@ -304,13 +314,19 @@ private fun TrioTrackerCard(
             ) {
                 Text(icon, fontSize = 18.sp)
             }
-            Column(modifier = Modifier.weight(1f)) {
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(0.dp)
+            ) {
                 Text(title, color = Color(0xFF071326), fontSize = 13.sp, fontWeight = FontWeight.Bold)
-                Text(subtitle, color = Color(0xFF8FA3C0), fontSize = 9.5.sp)
+                Text(subtitle, color = Color(0xFF8FA3C0), fontSize = 9.5.sp, lineHeight = 10.sp)
             }
-            Column(horizontalAlignment = Alignment.End) {
-                Text(score, color = scoreColor, fontSize = 15.sp, fontWeight = FontWeight.Bold)
-                Text("days", color = Color(0xFF8FA3C0), fontSize = 9.sp)
+            Column(
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.spacedBy((-1).dp)
+            ) {
+                Text(score, color = scoreColor, fontSize = 15.sp, lineHeight = 16.sp, fontWeight = FontWeight.Bold)
+                Text("days", color = Color(0xFF8FA3C0), fontSize = 9.sp, lineHeight = 10.sp)
             }
         }
 
@@ -336,15 +352,15 @@ private fun TrioTrackerCard(
                 Box(
                     modifier = Modifier
                         .weight(1f)
-                        .clip(RoundedCornerShape(4.dp))
+                        .clip(RoundedCornerShape(3.dp))
                         .background(if (done) activeDayColor else Color(0xFFF0F4F8))
-                        .padding(vertical = 4.dp),
+                        .padding(vertical = 2.5.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = day,
                         color = if (done) Color.White else Color(0xFF8FA3C0),
-                        fontSize = 8.sp,
+                        fontSize = 7.sp,
                         fontWeight = FontWeight.Bold
                     )
                 }
