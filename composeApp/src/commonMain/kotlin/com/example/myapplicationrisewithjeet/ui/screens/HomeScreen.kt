@@ -1154,12 +1154,12 @@ private fun RevisionSuiteSection(onExploreClick: () -> Unit = {}) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     modifier = Modifier
-                        .size(96.dp)
-                        .clip(RoundedCornerShape(18.dp))
+                        .size(82.dp)
+                        .clip(RoundedCornerShape(16.dp))
                         .background(Color(0xFF33415F)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("🎧", fontSize = 44.sp)
+                    Text("🎧", fontSize = 36.sp)
                 }
                 Spacer(Modifier.width(16.dp))
                 Column(modifier = Modifier.weight(1f)) {

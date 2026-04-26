@@ -130,6 +130,7 @@ fun App() {
                             onBack = { currentScreen = Screen.Home }
                         )
                         is Screen.VideoLectures -> VideoLecturesScreen(
+                            onBack = { currentScreen = Screen.Home },
                             onIndianPolityClick = { currentScreen = Screen.IndianPolityVideos }
                         )
                         is Screen.IndianPolityVideos -> IndianPolityVideosScreen(

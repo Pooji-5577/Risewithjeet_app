@@ -65,27 +65,35 @@ fun IndianPolityVideosScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFEEF2F8))
+            .background(Color(0xFF071224))
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize()
         ) {
             item { PolityHeader(onBack = onBack) }
-            item { FilterRow() }
-            items(polityVideos.size) { idx ->
-                val lecture = polityVideos[idx]
-                PolityLectureCard(
-                    video = lecture,
-                    onAskMentor = {
-                        selectedLectureTitle = lecture.title
-                        showAskMentor = true
-                    },
-                    onWatch = onWatch,
-                    onPdf = onPdf
-                )
-                Spacer(Modifier.height(12.dp))
+            item {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
+                        .background(Color(0xFFF0F4FA))
+                        .padding(top = 10.dp, bottom = 12.dp)
+                ) {
+                    FilterRow()
+                    polityVideos.forEach { lecture ->
+                        PolityLectureCard(
+                            video = lecture,
+                            onAskMentor = {
+                                selectedLectureTitle = lecture.title
+                                showAskMentor = true
+                            },
+                            onWatch = onWatch,
+                            onPdf = onPdf
+                        )
+                        Spacer(Modifier.height(12.dp))
+                    }
+                }
             }
-            item { Spacer(Modifier.height(12.dp)) }
         }
 
         if (showAskMentor) {
@@ -107,6 +115,8 @@ private fun PolityHeader(onBack: () -> Unit) {
     ) {
         Text("←", color = Color.White.copy(alpha = 0.52f), fontSize = 13.sp, modifier = Modifier.clickable { onBack() })
         Spacer(Modifier.height(6.dp))
+        Text("⚖️", color = Color.White, fontSize = 26.sp, modifier = Modifier.align(Alignment.CenterHorizontally))
+        Spacer(Modifier.height(6.dp))
         Box(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
@@ -118,7 +128,6 @@ private fun PolityHeader(onBack: () -> Unit) {
             Text("GS PAPER II · POLITY", color = Color(0xFFF5A623), fontSize = 9.5.sp, fontWeight = FontWeight.Bold)
         }
         Spacer(Modifier.height(8.dp))
-        Text("⚖️", color = Color.White, fontSize = 26.sp, modifier = Modifier.align(Alignment.CenterHorizontally))
         Text("Indian Polity", color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.ExtraBold, modifier = Modifier.align(Alignment.CenterHorizontally))
         Text("41 videos · 28h · 3.2L views", color = Color.White.copy(alpha = 0.5f), fontSize = 12.sp, modifier = Modifier.align(Alignment.CenterHorizontally))
         Spacer(Modifier.height(10.dp))
@@ -393,7 +402,14 @@ private fun AskMentorBottomSheet(
                         .background(GoldGradient),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("Submit Doubt ➜", color = Color(0xFF1A2744), fontSize = 20.sp, fontWeight = FontWeight.ExtraBold)
+                    Text(
+                        "Submit Doubt →",
+                        color = Color(0xFF1A2744),
+                        fontSize = 14.sp,
+                        lineHeight = 20.sp,
+                        letterSpacing = (-0.2).sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
                 }
                 Spacer(Modifier.height(12.dp))
                 Text(

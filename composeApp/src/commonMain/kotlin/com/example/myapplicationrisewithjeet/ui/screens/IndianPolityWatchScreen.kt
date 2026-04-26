@@ -7,12 +7,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -55,29 +58,35 @@ fun IndianPolityWatchScreen(
         item { TimelineBar() }
         item { PlaybackControls() }
         item { PlaybackOptions() }
-        item { LectureDetails() }
-        item { QuickActions(onReadPdf = onReadPdf) }
-        item { PlaylistHeader() }
-        items(playlistItems.size) { idx ->
-            PlaylistRow(playlistItems[idx], idx + 1)
-        }
         item {
-            Box(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFFEEF2F8))
-                    .padding(18.dp)
+                    .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
+                    .background(Color(0xFFF0F4FA))
             ) {
+                LectureDetails()
+                QuickActions(onReadPdf = onReadPdf)
+                PlaylistHeader()
+                playlistItems.forEachIndexed { idx, playlistItem ->
+                    PlaylistRow(playlistItem, idx + 1)
+                }
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(48.dp)
-                        .clip(RoundedCornerShape(13.dp))
-                        .background(Color.White)
-                        .border(0.8.dp, Color(0xFFDDE5F0), RoundedCornerShape(13.dp)),
-                    contentAlignment = Alignment.Center
+                        .padding(18.dp)
                 ) {
-                    Text("View All 41 Videos ➜", color = Color(0xFF1A2744), fontSize = 13.5.sp, fontWeight = FontWeight.Bold)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp)
+                            .clip(RoundedCornerShape(13.dp))
+                            .background(Color.White)
+                            .border(0.8.dp, Color(0xFFDDE5F0), RoundedCornerShape(13.dp)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("View All 41 Videos →", color = Color(0xFF1A2744), fontSize = 13.5.sp, fontWeight = FontWeight.Bold)
+                    }
                 }
             }
         }
@@ -86,19 +95,34 @@ fun IndianPolityWatchScreen(
 
 @Composable
 private fun PlayerTopBar(onBack: () -> Unit) {
-    Row(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(84.dp)
             .background(Color(0xFF071224))
-            .padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
     ) {
-        Text("←", color = Color.White.copy(alpha = 0.6f), fontSize = 13.sp, modifier = Modifier.clickable { onBack() })
-        Text("Indian Polity · 5/41", color = Color.White.copy(alpha = 0.5f), fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+        Text(
+            "←",
+            color = Color.White.copy(alpha = 0.6f),
+            fontSize = 13.sp,
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(start = 16.dp, top = 32.dp)
+                .clickable { onBack() }
+        )
+        Text(
+            "Indian Polity · 5/41",
+            color = Color.White.copy(alpha = 0.5f),
+            fontSize = 12.sp,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 34.dp)
+        )
         Box(
             modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(top = 26.dp, end = 16.dp)
                 .size(32.dp)
                 .clip(RoundedCornerShape(9.dp))
                 .background(Color.White.copy(alpha = 0.1f)),
@@ -119,6 +143,11 @@ private fun VideoHero() {
     ) {
         Box(
             modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0x61000000))
+        )
+        Box(
+            modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(10.dp)
                 .clip(RoundedCornerShape(10.dp))
@@ -128,14 +157,28 @@ private fun VideoHero() {
             Text("▶ YouTube", color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold)
         }
         Column(modifier = Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
-            Box(
-                modifier = Modifier
-                    .size(66.dp)
-                    .clip(RoundedCornerShape(999.dp))
-                    .background(Color(0xFFF5A623)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("▶", color = Color(0xFF0A0A0A), fontSize = 27.sp)
+            Box(contentAlignment = Alignment.Center) {
+                Box(
+                    modifier = Modifier
+                        .offset(y = 5.dp)
+                        .size(110.dp)
+                        .background(
+                            Brush.radialGradient(
+                                colors = listOf(Color(0x80F5A623), Color.Transparent),
+                                radius = 120f
+                            ),
+                            CircleShape
+                        )
+                )
+                Box(
+                    modifier = Modifier
+                        .size(66.dp)
+                        .clip(RoundedCornerShape(999.dp))
+                        .background(Color(0xFFF5A623)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("▶", color = Color(0xFF0A0A0A), fontSize = 27.sp)
+                }
             }
             Text("FUNDAMENTAL RIGHTS", color = Color.White.copy(alpha = 0.3f), fontSize = 11.sp, fontWeight = FontWeight.Bold)
         }
@@ -179,7 +222,7 @@ private fun TimelineBar() {
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth(0.4f)
+                    .fillMaxWidth(0.35f)
                     .height(3.dp)
                     .background(Color(0xFFF5A623))
             )
@@ -198,6 +241,7 @@ private fun PlaybackControls() {
             .fillMaxWidth()
             .height(55.dp)
             .background(Color(0xFF071224))
+            .border(0.8.dp, Color.White.copy(alpha = 0.06f))
             .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -244,7 +288,7 @@ private fun PlaybackOptions() {
                 .background(Color(0xFFF5A623))
                 .padding(horizontal = 14.dp, vertical = 7.dp)
         ) {
-            Text("▶ Open Full in YouTube ➜", color = Color(0xFF1A2744), fontSize = 12.sp, fontWeight = FontWeight.Bold)
+            Text("▶ Open Full in YouTube →", color = Color(0xFF1A2744), fontSize = 12.sp, fontWeight = FontWeight.Bold)
         }
     }
 }
@@ -254,7 +298,7 @@ private fun LectureDetails() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFEEF2F8))
+            .background(Color(0xFFF0F4FA))
             .padding(18.dp)
     ) {
         Box(
@@ -269,7 +313,7 @@ private fun LectureDetails() {
             "Fundamental Rights — Article 12 to 35 |\nComplete Deep Dive",
             color = Color(0xFF1A2744),
             fontSize = 16.sp,
-            lineHeight = 22.sp,
+            lineHeight = 21.6.sp,
             fontWeight = FontWeight.ExtraBold,
             modifier = Modifier.padding(top = 8.dp)
         )
@@ -283,7 +327,7 @@ private fun LectureDetails() {
             "Complete deep dive into Fundamental Rights (Articles 12–35) — covering Right to Equality, Freedom, Constitutional...",
             color = Color(0xFF5A7096),
             fontSize = 12.5.sp,
-            lineHeight = 21.sp,
+            lineHeight = 21.25.sp,
             modifier = Modifier.padding(top = 8.dp)
         )
         Text("Show more ▾", color = Color(0xFF1A56C4), fontSize = 12.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 4.dp))
@@ -297,19 +341,19 @@ private fun QuickActions(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFEEF2F8))
+            .background(Color(0xFFF0F4FA))
             .padding(horizontal = 18.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(9.dp)
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) {
-            SmallAction("▶", "YouTube", Color.Red, Modifier.weight(1f))
-            SmallAction("📄", "Read PDF", Color(0xFF5A7096), Modifier.weight(1f), onClick = onReadPdf)
-            SmallAction("🔖", "Save", Color(0xFF5A7096), Modifier.weight(1f))
+            SmallAction("▶", "YouTube", Color.Red, Modifier.width(111.4.dp))
+            SmallAction("📄", "Read PDF", Color(0xFF5A7096), Modifier.width(111.4.dp), onClick = onReadPdf)
+            SmallAction("🔖", "Save", Color(0xFF5A7096), Modifier.width(111.4.dp))
         }
         Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) {
-            SmallAction("📤", "Share", Color(0xFF5A7096), Modifier.weight(1f))
-            SmallAction("👨‍🏫", "Ask Mentor", Color(0xFF1A56C4), Modifier.weight(1f))
-            SmallAction("📝", "Add Note", Color(0xFF5A7096), Modifier.weight(1f))
+            SmallAction("📤", "Share", Color(0xFF5A7096), Modifier.width(111.4.dp))
+            SmallAction("👨‍🏫", "Ask Mentor", Color(0xFF1A56C4), Modifier.width(111.4.dp))
+            SmallAction("📝", "Add Note", Color(0xFF5A7096), Modifier.width(111.4.dp))
         }
     }
 }
@@ -359,7 +403,7 @@ private fun PlaylistRow(item: PlaylistItem, index: Int) {
     val bg = when (item.state) {
         "watched" -> Color(0xFFEDF9F3)
         "current" -> Color(0x0DF5A623)
-        else -> Color(0xFFEEF2F8)
+        else -> Color(0xFFF0F4FA)
     }
     val leftBar = when (item.state) {
         "watched" -> Color(0xFF0E8A56)

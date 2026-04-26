@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -21,18 +23,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -65,18 +68,25 @@ private val videoSubjects = listOf(
 
 @Composable
 fun VideoLecturesScreen(
+    onBack: () -> Unit = {},
     onIndianPolityClick: () -> Unit = {}
 ) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFEEF2F8))
+            .background(Color(0xFF071224))
     ) {
         item {
-            HeroSection()
+            HeroSection(onBack = onBack)
         }
         item {
-            Column(Modifier.padding(horizontal = 12.dp)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
+                    .background(Color(0xFFF0F4FA))
+                    .padding(horizontal = 18.dp, vertical = 12.dp)
+            ) {
                 CategoryChips()
                 Spacer(Modifier.height(10.dp))
                 FeaturedVideoCard()
@@ -93,7 +103,7 @@ fun VideoLecturesScreen(
 }
 
 @Composable
-private fun HeroSection() {
+private fun HeroSection(onBack: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -105,6 +115,15 @@ private fun HeroSection() {
                 Text("9:41", color = Color.White, fontSize = 12.sp)
                 Text("••••  🔋", color = Color.White.copy(alpha = 0.55f), fontSize = 11.sp)
             }
+            Spacer(Modifier.height(4.dp))
+            Text(
+                "←",
+                color = Color.White.copy(alpha = 0.55f),
+                fontSize = 13.sp,
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .clickable { onBack() }
+            )
             Spacer(Modifier.height(12.dp))
             Box(
                 modifier = Modifier
@@ -129,10 +148,14 @@ private fun HeroSection() {
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                "Every editorial, every perspective - mapped to what UPSC asks.\nLearn from Jeet Sir & IAS toppers.",
+                "Every editorial, every perspective mapped to what UPSC asks. Learn from Jeet Sir & IAS toppers.",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
                 color = Color.White.copy(alpha = 0.48f),
                 fontSize = 12.sp,
-                lineHeight = 18.sp
+                lineHeight = 18.sp,
+                textAlign = TextAlign.Center
             )
             Spacer(Modifier.height(12.dp))
             Box(
@@ -210,28 +233,48 @@ private fun FeaturedVideoCard() {
         modifier = Modifier
             .fillMaxWidth()
             .height(170.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .background(Brush.linearGradient(listOf(Color(0xFF0F1F3D), Color(0xFF223256))))
+            .clip(RoundedCornerShape(34.dp))
+            .background(
+                Brush.verticalGradient(
+                    listOf(
+                        Color(0xFF202C4F),
+                        Color(0xFF19284A),
+                        Color(0xFF020A1B)
+                    )
+                )
+            )
     ) {
         Box(
             modifier = Modifier
-                .align(Alignment.Center)
+                .align(Alignment.TopCenter)
+                .padding(top = 43.dp)
                 .size(52.dp)
+                .shadow(9.dp, CircleShape, clip = false)
                 .clip(CircleShape)
-                .background(Color(0xFFF5A623))
-                .border(1.dp, Color(0x66F5A623), CircleShape),
+                .background(Color(0xEBF5A623)),
             contentAlignment = Alignment.Center
         ) {
-            Text("▶", color = Color(0xFF0A0A0A), fontSize = 20.sp)
+            Text("▶", color = Color(0xFF0A0A0A), fontSize = 22.sp, lineHeight = 33.sp)
         }
         Column(
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(14.dp)
+                .padding(horizontal = 16.dp, vertical = 14.dp)
         ) {
-            Text("Polity Simplified - Complete Series", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.ExtraBold)
-            Spacer(Modifier.height(6.dp))
-            Text("📺 41 videos     ⏱ 28 hours     👁 3.2L views", color = Color.White.copy(alpha = 0.6f), fontSize = 11.sp)
+            Text(
+                "Polity Simplified — Complete Series",
+                color = Color.White,
+                fontSize = 16.sp,
+                lineHeight = 20.8.sp,
+                letterSpacing = (-0.3).sp,
+                fontWeight = FontWeight.ExtraBold
+            )
+            Spacer(Modifier.height(9.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text("📺 41 videos", color = Color.White.copy(alpha = 0.6f), fontSize = 11.5.sp, lineHeight = 17.25.sp)
+                Text("⏱ 28 hours", color = Color.White.copy(alpha = 0.6f), fontSize = 11.5.sp, lineHeight = 17.25.sp)
+                Text("👁 3.2L views", color = Color.White.copy(alpha = 0.6f), fontSize = 11.5.sp, lineHeight = 17.25.sp)
+            }
         }
     }
 }
@@ -239,9 +282,9 @@ private fun FeaturedVideoCard() {
 @Composable
 private fun SubjectHeading() {
     Column {
-        Text("BROWSE BY SUBJECT", color = Color(0xFFC95212), fontSize = 10.sp, fontWeight = FontWeight.Bold)
-        Text("Pick Your Subject,", color = Color(0xFF1A2744), fontSize = 28.sp, fontWeight = FontWeight.ExtraBold)
-        Text("Start Learning.", color = Color(0xFFF5A623), fontSize = 28.sp, fontStyle = FontStyle.Italic, fontWeight = FontWeight.ExtraBold)
+        Text("BROWSE BY SUBJECT", color = Color(0xFFC95212), fontSize = 10.sp, fontWeight = FontWeight.Bold, letterSpacing = 0.9.sp)
+        Text("Pick Your Subject,", color = Color(0xFF1A2744), fontSize = 20.sp, lineHeight = 25.sp, letterSpacing = (-0.4).sp, fontWeight = FontWeight.ExtraBold)
+        Text("Start Learning.", color = Color(0xFFF5A623), fontSize = 20.sp, lineHeight = 25.sp, letterSpacing = (-0.4).sp, fontStyle = FontStyle.Italic, fontWeight = FontWeight.ExtraBold)
     }
 }
 
@@ -250,20 +293,24 @@ private fun SubjectHeading() {
 private fun SubjectGrid(
     onIndianPolityClick: () -> Unit
 ) {
-    FlowRow(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        maxItemsInEachRow = 2
-    ) {
-        videoSubjects.forEach { subject ->
-            VideoSubjectCard(
-                subject = subject,
-                modifier = Modifier.width(170.dp),
-                onClick = {
-                    if (subject.title == "Indian Polity") onIndianPolityClick()
-                }
-            )
+    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+        val cardWidth = (maxWidth - 12.dp) / 2
+
+        FlowRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            maxItemsInEachRow = 2
+        ) {
+            videoSubjects.forEach { subject ->
+                VideoSubjectCard(
+                    subject = subject,
+                    modifier = Modifier.width(cardWidth),
+                    onClick = {
+                        if (subject.title == "Indian Polity") onIndianPolityClick()
+                    }
+                )
+            }
         }
     }
 }
@@ -290,15 +337,27 @@ private fun VideoSubjectCard(
         Spacer(Modifier.height(2.dp))
         Text("👁 ${subject.views}", color = Color(0xFF8FA4BE), fontSize = 10.sp)
         Spacer(Modifier.height(8.dp))
-        LinearProgressIndicator(
-            progress = { subject.progress },
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(4.dp)
-                .clip(RoundedCornerShape(4.dp)),
-            color = Color(0xFFF5A623),
-            trackColor = Color(0xFFDDE5F0)
-        )
+                .height(8.dp),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(4.dp)
+                    .clip(RoundedCornerShape(999.dp))
+                    .background(Color(0xFFDDE5F0))
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(subject.progress.coerceIn(0f, 1f))
+                    .height(4.dp)
+                    .clip(RoundedCornerShape(999.dp))
+                    .background(Color(0xFFD79B24))
+            )
+        }
     }
 }
 
@@ -307,36 +366,84 @@ private fun YoutubeBanner() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .height(216.dp)
             .clip(RoundedCornerShape(20.dp))
             .background(Color(0xFF071224))
             .border(0.8.dp, Color.White.copy(alpha = 0.07f), RoundedCornerShape(20.dp))
-            .padding(16.dp)
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text("Never Miss a", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.ExtraBold)
-                Text("Lecture Again.", color = Color(0xFFF5A623), fontSize = 20.sp, fontWeight = FontWeight.ExtraBold)
-                Spacer(Modifier.height(8.dp))
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .offset(x = 28.dp, y = (-40).dp)
+                .size(100.dp)
+                .clip(CircleShape)
+                .background(
+                    Brush.radialGradient(
+                        colors = listOf(Color(0x1AF5A623), Color.Transparent),
+                        radius = 140f
+                    )
+                )
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(start = 19.dp, end = 19.dp, top = 19.dp, bottom = 19.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(modifier = Modifier.width(187.dp)) {
                 Text(
-                    "Subscribe to Rise With Jeet on YouTube for instant notifications.",
+                    "Never Miss a",
+                    color = Color.White,
+                    fontSize = 15.sp,
+                    lineHeight = 22.5.sp,
+                    letterSpacing = (-0.3).sp,
+                    fontWeight = FontWeight.ExtraBold
+                )
+                Text(
+                    "Lecture Again.",
+                    color = Color(0xFFF5A623),
+                    fontSize = 15.sp,
+                    lineHeight = 22.5.sp,
+                    letterSpacing = (-0.3).sp,
+                    fontWeight = FontWeight.ExtraBold
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    "Subscribe to Rise With Jeet on\nYouTube for instant\nnotifications.",
                     color = Color.White.copy(alpha = 0.5f),
                     fontSize = 12.sp,
-                    lineHeight = 18.sp
+                    lineHeight = 19.2.sp
                 )
-                Spacer(Modifier.height(10.dp))
+                Spacer(Modifier.height(12.dp))
                 Box(
                     modifier = Modifier
+                        .width(186.dp)
+                        .height(36.dp)
                         .clip(RoundedCornerShape(10.dp))
-                        .background(Color(0xFFFF0000))
-                        .padding(horizontal = 12.dp, vertical = 9.dp)
+                        .background(Color(0xFFFF0000)),
+                    contentAlignment = Alignment.CenterStart
                 ) {
-                    Text("▶ Join Our YouTube Family", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                    Row(
+                        modifier = Modifier.padding(start = 14.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text("▶", color = Color.White, fontSize = 15.sp, lineHeight = 20.sp, fontWeight = FontWeight.Bold)
+                        Text(" Join Our YouTube Family", color = Color.White, fontSize = 12.sp, lineHeight = 16.sp, fontWeight = FontWeight.Bold)
+                    }
                 }
-                Spacer(Modifier.height(6.dp))
-                Text("Join 14K+ UPSC Aspirants Now", color = Color.White.copy(alpha = 0.3f), fontSize = 11.sp)
+                Spacer(Modifier.height(7.dp))
+                Text(
+                    "Join 14K+ UPSC Aspirants Now",
+                    color = Color.White.copy(alpha = 0.3f),
+                    fontSize = 11.sp,
+                    lineHeight = 16.5.sp
+                )
             }
-            Spacer(Modifier.width(10.dp))
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier = Modifier
+                    .padding(top = 41.dp, end = 10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Box(
                     modifier = Modifier
                         .size(72.dp)
@@ -345,10 +452,15 @@ private fun YoutubeBanner() {
                         .border(1.6.dp, Color.White.copy(alpha = 0.1f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("🔔", fontSize = 36.sp)
+                    Text("🔔", color = Color(0xFF0A0A0A), fontSize = 38.sp, lineHeight = 57.sp)
                 }
-                Spacer(Modifier.height(4.dp))
-                Text("@RiseWithJeet", color = Color.White.copy(alpha = 0.35f), fontSize = 11.sp)
+                Spacer(Modifier.height(5.dp))
+                Text(
+                    "@RiseWithJeet",
+                    color = Color.White.copy(alpha = 0.35f),
+                    fontSize = 11.sp,
+                    lineHeight = 16.5.sp
+                )
             }
         }
     }
