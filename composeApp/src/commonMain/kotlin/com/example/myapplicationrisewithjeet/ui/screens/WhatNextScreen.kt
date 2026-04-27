@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -37,8 +38,25 @@ import myapplicationrisewithjeet.composeapp.generated.resources.icon_note
 import myapplicationrisewithjeet.composeapp.generated.resources.icon_reset
 import myapplicationrisewithjeet.composeapp.generated.resources.icon_star
 import myapplicationrisewithjeet.composeapp.generated.resources.icon_target
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_trophy
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+
+private data class PastChallenge(
+    val tag1: String,
+    val tag1Bg: Color,
+    val tag1Text: Color,
+    val tag2: String,
+    val tag2Bg: Color,
+    val tag2Text: Color,
+    val question: String,
+    val score: String,
+    val scoreBg: Color,
+    val scoreText: Color,
+    val words: String,
+    val thirdStat: String,
+    val thirdStatColor: Color
+)
 
 @Composable
 fun WhatNextScreen(
@@ -93,10 +111,9 @@ fun WhatNextScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 14.dp, vertical = 12.dp)
-                .clip(RoundedCornerShape(24.dp))
-                .background(Color(0xFFF1F3F8))
-                .padding(14.dp),
+                .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
+                .background(Color(0xFFF0F4FA))
+                .padding(horizontal = 14.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Row(
@@ -169,8 +186,156 @@ fun WhatNextScreen(
                 }
                 Text("›", color = Color(0xFF9CA3AF), fontSize = 20.sp)
             }
+
+            PastChallengesSection()
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(49.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Color.White)
+                        .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp))
+                        .clickable { onTryAnother() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("✍️ Try Another", color = Color(0xFF666666), fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                }
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(49.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Color.White)
+                        .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp))
+                        .clickable { onDashboard() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("← Dashboard", color = Color(0xFF0D1B2E), fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                }
+            }
         }
         Spacer(Modifier.height(16.dp))
+    }
+}
+
+@Composable
+private fun PastChallengesSection() {
+    val challenges = listOf(
+        PastChallenge(
+            tag1 = "GS-II",
+            tag1Bg = Color(0xFFE3F2FD),
+            tag1Text = Color(0xFF1976D2),
+            tag2 = "Science & Tech",
+            tag2Bg = Color(0xFFF3E5F5),
+            tag2Text = Color(0xFF7B1FA2),
+            question = "What are biosimilars? Discuss how the Biopharma Shakti initiative can help improve access to biological therapies in India.",
+            score = "8/10",
+            scoreBg = Color(0xFFE8F5E9),
+            scoreText = Color(0xFF4CAF50),
+            words = "242 words",
+            thirdStat = "Your best this week!",
+            thirdStatColor = Color(0xFF4CAF50)
+        ),
+        PastChallenge(
+            tag1 = "GS-III",
+            tag1Bg = Color(0xFFE8F5E9),
+            tag1Text = Color(0xFF4CAF50),
+            tag2 = "Environment & Ecology",
+            tag2Bg = Color(0xFFFFF4E6),
+            tag2Text = Color(0xFFF5A623),
+            question = "\"India's stance on biodiversity reserves reflects the complex trade-off between developmental needs and wildlife conservation.\" Discuss with reference to the Kopra irrigation project in India.",
+            score = "6.5/10",
+            scoreBg = Color(0xFFFFF4E6),
+            scoreText = Color(0xFFF5A623),
+            words = "240 words",
+            thirdStat = "9 Feb, 2026",
+            thirdStatColor = Color(0xFF999999)
+        )
+    )
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(elevation = 4.dp, shape = RoundedCornerShape(18.dp))
+            .clip(RoundedCornerShape(18.dp))
+            .background(Color.White)
+            .padding(horizontal = 12.dp, vertical = 18.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Image(
+                    painter = painterResource(Res.drawable.icon_trophy),
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
+                Text("Past Challenges", color = Color(0xFF0D1B2E), fontSize = 15.sp, fontWeight = FontWeight.ExtraBold)
+            }
+            Text("View All →", color = Color(0xFFF5A623), fontSize = 13.sp, fontWeight = FontWeight.Bold)
+        }
+
+        challenges.forEach { challenge ->
+            PastChallengeCard(challenge)
+        }
+    }
+}
+
+@Composable
+private fun PastChallengeCard(item: PastChallenge) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(0xFFF5F7FA))
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            TagPill(item.tag1, item.tag1Bg, item.tag1Text)
+            TagPill(item.tag2, item.tag2Bg, item.tag2Text)
+        }
+
+        Text(
+            item.question,
+            color = Color(0xFF0D1B2E),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+            lineHeight = 21.sp
+        )
+
+        Row(horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(item.scoreBg)
+                    .padding(horizontal = 10.dp, vertical = 4.dp)
+            ) {
+                Text(item.score, color = item.scoreText, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+            }
+            Text(item.words, color = Color(0xFF999999), fontSize = 11.sp)
+            Text(item.thirdStat, color = item.thirdStatColor, fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
+        }
+    }
+}
+
+@Composable
+private fun TagPill(text: String, bg: Color, fg: Color) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .background(bg)
+            .padding(horizontal = 12.dp, vertical = 6.dp)
+    ) {
+        Text(text, color = fg, fontSize = 10.sp, fontWeight = FontWeight.Bold)
     }
 }
 

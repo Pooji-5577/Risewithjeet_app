@@ -1,6 +1,7 @@
 package com.example.myapplicationrisewithjeet.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.Image
@@ -32,6 +33,7 @@ private val MUBg    = Color(0xFFF2F3F8)
 private val MUDark  = Color(0xFF0F1629)
 private val MUWhite = Color.White
 private val MUGray  = Color(0xFF9CA3AF)
+private val MUContentBg = Color(0xFFF0F4FA)
 
 @Composable
 fun ExaminerMarkupScreen(
@@ -45,7 +47,7 @@ fun ExaminerMarkupScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MUBg)
+            .background(MUDark)
             .verticalScroll(rememberScrollState())
     ) {
         // ── Header ─────────────────────────────────────────────
@@ -73,11 +75,17 @@ fun ExaminerMarkupScreen(
             Text("Examiner's Markup", color = MUWhite, fontSize = 20.sp, fontWeight = FontWeight.ExtraBold)
         }
 
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
+                .background(MUContentBg)
+        ) {
         // ── Filter tabs ────────────────────────────────────────
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MUWhite)
+                .background(MUContentBg)
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
@@ -258,7 +266,8 @@ fun ExaminerMarkupScreen(
                 onClick = onTryAnother,
                 modifier = Modifier.weight(1f).height(50.dp),
                 shape = RoundedCornerShape(14.dp),
-                border = ButtonDefaults.outlinedButtonBorder
+                border = BorderStroke(1.dp, Color(0xFFE0E0E0)),
+                colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
@@ -290,6 +299,7 @@ fun ExaminerMarkupScreen(
         }
 
         Spacer(Modifier.height(32.dp))
+        }
     }
 }
 

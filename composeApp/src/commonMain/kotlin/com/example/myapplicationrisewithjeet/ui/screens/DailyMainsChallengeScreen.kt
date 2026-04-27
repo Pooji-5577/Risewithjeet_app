@@ -83,21 +83,9 @@ fun DailyMainsChallengeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(DmcBackdrop)
+            .background(DmcSurface)
             .verticalScroll(rememberScrollState())
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .statusBarsPadding()
-                .padding(horizontal = 16.dp, vertical = 10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text("←", color = Color(0xFFAEB5C2), fontSize = 20.sp, modifier = Modifier.clickable { onBack() })
-            Spacer(Modifier.width(8.dp))
-            Text("Container", color = Color(0xFF8F949D), fontSize = 14.sp)
-        }
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -125,7 +113,7 @@ fun DailyMainsChallengeScreen(
                         Text("LIVE TODAY", color = Color(0xFF22C55E), fontSize = 10.sp, fontWeight = FontWeight.Bold)
                     }
                     Spacer(Modifier.height(8.dp))
-                    Text("✍️ Daily Mains Challenge", color = Color.White, fontSize = 27.sp, fontWeight = FontWeight.ExtraBold, lineHeight = 31.sp)
+                    Text("✍️ Daily Mains Challenge", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, lineHeight = 24.sp)
                     Spacer(Modifier.height(8.dp))
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         HeroMetaChip("10 Questions")
