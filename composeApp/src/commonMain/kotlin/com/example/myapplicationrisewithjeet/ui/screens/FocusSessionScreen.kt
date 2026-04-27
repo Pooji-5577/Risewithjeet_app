@@ -85,7 +85,7 @@ fun FocusSessionScreen(
 
     val min = secondsLeft / 60
     val sec = secondsLeft % 60
-    val timer = "%02d:%02d".format(min, sec)
+    val timer = "${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}"
 
     Column(
         modifier = Modifier

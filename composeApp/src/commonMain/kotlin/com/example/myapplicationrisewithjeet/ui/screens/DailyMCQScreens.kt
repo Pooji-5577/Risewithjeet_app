@@ -3,13 +3,13 @@ package com.example.myapplicationrisewithjeet.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -18,15 +18,44 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplicationrisewithjeet.ui.theme.GoldAccent
 import com.example.myapplicationrisewithjeet.ui.theme.GoldGradient
 import com.example.myapplicationrisewithjeet.ui.theme.White
 import com.example.myapplicationrisewithjeet.ui.theme.White70
+import myapplicationrisewithjeet.composeapp.generated.resources.Res
+import myapplicationrisewithjeet.composeapp.generated.resources.daily_mcq_economy
+import myapplicationrisewithjeet.composeapp.generated.resources.mains_current_affairs
+import myapplicationrisewithjeet.composeapp.generated.resources.mains_mix_bag
+import myapplicationrisewithjeet.composeapp.generated.resources.mains_ncert
+import myapplicationrisewithjeet.composeapp.generated.resources.mains_pyq
+import myapplicationrisewithjeet.composeapp.generated.resources.mains_sectional
+import myapplicationrisewithjeet.composeapp.generated.resources.mains_trophy
+import myapplicationrisewithjeet.composeapp.generated.resources.daily_mcq_mock_test
+import myapplicationrisewithjeet.composeapp.generated.resources.daily_mcq_next_steps
+import myapplicationrisewithjeet.composeapp.generated.resources.daily_mcq_prev_chart
+import myapplicationrisewithjeet.composeapp.generated.resources.daily_mcq_prev_trophy
+import myapplicationrisewithjeet.composeapp.generated.resources.daily_mcq_search
+import myapplicationrisewithjeet.composeapp.generated.resources.daily_mcq_target
+import myapplicationrisewithjeet.composeapp.generated.resources.daily_mcq_timer
+import myapplicationrisewithjeet.composeapp.generated.resources.daily_mcq_trophy
+import myapplicationrisewithjeet.composeapp.generated.resources.daily_mcq_view_analysis
+import myapplicationrisewithjeet.composeapp.generated.resources.daily_next_editorial
+import myapplicationrisewithjeet.composeapp.generated.resources.daily_next_flashcards
+import myapplicationrisewithjeet.composeapp.generated.resources.daily_next_header_icon
+import myapplicationrisewithjeet.composeapp.generated.resources.daily_next_practice_target
+import myapplicationrisewithjeet.composeapp.generated.resources.daily_next_retry
+import myapplicationrisewithjeet.composeapp.generated.resources.daily_next_star
+import myapplicationrisewithjeet.composeapp.generated.resources.daily_next_study_plan
+import myapplicationrisewithjeet.composeapp.generated.resources.question_review_icon
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 
 // ─── Color tokens ──────────────────────────────────────────
 private val DarkBg      = Color(0xFF061123)
@@ -53,12 +82,12 @@ fun DailyMCQSetupScreen(
     var selectedTime     by remember { mutableStateOf("30 min") }
 
     val sources = listOf(
-        Triple("📄", "Sectional",    "Single subject"),
-        Triple("🎲", "Mix Bag",      "All subjects"),
-        Triple("📅", "PYQ Based",    "Past papers"),
-        Triple("🏆", "Full Length",  "PLT · 100 Qs"),
-        Triple("📚", "NCERT",        "Book-wise"),
-        Triple("📰", "Curr. Affairs","Last 6 months"),
+        Triple(Res.drawable.mains_sectional, "Sectional", "Single subject"),
+        Triple(Res.drawable.mains_mix_bag, "Mix Bag", "All subjects"),
+        Triple(Res.drawable.mains_pyq, "PYQ Based", "Past papers"),
+        Triple(Res.drawable.mains_trophy, "Full Length", "PLT · 100 Qs"),
+        Triple(Res.drawable.mains_ncert, "NCERT", "Book-wise"),
+        Triple(Res.drawable.mains_current_affairs, "Curr. Affairs", "Last 6 months"),
     )
 
     Column(
@@ -124,7 +153,11 @@ fun DailyMCQSetupScreen(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("📋", fontSize = 18.sp)
+            Image(
+                painter = painterResource(Res.drawable.daily_mcq_mock_test),
+                contentDescription = "Prelims Mock Test",
+                modifier = Modifier.size(20.dp)
+            )
             Spacer(Modifier.width(8.dp))
             Text("Prelims Mock Test", color = DarkNavy, fontSize = 17.sp, fontWeight = FontWeight.Bold)
         }
@@ -148,7 +181,7 @@ fun DailyMCQSetupScreen(
             cols.forEach { row ->
                 Row(modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    row.forEach { (emoji, label, sub) ->
+                    row.forEach { (iconRes, label, sub) ->
                         val sel = selectedSource == label
                         Column(
                             modifier = Modifier.weight(1f)
@@ -163,7 +196,7 @@ fun DailyMCQSetupScreen(
                                 .padding(10.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(emoji, fontSize = 22.sp)
+                            SourceIcon(icon = iconRes)
                             Spacer(Modifier.height(4.dp))
                             Text(label, color = if (sel) White else DarkNavy,
                                 fontSize = 11.sp, fontWeight = FontWeight.Bold,
@@ -232,7 +265,15 @@ fun DailyMCQSetupScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
-                            Text(emoji, fontSize = 13.sp)
+                            if (name == "Economy") {
+                                Image(
+                                    painter = painterResource(Res.drawable.daily_mcq_economy),
+                                    contentDescription = "Economy",
+                                    modifier = Modifier.size(14.dp)
+                                )
+                            } else {
+                                Text(emoji, fontSize = 13.sp)
+                            }
                             Spacer(Modifier.width(4.dp))
                             Text(name, color = if (sel) White else DarkNavy,
                                 fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
@@ -289,6 +330,15 @@ fun DailyMCQSetupScreen(
     }
 }
 
+@Composable
+private fun SourceIcon(icon: DrawableResource) {
+    Image(
+        painter = painterResource(icon),
+        contentDescription = null,
+        modifier = Modifier.size(26.dp)
+    )
+}
+
 // ═══════════════════════════════════════════════════════════
 // SCREEN 2 — Daily MCQ Challenge  (Image #13)
 // ═══════════════════════════════════════════════════════════
@@ -326,7 +376,11 @@ fun DailyMCQChallengeScreen(
                         .align(Alignment.Start)
                         .padding(start = 20.dp)
                         .clickable { onBack() })
-                Text("🎯", fontSize = 36.sp)
+                Image(
+                    painter = painterResource(Res.drawable.daily_mcq_target),
+                    contentDescription = "Daily MCQ Challenge",
+                    modifier = Modifier.size(36.dp)
+                )
                 Spacer(Modifier.height(8.dp))
                 Text("Daily MCQ Challenge", color = White, fontSize = 22.sp,
                     fontWeight = FontWeight.Bold)
@@ -337,8 +391,8 @@ fun DailyMCQChallengeScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
-                    .background(LightBg)
+                    .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
+                    .background(Color(0xFFF0F4FA))
                     .padding(top = 14.dp, bottom = 24.dp)
             ) {
                 // Ready card
@@ -432,7 +486,15 @@ fun DailyMCQChallengeScreen(
                         .background(Color(0xFFEFF2F8))
                         .padding(horizontal = 12.dp, vertical = 6.dp)
                 ) {
-                    Text("⏳  9:11", color = Color(0xFF1F2937), fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Image(
+                            painter = painterResource(Res.drawable.daily_mcq_timer),
+                            contentDescription = "Timer",
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(Modifier.width(6.dp))
+                        Text("9:11", color = Color(0xFF1F2937), fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                    }
                 }
             }
 
@@ -448,7 +510,7 @@ fun DailyMCQChallengeScreen(
             ) {
                 questions.take(8).forEachIndexed { idx, _ ->
                     Box(
-                        modifier = Modifier.size(44.dp)
+                        modifier = Modifier.size(36.dp)
                             .clip(RoundedCornerShape(12.dp))
                             .background(
                                 when {
@@ -461,7 +523,7 @@ fun DailyMCQChallengeScreen(
                     ) {
                         Text("${idx + 1}",
                             color = if (idx == currentQuestion) White else DarkNavy,
-                            fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                            fontSize = 13.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -470,12 +532,11 @@ fun DailyMCQChallengeScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            // Question card
+            // Question content on page background (no outer card)
             Column(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp).fillMaxWidth()
-                    .clip(RoundedCornerShape(18.dp)).background(CardBg)
-                    .padding(16.dp)
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
             ) {
                 Text(q.subject, color = LabelGray, fontSize = 10.sp,
                     fontWeight = FontWeight.Bold, letterSpacing = 0.6.sp)
@@ -493,23 +554,24 @@ fun DailyMCQChallengeScreen(
                     val bgColor = when {
                         showResult && isCorrect  -> Color(0xFFEAF6E8)
                         showResult && isSelected && !isCorrect -> Color(0xFFFDF1F1)
-                        isSelected -> Color(0xFFF1F4FA)
-                        else -> Color(0xFFF9FAFC)
+                        isSelected -> Color(0xFFFFFFFF)
+                        else -> Color(0xFFFFFFFF)
                     }
                     val borderColor = when {
                         showResult && isCorrect  -> Color(0xFF79BC64)
                         showResult && isSelected && !isCorrect -> Color(0xFFE46153)
-                        isSelected -> Color(0xFFCFD7E6)
-                        else -> Color(0xFFDDE2EC)
+                        isSelected -> Color(0xFFE0E0E0)
+                        else -> Color(0xFFE0E0E0)
                     }
 
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .height(94.dp)
                             .padding(bottom = 8.dp)
                             .clip(RoundedCornerShape(12.dp))
                             .background(bgColor)
-                            .border(1.dp, borderColor, RoundedCornerShape(12.dp))
+                            .border(1.6.dp, borderColor, RoundedCornerShape(12.dp))
                             .clickable {
                                 if (answered == null) {
                                     answers = answers + (currentQuestion to letter)
@@ -553,13 +615,16 @@ fun DailyMCQChallengeScreen(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Box(
-                    modifier = Modifier.weight(1f).height(46.dp)
+                    modifier = Modifier
+                        .width(87.dp)
+                        .height(39.dp)
                         .clip(RoundedCornerShape(12.dp))
-                        .background(Color(0xFFE2E8F0))
+                        .background(Color.White)
+                        .border(1.dp, Color(0xFFEAEFF6), RoundedCornerShape(12.dp))
                         .clickable { if (currentQuestion > 0) currentQuestion-- },
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("← Prev", color = DarkNavy, fontWeight = FontWeight.SemiBold)
+                    Text("← Prev", color = Color(0xFF6B7280), fontWeight = FontWeight.SemiBold)
                 }
                 Box(
                     modifier = Modifier.weight(1f).height(46.dp)
@@ -582,13 +647,16 @@ fun DailyMCQChallengeScreen(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Box(
-                    modifier = Modifier.weight(1f).height(46.dp)
+                    modifier = Modifier
+                        .width(87.dp)
+                        .height(39.dp)
                         .clip(RoundedCornerShape(12.dp))
-                        .background(Color(0xFFE2E8F0))
+                        .background(Color.White)
+                        .border(1.dp, Color(0xFFEAEFF6), RoundedCornerShape(12.dp))
                         .clickable { if (currentQuestion > 0) currentQuestion-- },
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("← Prev", color = DarkNavy, fontWeight = FontWeight.SemiBold)
+                    Text("← Prev", color = Color(0xFF6B7280), fontWeight = FontWeight.SemiBold)
                 }
                 Box(
                     modifier = Modifier.weight(1f).height(46.dp)
@@ -644,9 +712,9 @@ fun DailyMCQResultScreen(
                 }
             }
             Spacer(Modifier.height(14.dp))
-            Text("Mock Test Session Complete", color = White, fontSize = 20.sp,
+            Text("Daily MCQs Completed!", color = White, fontSize = 20.sp,
                 fontWeight = FontWeight.Bold)
-            Text("Ancient India · 10 Questions · Exam Mode",
+            Text("Great effort! Here's your performance analysis",
                 color = White70, fontSize = 12.sp)
         }
 
@@ -691,30 +759,24 @@ fun DailyMCQResultScreen(
             Spacer(Modifier.height(12.dp))
 
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                Column(
-                    modifier = Modifier.weight(1f)
-                        .clip(RoundedCornerShape(14.dp)).background(CardBg)
-                        .padding(12.dp)
-                ) {
-                    Text("💪 Strong in:", color = Color(0xFF4C8A53), fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                    Spacer(Modifier.height(6.dp))
-                    listOf("Fundamental Rights", "Right to Equality", "Judicial Review").forEachIndexed { i, item ->
-                        Text("✓ $item", color = Color(0xFF334155), fontSize = 11.sp, modifier = Modifier.padding(top = 2.dp))
-                        if (i < 2) HorizontalDivider(color = Color(0xFFDDE3EE), thickness = 1.dp, modifier = Modifier.padding(vertical = 4.dp))
-                    }
-                }
-                Column(
-                    modifier = Modifier.weight(1f)
-                        .clip(RoundedCornerShape(14.dp)).background(CardBg)
-                        .padding(12.dp)
-                ) {
-                    Text("🔍 Needs revision:", color = Color(0xFFC44B4B), fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                    Spacer(Modifier.height(6.dp))
-                    listOf("Const. Remedies", "DPSP Principles", "Writs Art. 32").forEachIndexed { i, item ->
-                        Text("! $item", color = Color(0xFF334155), fontSize = 11.sp, modifier = Modifier.padding(top = 2.dp))
-                        if (i < 2) HorizontalDivider(color = Color(0xFFDDE3EE), thickness = 1.dp, modifier = Modifier.padding(vertical = 4.dp))
-                    }
-                }
+                ResultInsightCard(
+                    modifier = Modifier.weight(1f),
+                    title = "Strong in:",
+                    titleColor = Color(0xFF4C8A53),
+                    leadingEmoji = "💪",
+                    items = listOf("Fundamental Rights", "Right to Equality", "Judicial Review"),
+                    markerText = "✓",
+                    markerColor = Color(0xFF4C8A53),
+                )
+                ResultInsightCard(
+                    modifier = Modifier.weight(1f),
+                    title = "Needs revision:",
+                    titleColor = Color(0xFFB03A3A),
+                    leadingIcon = Res.drawable.daily_mcq_search,
+                    items = listOf("Const. Remedies", "DPSP Principles", "Writs Art. 32"),
+                    markerText = "!",
+                    markerColor = Color(0xFFD85D4E),
+                )
             }
 
             Spacer(Modifier.height(16.dp))
@@ -728,7 +790,15 @@ fun DailyMCQResultScreen(
                         .clickable { onViewAnalysis() },
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("📋 View Analysis", color = DarkNavy, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Image(
+                            painter = painterResource(Res.drawable.daily_mcq_view_analysis),
+                            contentDescription = "View Analysis",
+                            modifier = Modifier.size(14.dp)
+                        )
+                        Spacer(Modifier.width(6.dp))
+                        Text("View Analysis", color = DarkNavy, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                    }
                 }
                 Box(
                     modifier = Modifier.weight(1f).height(48.dp)
@@ -737,7 +807,15 @@ fun DailyMCQResultScreen(
                         .clickable { onNextSteps() },
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("✦ Next Steps", color = Color(0xFF1A1A1A), fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Image(
+                            painter = painterResource(Res.drawable.daily_mcq_next_steps),
+                            contentDescription = "Next Steps",
+                            modifier = Modifier.size(14.dp)
+                        )
+                        Spacer(Modifier.width(6.dp))
+                        Text("Next Steps", color = Color(0xFF1A1A1A), fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                    }
                 }
             }
 
@@ -802,9 +880,39 @@ fun DailyMCQReviewScreen(
             modifier = Modifier.fillMaxWidth().padding(top = 8.dp, bottom = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("📝", fontSize = 28.sp)
+            Image(
+                painter = painterResource(Res.drawable.question_review_icon),
+                contentDescription = "Question Review",
+                modifier = Modifier.size(54.dp)
+            )
             Spacer(Modifier.height(6.dp))
             Text("Question Review", color = White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 10.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
+        ) {
+            listOf("All (10)", "Wrong (3)", "Correct (6)").forEach { tab ->
+                val key = tab.substringBefore(" ")
+                val sel = filter == key
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(24.dp))
+                        .background(if (sel) GoldBtn else Color(0xFF2A3348))
+                        .clickable { filter = key }
+                        .padding(horizontal = 22.dp, vertical = 11.dp)
+                ) {
+                    Text(
+                        tab,
+                        color = if (sel) Color(0xFF0F172A) else Color(0xFFE5E7EB),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            }
         }
 
         Column(
@@ -812,31 +920,8 @@ fun DailyMCQReviewScreen(
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
                 .background(LightBg)
-                .padding(top = 12.dp, start = 16.dp, end = 16.dp, bottom = 20.dp)
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 20.dp)
         ) {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                listOf("All (10)", "Wrong (3)", "Correct (6)", "Skipped").forEach { tab ->
-                    val key = tab.substringBefore(" ")
-                    val sel = filter == key
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(20.dp))
-                            .background(if (sel) GoldBtn else Color(0xFFE6EAF2))
-                            .clickable { filter = key }
-                            .padding(horizontal = 12.dp, vertical = 7.dp)
-                    ) {
-                        Text(
-                            tab,
-                            color = if (sel) Color(0xFF1A1A1A) else Color(0xFF4B5563),
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-                }
-            }
-
-            Spacer(Modifier.height(12.dp))
-
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 filtered.forEach { item ->
                     Column(
@@ -848,10 +933,18 @@ fun DailyMCQReviewScreen(
                             Box(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(10.dp))
-                                    .background(Color(0xFFF3E7E9))
+                                    .background(
+                                        if (item.isCorrect) Color(0xFFEAF6E8)
+                                        else Color(0xFFF3E7E9)
+                                    )
                                     .padding(horizontal = 10.dp, vertical = 6.dp)
                             ) {
-                                Text("${item.number}", color = Color(0xFFC95445), fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                                Text(
+                                    "${item.number}",
+                                    color = if (item.isCorrect) Color(0xFF4FA25B) else Color(0xFFC95445),
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
                             }
                             Spacer(Modifier.width(8.dp))
                             Text("${item.subject} · ${if (item.isCorrect) "CORRECT" else "INCORRECT"}", color = if (item.isCorrect) Color(0xFF4FA25B) else Color(0xFFC95445), fontSize = 14.sp, fontWeight = FontWeight.Bold)
@@ -871,11 +964,9 @@ fun DailyMCQReviewScreen(
                             ) {
                                 Text(
                                     item.userAnswer,
-                                    color = Color.White,
-                                    fontSize = 11.sp,
+                                    color = RedWrong,
+                                    fontSize = 16.sp,
                                     fontWeight = FontWeight.Bold,
-                                    modifier = Modifier.clip(RoundedCornerShape(6.dp))
-                                        .background(RedWrong).padding(horizontal = 6.dp, vertical = 2.dp)
                                 )
                                 Spacer(Modifier.width(8.dp))
                                 Text(item.userAnswerText, color = DarkNavy, fontSize = 14.sp, modifier = Modifier.weight(1f), lineHeight = 20.sp)
@@ -894,11 +985,9 @@ fun DailyMCQReviewScreen(
                         ) {
                             Text(
                                 item.correctAnswer,
-                                color = Color.White,
-                                fontSize = 11.sp,
+                                color = GreenOk,
+                                fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
-                                modifier = Modifier.clip(RoundedCornerShape(6.dp))
-                                    .background(GreenOk).padding(horizontal = 6.dp, vertical = 2.dp)
                             )
                             Spacer(Modifier.width(8.dp))
                             Text(item.correctAnswerText, color = DarkNavy, fontSize = 14.sp, modifier = Modifier.weight(1f), lineHeight = 20.sp)
@@ -906,16 +995,18 @@ fun DailyMCQReviewScreen(
                         }
 
                         Spacer(Modifier.height(10.dp))
-                        Text("EXPLANATION", color = LabelGray, fontSize = 9.sp, fontWeight = FontWeight.Bold, letterSpacing = 0.6.sp)
-                        Spacer(Modifier.height(4.dp))
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(12.dp))
-                                .background(Color(0xFFF3F4F6))
+                                .background(Color(0xFFF5F7FA))
                                 .padding(12.dp)
                         ) {
-                            Text(item.explanation, color = Color(0xFF4B5563), fontSize = 11.sp, lineHeight = 19.sp)
+                            Column {
+                                Text("EXPLANATION", color = LabelGray, fontSize = 9.sp, fontWeight = FontWeight.Bold, letterSpacing = 0.6.sp)
+                                Spacer(Modifier.height(4.dp))
+                                Text(item.explanation, color = Color(0xFF4B5563), fontSize = 11.sp, lineHeight = 19.sp)
+                            }
                         }
                     }
                 }
@@ -924,11 +1015,18 @@ fun DailyMCQReviewScreen(
             Spacer(Modifier.height(14.dp))
 
             Box(
-                modifier = Modifier.fillMaxWidth().clickable { onBack() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Color.White)
+                    .border(1.dp, Color(0xFFD5DCE8), RoundedCornerShape(12.dp))
+                    .clickable { onBack() },
                 contentAlignment = Alignment.Center
             ) {
-                Text("← Back to Results", color = LabelGray, fontSize = 13.sp, modifier = Modifier.padding(vertical = 8.dp))
+                Text("← Back to Results", color = DarkNavy, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
             }
+            Spacer(Modifier.height(10.dp))
             Box(
                 modifier = Modifier.fillMaxWidth().height(50.dp)
                     .clip(RoundedCornerShape(14.dp))
@@ -972,10 +1070,23 @@ fun DailyMCQNextStepsScreen(
             modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("💡", fontSize = 36.sp)
+            Image(
+                painter = painterResource(Res.drawable.daily_next_header_icon),
+                contentDescription = "Next steps",
+                modifier = Modifier.size(36.dp)
+            )
             Spacer(Modifier.height(8.dp))
-            Text("What would you like to do ", color = White, fontSize = 22.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
-            Text("next?", color = GoldAccent, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text(
+                buildAnnotatedString {
+                    append("What would you like to do")
+                    withStyle(SpanStyle(color = GoldAccent)) { append(" next?") }
+                },
+                color = White,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                maxLines = 1
+            )
             Spacer(Modifier.height(4.dp))
             Text("Smart recommendations based on your performance", color = White70, fontSize = 13.sp, textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = 24.dp))
@@ -991,35 +1102,36 @@ fun DailyMCQNextStepsScreen(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             NextStepCard(
-                emoji = "🎯",
+                icon = Res.drawable.daily_next_practice_target,
                 title = "Practice Weak Topics",
                 subtitle = "10 mixed-level questions on Constitutional\nRemedies & DPSP to improve overall accuracy",
-                tag = "✨ Recommended", tagBg = Color(0xFFFFF3DC), tagColor = Color(0xFFB97A10),
+                tag = "Recommended", tagBg = Color(0xFFFFF3DC), tagColor = Color(0xFFB97A10),
+                tagIcon = Res.drawable.daily_next_star,
                 highlighted = false
             )
             NextStepCard(
-                emoji = "📅",
+                icon = Res.drawable.daily_next_study_plan,
                 title = "Add to Today's Study Plan",
                 subtitle = "Schedule 30 mins for Polity revision in your\ndaily calendar",
                 tag = "+30 min", tagBg = Color(0xFFEEF2FF), tagColor = Color(0xFF6366F1),
                 highlighted = false
             )
             NextStepCard(
-                emoji = "📚",
+                icon = Res.drawable.daily_next_flashcards,
                 title = "Add to Flashcards",
                 subtitle = "Focus on Constitutional Remedies & DPSP\nwith targeted flashcard practice",
                 tag = "3 new cards", tagBg = Color(0xFFDCFCE7), tagColor = GreenOk,
                 highlighted = false
             )
             NextStepCard(
-                emoji = "📰",
+                icon = Res.drawable.daily_next_editorial,
                 title = "Read Today's Editorial",
                 subtitle = "Today's editorial on DPSP: \"The Right-Duty\nBalance\"",
                 tag = "5 min read", tagBg = Color(0xFFF0F9FF), tagColor = Color(0xFF0EA5E9),
                 highlighted = false
             )
             NextStepCard(
-                emoji = "🔄",
+                icon = Res.drawable.daily_next_retry,
                 title = "Retry Today's Challenge",
                 subtitle = "Today's score from 6/10 —\ndaily challenges can be retried",
                 tag = "Improve score", tagBg = Color(0xFFFFF3DC), tagColor = Color(0xFFB97A10),
@@ -1069,7 +1181,11 @@ private fun PreviousChallengesCard() {
             .padding(16.dp)
     ) {
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text("🏆", fontSize = 16.sp)
+            Image(
+                painter = painterResource(Res.drawable.daily_mcq_trophy),
+                contentDescription = "Previous Challenges",
+                modifier = Modifier.size(16.dp)
+            )
             Spacer(Modifier.width(8.dp))
             Text("Previous Challenges", color = DarkNavy, fontSize = 15.sp,
                 fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
@@ -1077,17 +1193,17 @@ private fun PreviousChallengesCard() {
                 fontWeight = FontWeight.SemiBold)
         }
         Spacer(Modifier.height(12.dp))
-        PrevChallengeRow("🏆", "Mar 18 · Tuesday", "History & Polity · 12 min",
+        PrevChallengeRow(Res.drawable.daily_mcq_prev_trophy, "Mar 18 · Tuesday", "History & Polity · 12 min",
             "9/10", Color(0xFFDCE9FF), Color(0xFF3E6BC2))
         Spacer(Modifier.height(8.dp))
-        PrevChallengeRow("📊", "Mar 17 · Monday", "Economy & Env · 10 min",
+        PrevChallengeRow(Res.drawable.daily_mcq_prev_chart, "Mar 17 · Monday", "Economy & Env · 10 min",
             "7/10", Color(0xFFF0E5FF), Color(0xFF7A4BB0))
     }
 }
 
 @Composable
 private fun PrevChallengeRow(
-    emoji: String, title: String, sub: String,
+    icon: DrawableResource, title: String, sub: String,
     score: String, scoreBg: Color, scoreColor: Color
 ) {
     Row(
@@ -1098,7 +1214,11 @@ private fun PrevChallengeRow(
             .background(Color(0xFFF9F9F9))
             .padding(horizontal = 12.dp, vertical = 10.dp)
     ) {
-        Text(emoji, fontSize = 22.sp)
+        Image(
+            painter = painterResource(icon),
+            contentDescription = title,
+            modifier = Modifier.size(22.dp)
+        )
         Spacer(Modifier.width(10.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(title, color = DarkNavy, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
@@ -1130,13 +1250,17 @@ private fun StatBox(value: String, label: String) {
 private fun StatCard(modifier: Modifier, label: String, value: String, valueColor: Color) {
     Column(
         modifier = modifier
-            .clip(RoundedCornerShape(14.dp)).background(CardBg)
-            .padding(14.dp)
+            .height(130.dp)
+            .clip(RoundedCornerShape(18.dp))
+            .background(CardBg)
+            .padding(horizontal = 14.dp, vertical = 12.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(label, color = LabelGray, fontSize = 10.sp,
-            fontWeight = FontWeight.Bold, letterSpacing = 0.5.sp)
-        Spacer(Modifier.height(4.dp))
-        Text(value, color = valueColor, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            fontWeight = FontWeight.Bold, letterSpacing = 0.5.sp, textAlign = TextAlign.Center)
+        Spacer(Modifier.height(8.dp))
+        Text(value, color = valueColor, fontSize = 20.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
     }
 }
 
@@ -1146,13 +1270,21 @@ private fun BreakdownRow(label: String, color: Color, fraction: Float, count: St
         Text(label, color = color, fontSize = 13.sp, fontWeight = FontWeight.SemiBold,
             modifier = Modifier.width(60.dp))
         Spacer(Modifier.width(8.dp))
-        LinearProgressIndicator(
-            progress = { fraction },
-            modifier = Modifier.weight(1f).height(10.dp).clip(RoundedCornerShape(6.dp)),
-            color = color,
-            trackColor = Color(0xFFE6EBF3),
-            strokeCap = StrokeCap.Round
-        )
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .height(10.dp)
+                .clip(RoundedCornerShape(6.dp))
+                .background(Color(0xFFE6EBF3))
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth(fraction.coerceIn(0f, 1f))
+                    .clip(RoundedCornerShape(6.dp))
+                    .background(color)
+            )
+        }
         Spacer(Modifier.width(8.dp))
         Text(count, color = DarkNavy, fontSize = 13.sp, fontWeight = FontWeight.Bold,
             modifier = Modifier.width(20.dp), textAlign = TextAlign.End)
@@ -1160,10 +1292,62 @@ private fun BreakdownRow(label: String, color: Color, fraction: Float, count: St
 }
 
 @Composable
+private fun ResultInsightCard(
+    modifier: Modifier = Modifier,
+    title: String,
+    titleColor: Color,
+    leadingIcon: DrawableResource? = null,
+    leadingEmoji: String? = null,
+    items: List<String>,
+    markerText: String,
+    markerColor: Color,
+) {
+    Column(
+        modifier = modifier
+            .shadow(7.dp, RoundedCornerShape(24.dp))
+            .clip(RoundedCornerShape(24.dp))
+            .background(CardBg)
+            .border(1.dp, Color(0xFFD6DEEB), RoundedCornerShape(24.dp))
+            .padding(horizontal = 16.dp, vertical = 14.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            if (leadingIcon != null) {
+                Image(
+                    painter = painterResource(leadingIcon),
+                    contentDescription = title,
+                    modifier = Modifier.size(20.dp)
+                )
+            } else {
+                Text(leadingEmoji ?: "", fontSize = 22.sp)
+            }
+            Spacer(Modifier.width(8.dp))
+            Text(title, color = titleColor, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+        }
+        Spacer(Modifier.height(10.dp))
+        items.forEachIndexed { index, item ->
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(markerText, color = markerColor, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+                Spacer(Modifier.width(8.dp))
+                Text(item, color = Color(0xFF3C4962), fontSize = 16.sp)
+            }
+            if (index < items.lastIndex) {
+                HorizontalDivider(
+                    color = Color(0xFFD4DCE8),
+                    thickness = 1.dp,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
 private fun NextStepCard(
-    emoji: String, title: String, subtitle: String,
+    icon: DrawableResource, title: String, subtitle: String,
     tag: String, tagBg: Color, tagColor: Color,
-    highlighted: Boolean, onClick: () -> Unit = {}
+    highlighted: Boolean,
+    tagIcon: DrawableResource? = null,
+    onClick: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -1178,28 +1362,48 @@ private fun NextStepCard(
             .border(1.dp, if (highlighted) Color(0xFFE2A532) else Color(0xFFE3E8F1), RoundedCornerShape(16.dp))
             .padding(16.dp)
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.Top
+        ) {
             Box(
                 modifier = Modifier
                     .size(42.dp)
                     .clip(RoundedCornerShape(12.dp))
                     .background(Color(0xFFF7F2E8)),
                 contentAlignment = Alignment.Center
-            ) { Text(emoji, fontSize = 20.sp) }
+            ) {
+                Image(
+                    painter = painterResource(icon),
+                    contentDescription = title,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
             Spacer(Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(title, color = if (highlighted) Color(0xFFD89A24) else DarkNavy, fontSize = 15.sp, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(2.dp))
                 Text(subtitle, color = Color(0xFF7A8499), fontSize = 13.sp, lineHeight = 20.sp)
+                Spacer(Modifier.height(8.dp))
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(tagBg)
+                        .padding(horizontal = 10.dp, vertical = 4.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        if (tagIcon != null) {
+                            Image(
+                                painter = painterResource(tagIcon),
+                                contentDescription = tag,
+                                modifier = Modifier.size(12.dp)
+                            )
+                            Spacer(Modifier.width(4.dp))
+                        }
+                        Text(tag, color = tagColor, fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
+                    }
+                }
             }
-        }
-        Spacer(Modifier.height(8.dp))
-        Box(
-            modifier = Modifier
-                .clip(RoundedCornerShape(8.dp)).background(tagBg)
-                .padding(horizontal = 10.dp, vertical = 4.dp)
-        ) {
-            Text(tag, color = tagColor, fontSize = 11.sp, fontWeight = FontWeight.SemiBold)
         }
     }
 }

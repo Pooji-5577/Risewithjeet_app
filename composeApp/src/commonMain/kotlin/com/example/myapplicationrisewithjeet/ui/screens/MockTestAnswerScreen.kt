@@ -63,7 +63,7 @@ fun MockTestAnswerScreen(
 
     val minutes = secondsLeft / 60
     val seconds = secondsLeft % 60
-    val timerText = "%02d:%02d".format(minutes, seconds)
+    val timerText = "${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}"
 
     Column(
         modifier = Modifier
