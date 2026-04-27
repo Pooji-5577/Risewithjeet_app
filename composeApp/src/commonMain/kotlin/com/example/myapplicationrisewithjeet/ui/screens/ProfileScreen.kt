@@ -2,6 +2,7 @@ package com.example.myapplicationrisewithjeet.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,6 +18,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplicationrisewithjeet.ui.theme.*
+import myapplicationrisewithjeet.composeapp.generated.resources.Res
+import myapplicationrisewithjeet.composeapp.generated.resources.profile_account_settings
+import myapplicationrisewithjeet.composeapp.generated.resources.profile_bookmarks
+import myapplicationrisewithjeet.composeapp.generated.resources.profile_edit_profile
+import myapplicationrisewithjeet.composeapp.generated.resources.profile_go_premium
+import myapplicationrisewithjeet.composeapp.generated.resources.profile_help_support
+import myapplicationrisewithjeet.composeapp.generated.resources.profile_leaderboard
+import myapplicationrisewithjeet.composeapp.generated.resources.profile_my_analytics
+import myapplicationrisewithjeet.composeapp.generated.resources.profile_rate_us
+import myapplicationrisewithjeet.composeapp.generated.resources.profile_sign_out
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun ProfileScreen(
@@ -128,7 +141,11 @@ fun ProfileScreen(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("📊", fontSize = 18.sp)
+                    Image(
+                        painter = painterResource(Res.drawable.profile_my_analytics),
+                        contentDescription = "My Analytics",
+                        modifier = Modifier.size(20.dp)
+                    )
                     Spacer(Modifier.width(12.dp))
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
@@ -159,13 +176,13 @@ fun ProfileScreen(
                     .background(Color.White)
             ) {
                 val menuItems = listOf(
-                    MenuItemData("✏️", "Edit Profile",       "Update name, photo, target",  onEditProfile),
-                    MenuItemData("⚙️", "Account Settings",   "Email, phone, password",       onAccountSettings),
-                    MenuItemData("🏆", "Leaderboard",        "You're ranked #47 this week",  onLeaderboard),
-                    MenuItemData("🔖", "Bookmarks",          "47 saved items",               onBookmarks),
-                    MenuItemData("🥇", "Go Premium",         "7-day free trial available",   onPremiumPlans),
-                    MenuItemData("⭐", "Rate Us",            "Love the app? Tell us!",        onRateUs),
-                    MenuItemData("🤝", "Help & Support",     "FAQs, contact, report",        onHelpSupport),
+                    MenuItemData(Res.drawable.profile_edit_profile, "Edit Profile",       "Update name, photo, target",  onEditProfile),
+                    MenuItemData(Res.drawable.profile_account_settings, "Account Settings",   "Email, phone, password",       onAccountSettings),
+                    MenuItemData(Res.drawable.profile_leaderboard, "Leaderboard",        "You're ranked #47 this week",  onLeaderboard),
+                    MenuItemData(Res.drawable.profile_bookmarks, "Bookmarks",          "47 saved items",               onBookmarks),
+                    MenuItemData(Res.drawable.profile_go_premium, "Go Premium",         "7-day free trial available",   onPremiumPlans),
+                    MenuItemData(Res.drawable.profile_rate_us, "Rate Us",            "Love the app? Tell us!",        onRateUs),
+                    MenuItemData(Res.drawable.profile_help_support, "Help & Support",     "FAQs, contact, report",        onHelpSupport),
                 )
 
                 menuItems.forEachIndexed { index, item ->
@@ -192,7 +209,11 @@ fun ProfileScreen(
                         .padding(horizontal = 16.dp, vertical = 18.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("📕", fontSize = 18.sp)
+                    Image(
+                        painter = painterResource(Res.drawable.profile_sign_out),
+                        contentDescription = "Sign Out",
+                        modifier = Modifier.size(20.dp)
+                    )
                     Spacer(Modifier.width(12.dp))
                     Text(
                         "Sign Out",
@@ -212,7 +233,7 @@ fun ProfileScreen(
 // ─────────────────────────────────────────────
 
 private data class MenuItemData(
-    val emoji: String,
+    val iconRes: DrawableResource,
     val title: String,
     val subtitle: String,
     val onClick: () -> Unit
@@ -227,7 +248,11 @@ private fun ProfileMenuItem(item: MenuItemData) {
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(item.emoji, fontSize = 18.sp)
+        Image(
+            painter = painterResource(item.iconRes),
+            contentDescription = item.title,
+            modifier = Modifier.size(20.dp)
+        )
         Spacer(Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(

@@ -3,6 +3,7 @@ package com.example.myapplicationrisewithjeet.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,6 +35,16 @@ import com.example.myapplicationrisewithjeet.ui.theme.White
 import com.example.myapplicationrisewithjeet.ui.theme.White70
 import com.example.myapplicationrisewithjeet.ui.theme.dmSansFamily
 import com.example.myapplicationrisewithjeet.ui.theme.playfairDisplayFamily
+import myapplicationrisewithjeet.composeapp.generated.resources.Res
+import myapplicationrisewithjeet.composeapp.generated.resources.bookmarks_header
+import myapplicationrisewithjeet.composeapp.generated.resources.bookmarks_item_doc
+import myapplicationrisewithjeet.composeapp.generated.resources.bookmarks_item_idea
+import myapplicationrisewithjeet.composeapp.generated.resources.bookmarks_pin
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_chart
+import myapplicationrisewithjeet.composeapp.generated.resources.icon_write
+import myapplicationrisewithjeet.composeapp.generated.resources.profile_go_premium
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 
 // ─── Shared color tokens ────────────────────────────────
 private val DarkHeaderBg   = Color(0xFF061123)
@@ -53,7 +64,7 @@ fun EditProfileScreen(onBack: () -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(DarkHeaderBg)
+            .background(LightCardBg)
             .verticalScroll(rememberScrollState())
     ) {
         ProfileHeader(
@@ -187,6 +198,7 @@ fun LeaderboardScreen(onBack: () -> Unit = {}) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .offset(y = (-14).dp)
                 .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp))
                 .background(LightCardBg)
                 .padding(horizontal = 14.dp)
@@ -271,22 +283,22 @@ private data class LeaderEntry(
 @Composable
 fun BookmarksScreen(onBack: () -> Unit = {}) {
     val items = listOf(
-        BookmarkItem("📄", Color(0xFFE3F2FD), "SC ruling on Electoral Bonds — Analysis",
+        BookmarkItem(Res.drawable.bookmarks_item_doc, Color(0xFFE3F2FD), "SC ruling on Electoral Bonds — Analysis",
             "The Hindu · Mar 20 · ", "Polity", Color(0xFF1976D2)),
-        BookmarkItem("💡", Color(0xFFFFF9E6), "Basic Structure — UPSC 2019 Q.14",
+        BookmarkItem(Res.drawable.bookmarks_item_idea, Color(0xFFFFF9E6), "Basic Structure — UPSC 2019 Q.14",
             "Prelims · Polity · ", "PYQ", Color(0xFF42A5F5)),
-        BookmarkItem("📝", Color(0xFFF3E5F5), "Monetary Policy Tools — My Notes",
+        BookmarkItem(Res.drawable.icon_write, Color(0xFFF3E5F5), "Monetary Policy Tools — My Notes",
             "Economy · GS-III", null, null),
-        BookmarkItem("🌍", Color(0xFFE8F5E9), "India's NDC Targets 2070 — IE",
+        BookmarkItem(Res.drawable.icon_chart, Color(0xFFE8F5E9), "India's NDC Targets 2070 — IE",
             "Mar 18 · ", "Env", Color(0xFF4CAF50)),
-        BookmarkItem("📊", Color(0xFFFFF3E0), "GST Council — UPSC 2023 Q.47",
+        BookmarkItem(Res.drawable.icon_chart, Color(0xFFFFF3E0), "GST Council — UPSC 2023 Q.47",
             "Prelims · Economy · ", "PYQ", Color(0xFF42A5F5)),
     )
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(DarkHeaderBg)
+            .background(LightCardBg)
             .verticalScroll(rememberScrollState())
     ) {
         ProfileHeader(
@@ -294,7 +306,8 @@ fun BookmarksScreen(onBack: () -> Unit = {}) {
             subtitle = "Your saved articles, questions & notes",
             onBack = onBack,
             showAvatar = false,
-            headerEmoji = "🔖"
+            headerEmoji = "",
+            headerIconRes = Res.drawable.bookmarks_header
         )
 
         Column(
@@ -320,7 +333,13 @@ fun BookmarksScreen(onBack: () -> Unit = {}) {
                         modifier = Modifier.size(40.dp).clip(RoundedCornerShape(10.dp))
                             .background(item.iconBg),
                         contentAlignment = Alignment.Center
-                    ) { Text(item.icon, fontSize = 18.sp) }
+                    ) {
+                        Image(
+                            painter = painterResource(item.iconRes),
+                            contentDescription = item.title,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
                     Spacer(Modifier.width(12.dp))
                     Column(modifier = Modifier.weight(1f)) {
                         Text(item.title, color = ValueDark, fontSize = 14.sp,
@@ -338,7 +357,11 @@ fun BookmarksScreen(onBack: () -> Unit = {}) {
                         }
                     }
                     Spacer(Modifier.width(8.dp))
-                    Text("📌", fontSize = 18.sp, color = Color(0xFFF5A623))
+                    Image(
+                        painter = painterResource(Res.drawable.bookmarks_pin),
+                        contentDescription = "Pinned",
+                        modifier = Modifier.size(20.dp)
+                    )
                 }
             }
         }
@@ -346,7 +369,7 @@ fun BookmarksScreen(onBack: () -> Unit = {}) {
 }
 
 private data class BookmarkItem(
-    val icon: String, val iconBg: Color, val title: String,
+    val iconRes: DrawableResource, val iconBg: Color, val title: String,
     val metaPrefix: String, val tag: String?, val tagColor: Color?
 )
 
@@ -368,7 +391,8 @@ fun PremiumPlansScreen(onBack: () -> Unit = {}) {
             subtitle = "Unlock full power of RiseWithJeet AI",
             onBack = onBack,
             showAvatar = false,
-            headerEmoji = "🏅"
+            headerEmoji = "",
+            headerIconRes = Res.drawable.profile_go_premium
         )
 
         // Free trial banner
@@ -556,7 +580,8 @@ private fun ProfileHeader(
     subtitle: String,
     onBack: () -> Unit,
     showAvatar: Boolean,
-    headerEmoji: String = ""
+    headerEmoji: String = "",
+    headerIconRes: DrawableResource? = null
 ) {
     Column(
         modifier = Modifier
@@ -603,6 +628,12 @@ private fun ProfileHeader(
                     Text("📷", fontSize = 8.sp)
                 }
             }
+        } else if (headerIconRes != null) {
+            Image(
+                painter = painterResource(headerIconRes),
+                contentDescription = title,
+                modifier = Modifier.size(40.dp)
+            )
         } else {
             Text(headerEmoji, fontSize = 36.sp)
         }
@@ -779,9 +810,9 @@ private fun PodiumItem(
                 fontWeight = FontWeight.Bold)
         }
         Spacer(Modifier.height(4.dp))
-        Text(name, color = White70, fontSize = 10.sp)
+        Text(name, color = White70, fontSize = 10.sp, lineHeight = 10.sp)
         Text(score, color = Color(0xFFC9A84C), fontSize = if (gold) 12.sp else 11.sp,
-            fontWeight = FontWeight.Bold)
+            fontWeight = FontWeight.Bold, lineHeight = if (gold) 12.sp else 11.sp)
         Spacer(Modifier.height(4.dp))
         Box(
             modifier = Modifier

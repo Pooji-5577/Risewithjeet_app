@@ -3,6 +3,7 @@ package com.example.myapplicationrisewithjeet.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -22,6 +24,10 @@ import androidx.compose.ui.unit.sp
 import com.example.myapplicationrisewithjeet.ui.theme.*
 import com.example.myapplicationrisewithjeet.ui.theme.dmSansFamily
 import com.example.myapplicationrisewithjeet.ui.theme.playfairDisplayFamily
+import myapplicationrisewithjeet.composeapp.generated.resources.Res
+import myapplicationrisewithjeet.composeapp.generated.resources.profile_rate_us
+import myapplicationrisewithjeet.composeapp.generated.resources.rate_star
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun RateUsScreen(onBack: () -> Unit) {
@@ -59,7 +65,11 @@ fun RateUsScreen(onBack: () -> Unit) {
             Spacer(Modifier.height(24.dp))
 
             // Icon
-            Text("⭐💬", fontSize = 48.sp)
+            Image(
+                painter = painterResource(Res.drawable.profile_rate_us),
+                contentDescription = "Rate RiseWithJeet",
+                modifier = Modifier.size(96.dp)
+            )
 
             Spacer(Modifier.height(20.dp))
 
@@ -156,13 +166,12 @@ fun RateUsScreen(onBack: () -> Unit) {
             } else {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        "HOW WOULD YOU RATE\nYOUR EXPERIENCE?",
+                        "How would you rate\nyour experience?",
                         color = Color(0xFF111827),
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.ExtraBold,
                         fontFamily = dmSans,
-                        letterSpacing = 0.7.sp,
-                        lineHeight = 10.sp,
+                        lineHeight = 24.sp,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -189,12 +198,13 @@ fun RateUsScreen(onBack: () -> Unit) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         (1..5).forEach { star ->
-                            Text(
-                                text = if (star <= selectedStars) "⭐" else "☆",
-                                fontSize = 40.sp,
-                                color = if (star <= selectedStars) GoldAccent else Color(0xFFD1D5DB),
+                            Image(
+                                painter = painterResource(Res.drawable.rate_star),
+                                contentDescription = "Rate $star",
                                 modifier = Modifier
-                                    .padding(horizontal = 6.dp)
+                                    .size(42.dp)
+                                    .padding(horizontal = 4.dp)
+                                    .graphicsLayer(alpha = if (star <= selectedStars) 1f else 0.35f)
                                     .clickable { selectedStars = star }
                             )
                         }
@@ -244,21 +254,32 @@ fun RateUsScreen(onBack: () -> Unit) {
 
                     // Submit button
                     Box(
-                        modifier = Modifier.fillMaxWidth().height(54.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(54.dp)
+                            .shadow(
+                                elevation = 8.dp,
+                                shape = RoundedCornerShape(14.dp),
+                                ambientColor = Color(0xFFF5A623).copy(alpha = 0.3f),
+                                spotColor = Color(0xFFF5A623).copy(alpha = 0.3f)
+                            )
                             .clip(RoundedCornerShape(14.dp))
                             .background(
-                                if (selectedStars > 0) GoldGradient
-                                else Brush.linearGradient(listOf(GoldAccent.copy(alpha = 0.4f), GoldAccent.copy(alpha = 0.4f)))
+                                Brush.linearGradient(
+                                    colors = listOf(Color(0xFFF5A623), Color(0xFFD4881A))
+                                )
                             )
                             .clickable { if (selectedStars > 0) submitted = true },
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
                             "Submit Review",
-                            color = Color(0xFF1A1A1A),
-                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF0D1B2E),
+                            fontWeight = FontWeight.ExtraBold,
                             fontFamily = dmSans,
-                            fontSize = 14.sp
+                            fontSize = 15.sp,
+                            lineHeight = 22.5.sp,
+                            letterSpacing = (-0.2).sp
                         )
                     }
 

@@ -129,7 +129,7 @@ fun HelpSupportScreen(onBack: () -> Unit) {
                         modifier = Modifier.weight(1f),
                         icon = Res.drawable.help_email,
                         title = "Email Us",
-                        subtitle = "together@risewith\njeet.com"
+                        subtitle = "together@risewithjeet.com"
                     )
                     ContactCard(
                         modifier = Modifier.weight(1f),
@@ -219,18 +219,6 @@ fun HelpSupportScreen(onBack: () -> Unit) {
                 }
 
                 Spacer(Modifier.height(24.dp))
-
-                // ── APP VERSION ─────────────────────────────
-                Text(
-                    "RiseWithJeet v1.0.0 · Made with ❤️ for UPSC Warriors",
-                    color = LblColor,
-                    fontSize = 12.sp,
-                    fontFamily = dmSansFamily(),
-                    fontWeight = FontWeight.Normal,
-                    lineHeight = 12.sp,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
             }
         }
     }
@@ -261,7 +249,7 @@ private fun ContactCard(
         modifier = modifier
             .clip(RoundedCornerShape(14.dp))
             .background(CardW)
-            .padding(vertical = 20.dp, horizontal = 12.dp),
+            .padding(vertical = 18.dp, horizontal = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
@@ -288,7 +276,8 @@ private fun ContactCard(
             fontFamily = dmSansFamily(),
             fontWeight = FontWeight.Normal,
             textAlign = TextAlign.Center,
-            lineHeight = 16.sp
+            lineHeight = 16.sp,
+            maxLines = 1
         )
     }
 }
@@ -302,20 +291,12 @@ private fun FaqRow(icon: DrawableResource, title: String, subtitle: String) {
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(
-            modifier = Modifier
-                .size(36.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(Color(0xFFF3F4F6)),
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                painter = painterResource(icon),
-                contentDescription = null,
-                modifier = Modifier.size(18.dp),
-                contentScale = ContentScale.Fit
-            )
-        }
+        Image(
+            painter = painterResource(icon),
+            contentDescription = null,
+            modifier = Modifier.size(22.dp),
+            contentScale = ContentScale.Fit
+        )
         Spacer(Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(title, color = TxtDark, fontSize = 14.sp, fontWeight = FontWeight.Normal,

@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -67,7 +68,6 @@ import myapplicationrisewithjeet.composeapp.generated.resources.home_study_plann
 import myapplicationrisewithjeet.composeapp.generated.resources.rev_flashcards
 import myapplicationrisewithjeet.composeapp.generated.resources.rev_mindmaps
 import myapplicationrisewithjeet.composeapp.generated.resources.rev_spaced_rep
-import myapplicationrisewithjeet.composeapp.generated.resources.syllabus_science
 import myapplicationrisewithjeet.composeapp.generated.resources.syllabus_tracker_header
 import com.example.myapplicationrisewithjeet.ui.theme.*
 import kotlinx.coroutines.launch
@@ -338,10 +338,13 @@ private fun HomeTopBar(onProfileClick: () -> Unit, onMenuClick: () -> Unit) {
         Spacer(Modifier.width(10.dp))
         Text(
             buildAnnotatedString {
-                withStyle(SpanStyle(color = Color.White, fontWeight = FontWeight.ExtraBold)) { append("Rise") }
-                withStyle(SpanStyle(color = GoldAccent, fontWeight = FontWeight.ExtraBold)) { append("WithJeet") }
+                withStyle(SpanStyle(color = Color.White, fontWeight = FontWeight.Bold)) { append("Rise") }
+                withStyle(SpanStyle(color = GoldAccent, fontWeight = FontWeight.Bold)) { append("WithJeet") }
             },
-            fontSize = 18.sp
+            fontFamily = dmSansFamily(),
+            fontSize = 16.sp,
+            lineHeight = 24.sp,
+            letterSpacing = (-0.3).sp
         )
         Spacer(Modifier.weight(1f))
         HeaderIconChip(icon = "🔥", badge = "47", badgeColor = Color(0xFFEF4444))
@@ -560,10 +563,24 @@ private fun GreetingSection() {
             .fillMaxWidth()
             .padding(horizontal = 4.dp)
     ) {
-        Text("Good morning, Rahul 👋", color = White70, fontSize = 15.sp)
+        Text(
+            buildAnnotatedString {
+                withStyle(SpanStyle(color = Color.White.copy(alpha = 0.6f), fontWeight = FontWeight.Normal)) {
+                    append("Good morning, ")
+                }
+                withStyle(SpanStyle(color = Color.White, fontWeight = FontWeight.SemiBold)) { append("Rahul") }
+                withStyle(SpanStyle(color = Color.White.copy(alpha = 0.6f), fontWeight = FontWeight.Normal)) {
+                    append(" 👋")
+                }
+            },
+            fontFamily = dmSansFamily(),
+            fontSize = 13.sp,
+            lineHeight = 19.5.sp
+        )
         Spacer(Modifier.height(4.dp))
         Text(
             "Ready to rise\ntoday?",
+            fontFamily = dmSansFamily(),
             color = Color.White,
             fontSize = 20.sp,
             fontWeight = FontWeight.ExtraBold,
@@ -644,7 +661,7 @@ private fun DailyTrioSection(onDailyMCQClick: () -> Unit = {}, onDailyMainsClick
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("⚡  Today’s Daily Trio", color = TextDark, fontSize = 17.sp, fontWeight = FontWeight.ExtraBold)
+            Text("✍️  Today’s Daily Trio", color = TextDark, fontSize = 17.sp, fontWeight = FontWeight.ExtraBold)
             Text(
                 "View All →",
                 color = GoldAccent,
@@ -698,7 +715,7 @@ private fun DailyTrioSection(onDailyMCQClick: () -> Unit = {}, onDailyMainsClick
                         emoji = "✍️",
                         title = "Mains",
                         sub = "GS2 · 150w",
-                        actionLabel = "🟦 Short",
+                        actionLabel = "✍️ Start",
                         actionBg = Color(0xFFE7F0FF),
                         actionColor = TagMCQ,
                         borderColor = Color(0xFFCBD5E6),
@@ -897,11 +914,7 @@ private fun StudyPlanSection(onStudyPlanClick: () -> Unit = {}) {
             contentAlignment = Alignment.Center
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Image(
-                    painter = painterResource(Res.drawable.home_study_planner),
-                    contentDescription = "Study Planner",
-                    modifier = Modifier.size(36.dp)
-                )
+                Text("📅", fontSize = 36.sp)
                 Spacer(Modifier.height(8.dp))
                 Text("No tasks added yet!", color = TextDark, fontSize = 18.sp, fontWeight = FontWeight.ExtraBold)
                 Spacer(Modifier.height(4.dp))
@@ -976,7 +989,7 @@ private fun SyllabusTrackerSection(onStartTracking: () -> Unit = {}) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(7.dp, Alignment.CenterHorizontally)
                 ) {
-                    listOf("⚖️ Polity","🏛 History","🌍 Geo","📈 Economy","🌿 Env").forEach { item ->
+                    listOf("⚖️ Polity","🏛️ History","🌍 Geo","📈 Economy","🌿 Env").forEach { item ->
                         val (emoji, label) = item.split(" ", limit = 2).let { it[0] to it[1] }
                         Column(
                             modifier = Modifier
@@ -1037,15 +1050,7 @@ private fun SyllabusTrackerSection(onStartTracking: () -> Unit = {}) {
                             .padding(vertical = 2.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        if (item.name == "Science & Technology") {
-                            Image(
-                                painter = painterResource(Res.drawable.syllabus_science),
-                                contentDescription = item.name,
-                                modifier = Modifier.size(18.dp)
-                            )
-                        } else {
-                            Text(item.emoji, fontSize = 18.sp)
-                        }
+                        Text(item.emoji, fontSize = 18.sp)
                         Spacer(Modifier.width(10.dp))
                         Column(modifier = Modifier.weight(1f)) {
                             Text(item.name, color = TextDark, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
@@ -1061,16 +1066,23 @@ private fun SyllabusTrackerSection(onStartTracking: () -> Unit = {}) {
                         )
                     }
                     Spacer(Modifier.height(6.dp))
-                    LinearProgressIndicator(
-                        progress = { item.progress },
+                    Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(8.dp)
-                            .clip(RoundedCornerShape(999.dp)),
-                        color = Color(0xFFF5A623),
-                        trackColor = Color(0xFFF5F5F5),
-                        drawStopIndicator = {}
-                    )
+                            .clip(RoundedCornerShape(999.dp))
+                            .background(Color(0xFFF5F5F5))
+                    ) {
+                        if (item.progress > 0f) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth(item.progress.coerceIn(0f, 1f))
+                                    .fillMaxHeight()
+                                    .clip(RoundedCornerShape(999.dp))
+                                    .background(Color(0xFFF5A623))
+                            )
+                        }
+                    }
                 }
             }
             Spacer(Modifier.height(8.dp))
@@ -1109,7 +1121,7 @@ private fun RevisionSuiteSection(onExploreClick: () -> Unit = {}) {
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     RevStatCard(
-                        Modifier.weight(1f),
+                        Modifier.width(105.dp),
                         Res.drawable.rev_flashcards,
                         "2,847",
                         GoldAccent,
@@ -1119,7 +1131,7 @@ private fun RevisionSuiteSection(onExploreClick: () -> Unit = {}) {
                         strokeColor = Color(0xFF0E8A56)
                     )
                     RevStatCard(
-                        Modifier.weight(1f),
+                        Modifier.width(105.dp),
                         Res.drawable.rev_mindmaps,
                         "24",
                         Color(0xFFCC3E7B),
@@ -1129,7 +1141,7 @@ private fun RevisionSuiteSection(onExploreClick: () -> Unit = {}) {
                         strokeColor = Color(0xFFEC9B28)
                     )
                     RevStatCard(
-                        Modifier.weight(1f),
+                        Modifier.width(105.dp),
                         Res.drawable.rev_spaced_rep,
                         "91%",
                         Color(0xFF5F8FDB),
@@ -1154,41 +1166,74 @@ private fun RevisionSuiteSection(onExploreClick: () -> Unit = {}) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     modifier = Modifier
-                        .size(82.dp)
+                        .size(52.dp)
                         .clip(RoundedCornerShape(16.dp))
                         .background(Color(0xFF33415F)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("🎧", fontSize = 36.sp)
+                    Text("🎧", fontSize = 26.sp)
                 }
                 Spacer(Modifier.width(16.dp))
                 Column(modifier = Modifier.weight(1f)) {
-                    Text("FOCUS SESSION", color = White40, fontSize = 9.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.1.sp)
+                    Text(
+                        "FOCUS SESSION",
+                        color = White40,
+                        fontFamily = dmSansFamily(),
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Bold,
+                        lineHeight = 10.sp,
+                        letterSpacing = 1.1.sp
+                    )
                     Text(
                         "Study Mode",
                         color = Color.White,
-                        fontSize = 34.sp,
-                        lineHeight = 34.sp
+                        fontFamily = playfairDisplayFamily(),
+                        fontSize = 16.sp,
+                        lineHeight = 14.sp,
+                        fontWeight = FontWeight.Bold
                     )
-                    Spacer(Modifier.height(8.dp))
+                    Spacer(Modifier.height(4.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.Top
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
-                            Text("Distraction Free · Time Tracked ·", color = White70, fontSize = 13.sp)
-                            Text("Streak protected", color = White70, fontSize = 13.sp)
+                            Text(
+                                "Distraction Free · Time Tracked ·",
+                                color = White70,
+                                fontFamily = dmSansFamily(),
+                                fontSize = 11.sp,
+                                lineHeight = 11.sp,
+                                fontWeight = FontWeight.Normal
+                            )
+                            Text(
+                                "Streak protected",
+                                color = White70,
+                                fontFamily = dmSansFamily(),
+                                fontSize = 11.sp,
+                                lineHeight = 11.sp,
+                                fontWeight = FontWeight.Normal
+                            )
                         }
                         Spacer(Modifier.width(12.dp))
                         Box(
                             modifier = Modifier
+                                .width(67.dp)
+                                .height(30.dp)
                                 .clip(RoundedCornerShape(14.dp))
                                 .background(GoldGradient)
-                                .padding(horizontal = 22.dp, vertical = 14.dp)
-                                .clickable {}
+                                .clickable {},
+                            contentAlignment = Alignment.Center
                         ) {
-                            Text("Enter →", color = Color(0xFF1A1A1A), fontSize = 18.sp, fontWeight = FontWeight.ExtraBold)
+                            Text(
+                                "Enter →",
+                                color = Color(0xFF1A1A1A),
+                                fontFamily = dmSansFamily(),
+                                fontSize = 11.sp,
+                                lineHeight = 11.sp,
+                                fontWeight = FontWeight.Bold
+                            )
                         }
                     }
                     Spacer(Modifier.height(12.dp))
@@ -1226,36 +1271,35 @@ private fun RevStatCard(
 ) {
     Column(
         modifier = modifier
-            .heightIn(min = 180.dp)
+            .height(136.dp)
             .shadow(
                 elevation = 1.dp,
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(14.dp),
                 ambientColor = strokeColor,
                 spotColor = strokeColor
             )
-            .clip(RoundedCornerShape(16.dp))
+            .clip(RoundedCornerShape(14.dp))
             .background(Color.White)
-            .insideRoundedBorder(1.dp, strokeColor, 16.dp)
-            .padding(bottom = 10.dp),
+            .padding(bottom = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(8.dp)
+                .height(5.dp)
                 .background(topStripColor)
         )
-        Spacer(Modifier.height(10.dp))
+        Spacer(Modifier.height(6.dp))
         Image(
             painter = painterResource(iconRes),
             contentDescription = label,
-            modifier = Modifier.size(44.dp)
+            modifier = Modifier.size(36.dp)
         )
-        Spacer(Modifier.height(8.dp))
-        Text(value, color = valueColor, fontSize = 20.sp, fontWeight = FontWeight.ExtraBold)
-        Spacer(Modifier.height(2.dp))
-        Text(label, color = TextDark, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center, maxLines = 1)
-        Text(sub, color = Color(0xFF7183A6), fontSize = 10.sp, textAlign = TextAlign.Center, maxLines = 1)
+        Spacer(Modifier.height(5.dp))
+        Text(value, color = valueColor, fontSize = 20.sp, lineHeight = 30.sp, letterSpacing = (-0.8).sp, fontWeight = FontWeight.ExtraBold)
+        Spacer(Modifier.height(1.dp))
+        Text(label, color = TextDark, fontSize = 10.sp, lineHeight = 15.sp, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center, maxLines = 1)
+        Text(sub, color = Color(0xFF6B82A0), fontSize = 9.sp, lineHeight = 13.5.sp, textAlign = TextAlign.Center, maxLines = 1)
     }
 }
 
@@ -1304,17 +1348,26 @@ private fun QuoteSection() {
             .clip(RoundedCornerShape(16.dp))
             .background(Color(0xFFFFFCEB))
             .border(1.dp, Color(0xFFF1E7BC), RoundedCornerShape(16.dp))
-            .padding(20.dp)
+            .padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 20.dp)
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("“", color = Color(0xFFE7D8A2), fontSize = 38.sp, fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.Start))
+            Text(
+                "“",
+                color = Color(0xFFE7D8A2),
+                fontSize = 32.sp,
+                lineHeight = 24.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.align(Alignment.Start)
+            )
             Text(
                 "\"The secret of getting ahead is getting started. Every sunrise is a new invitation to rise again.\"",
                 color = Color(0xFF1E293B),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.ExtraBold,
+                fontFamily = dmSansFamily(),
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Bold,
+                fontStyle = FontStyle.Italic,
                 textAlign = TextAlign.Center,
-                lineHeight = 32.sp
+                lineHeight = 22.sp
             )
             Spacer(Modifier.height(8.dp))
             Text(
